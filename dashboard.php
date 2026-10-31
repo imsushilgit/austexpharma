@@ -2,11 +2,11 @@
 session_start();
 
 if (!isset($_SESSION['user_id'])) {
-    header("Location: ../auth/login.php");
+    header("Location: auth/login.php");
     exit();
 }
 
-require_once __DIR__ . '/../includes/core.php';
+require_once('includes/core.php');
 
 // ============================================================
 // 1. LOGGED-IN USER CONTEXT
@@ -321,7 +321,7 @@ function fmtINR($n) {
 }
 
 $pageTitle = "Dashboard";
-include __DIR__ . '/../includes/header.php';
+include __DIR__ . '/includes/header.php';
 ?>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
@@ -351,31 +351,31 @@ include __DIR__ . '/../includes/header.php';
     <span class="badge-sub">Real-time counters (Admin)</span>
 </div>
 <div class="pulse-strip">
-    <a href="../billing/orders.php" class="pulse-card">
+    <a href="billing/orders.php" class="pulse-card">
         <div class="pulse-icon" style="background:#eff6ff; color:#2563eb;">🛒</div>
         <div class="pulse-info"><div class="p-num"><?= (int)$wPendingOrders ?></div><div class="p-lbl">Orders in Flow</div></div>
     </a>
-    <a href="../billing/billing.php" class="pulse-card">
+    <a href="billing/billing.php" class="pulse-card">
         <div class="pulse-icon" style="background:#fff7ed; color:#ea580c;">🧾</div>
         <div class="pulse-info"><div class="p-num"><?= (int)$wPendingBilling ?></div><div class="p-lbl">Pending Billing</div></div>
     </a>
-    <a href="../hr/leaveapproval.php" class="pulse-card">
+    <a href="hr/leaveapproval.php" class="pulse-card">
         <div class="pulse-icon" style="background:#fef3c7; color:#d97706;">🏖️</div>
         <div class="pulse-info"><div class="p-num"><?= (int)$pendingLeaves ?></div><div class="p-lbl">Leave Pending</div></div>
     </a>
-    <a href="../fieldforce/expenseapproval.php" class="pulse-card">
+    <a href="fieldforce/expenseapproval.php" class="pulse-card">
         <div class="pulse-icon" style="background:#fce7f3; color:#db2777;">💳</div>
         <div class="pulse-info"><div class="p-num"><?= (int)$pendingExpenses ?></div><div class="p-lbl">Expense Pending</div></div>
     </a>
-    <a href="../fieldforce/tourplanapproval.php" class="pulse-card">
+    <a href="fieldforce/tourplanapproval.php" class="pulse-card">
         <div class="pulse-icon" style="background:#ede9fe; color:#7c3aed;">📅</div>
         <div class="pulse-info"><div class="p-num"><?= (int)$pendingTourPlans ?></div><div class="p-lbl">STP Pending</div></div>
     </a>
-    <a href="../hr/attendance.php" class="pulse-card">
+    <a href="hr/attendance.php" class="pulse-card">
         <div class="pulse-icon" style="background:#fef2f2; color:#dc2626;">⏱️</div>
         <div class="pulse-info"><div class="p-num"><?= (int)$absentToday ?></div><div class="p-lbl">Absent Today</div></div>
     </a>
-    <a href="../dispatch/dispatch.php" class="pulse-card">
+    <a href="dispatch/dispatch.php" class="pulse-card">
         <div class="pulse-icon" style="background:#fef2f2; color:#dc2626;">🚚</div>
         <div class="pulse-info"><div class="p-num"><?= (int)$dispatchPending ?></div><div class="p-lbl">Dispatch Pending</div></div>
     </a>
@@ -453,49 +453,49 @@ include __DIR__ . '/../includes/header.php';
 </div>
 <div class="status-grid" style="margin-bottom:20px;">
     <!-- Field Data -->
-    <a href="../fieldforce/doctors.php" class="status-pill" style="background:#f8fafc; border-color:#e2e8f0; text-decoration:none;">
+    <a href="fieldforce/doctors.php" class="status-pill" style="background:#f8fafc; border-color:#e2e8f0; text-decoration:none;">
         <div class="s-num" style="color:var(--navy);"><?= number_format($myDoctors) ?></div>
         <div class="s-lbl">Total Doctors</div>
     </a>
-    <a href="../masters/parties.php" class="status-pill" style="background:#f8fafc; border-color:#e2e8f0; text-decoration:none;">
+    <a href="masters/parties.php" class="status-pill" style="background:#f8fafc; border-color:#e2e8f0; text-decoration:none;">
         <div class="s-num" style="color:var(--navy);"><?= number_format($partyCount) ?></div>
         <div class="s-lbl">My Parties</div>
     </a>
     
     <!-- Orders Data -->
-    <a href="../billing/orders.php" class="status-pill" style="background:#eff6ff; border-color:#bfdbfe; text-decoration:none;">
+    <a href="billing/orders.php" class="status-pill" style="background:#eff6ff; border-color:#bfdbfe; text-decoration:none;">
         <div class="s-num" style="color:#2563eb;"><?= number_format($myPlacedOrders) ?></div>
         <div class="s-lbl">Orders Placed</div>
     </a>
-    <a href="../billing/orders.php" class="status-pill" style="background:#fff7ed; border-color:#fed7aa; text-decoration:none;">
+    <a href="billing/orders.php" class="status-pill" style="background:#fff7ed; border-color:#fed7aa; text-decoration:none;">
         <div class="s-num" style="color:#ea580c;"><?= number_format($myPendingBilling) ?></div>
         <div class="s-lbl">Pending Billing</div>
     </a>
-    <a href="../billing/orders.php" class="status-pill" style="background:#fef2f2; border-color:#fecaca; text-decoration:none;">
+    <a href="billing/orders.php" class="status-pill" style="background:#fef2f2; border-color:#fecaca; text-decoration:none;">
         <div class="s-num" style="color:#dc2626;"><?= number_format($myRejectedOrders) ?></div>
         <div class="s-lbl">Rejected Orders</div>
     </a>
 
     <!-- Dispatch Tracking -->
-    <a href="../sales/primary.php" class="status-pill" style="background:#ecfdf5; border-color:#a7f3d0; text-decoration:none;">
+    <a href="sales/primary.php" class="status-pill" style="background:#ecfdf5; border-color:#a7f3d0; text-decoration:none;">
         <div class="s-num" style="color:#059669;"><?= number_format($myDispatched) ?></div>
         <div class="s-lbl">Dispatched</div>
     </a>
-    <a href="../sales/primary.php" class="status-pill" style="background:#fef3c7; border-color:#fde68a; text-decoration:none;">
+    <a href="sales/primary.php" class="status-pill" style="background:#fef3c7; border-color:#fde68a; text-decoration:none;">
         <div class="s-num" style="color:#d97706;"><?= number_format($myDispatchPending) ?></div>
         <div class="s-lbl">Pending Dispatch</div>
     </a>
 
     <!-- HR & Expenses -->
-    <a href="../hr/leave.php" class="status-pill" style="background:#f5f3ff; border-color:#ddd6fe; text-decoration:none;">
+    <a href="hr/leave.php" class="status-pill" style="background:#f5f3ff; border-color:#ddd6fe; text-decoration:none;">
         <div class="s-num" style="color:#7c3aed;"><?= number_format($myLeaveTaken) ?></div>
         <div class="s-lbl">Leaves (YTD)</div>
     </a>
-    <a href="../hr/leave.php" class="status-pill" style="background:#f8fafc; border-color:#e2e8f0; text-decoration:none;">
+    <a href="hr/leave.php" class="status-pill" style="background:#f8fafc; border-color:#e2e8f0; text-decoration:none;">
         <div class="s-num" style="color:#475569; font-size:15px; margin-top:5px; margin-bottom:5px;"><?= htmlspecialchars($myLeaveStatus) ?></div>
         <div class="s-lbl">Recent Leave</div>
     </a>
-    <a href="../fieldforce/expense.php" class="status-pill" style="background:#fdf2f8; border-color:#fbcfe8; text-decoration:none;">
+    <a href="fieldforce/expense.php" class="status-pill" style="background:#fdf2f8; border-color:#fbcfe8; text-decoration:none;">
         <div class="s-num" style="color:#db2777; font-size:18px; line-height:22px;"><?= fmtINR($myExpenseYTD) ?></div>
         <div class="s-lbl">Expenses (YTD)</div>
     </a>
@@ -505,30 +505,30 @@ include __DIR__ . '/../includes/header.php';
 <!-- ===================== QUICK ACTIONS (Role & Access Restricted) ===================== -->
 <div class="quick-actions">
     <?php if ($isAdmin): ?>
-        <a href="../sales/salesdata.php" class="btn-action">⬆ Upload Invoices</a>
-        <a href="../accounts/collections.php" class="btn-action green">💰 Add Collection</a>
-        <a href="../billing/orders.php" class="btn-action">🛒 Place Order</a>
-        <a href="../sales/targets.php" class="btn-action gold">🎯 Targets</a>
-        <a href="../dispatch/dispatch.php" class="btn-action red">🚚 Dispatch Console</a>
+        <a href="sales/salesdata.php" class="btn-action">⬆ Upload Invoices</a>
+        <a href="accounts/collections.php" class="btn-action green">💰 Add Collection</a>
+        <a href="billing/orders.php" class="btn-action">🛒 Place Order</a>
+        <a href="sales/targets.php" class="btn-action gold">🎯 Targets</a>
+        <a href="dispatch/dispatch.php" class="btn-action red">🚚 Dispatch Console</a>
         <a href="reports.php" class="btn-action red">📑 All Reports</a>
     <?php else: ?>
         <?php if (canAccess('dailyvisit.php', $allowedPages, false, $useDynamicPerms, true)): ?>
-            <a href="../fieldforce/dailyvisit.php" class="btn-action">📝 Manage DCR</a>
+            <a href="fieldforce/dailyvisit.php" class="btn-action">📝 Manage DCR</a>
         <?php endif; ?>
         <?php if (canAccess('doctors.php', $allowedPages, false, $useDynamicPerms, true)): ?>
-            <a href="../fieldforce/doctors.php" class="btn-action cyan">🩺 Manage Doctors</a>
+            <a href="fieldforce/doctors.php" class="btn-action cyan">🩺 Manage Doctors</a>
         <?php endif; ?>
         <?php if (canAccess('leave.php', $allowedPages, false, $useDynamicPerms, true)): ?>
-            <a href="../hr/leave.php" class="btn-action violet">🏖️ Apply Leave</a>
+            <a href="hr/leave.php" class="btn-action violet">🏖️ Apply Leave</a>
         <?php endif; ?>
         <?php if (canAccess('stockstatement.php', $allowedPages, false, $useDynamicPerms, true)): ?>
-            <a href="../inventory/stockstatement.php" class="btn-action gold">📦 Stock Entry</a>
+            <a href="inventory/stockstatement.php" class="btn-action gold">📦 Stock Entry</a>
         <?php endif; ?>
         <?php if (canAccess('primary.php', $allowedPages, false, $useDynamicPerms, true)): ?>
-            <a href="../sales/primary.php" class="btn-action">📊 View Primary</a>
+            <a href="sales/primary.php" class="btn-action">📊 View Primary</a>
         <?php endif; ?>
         <?php if (canAccess('orders.php', $allowedPages, false, $useDynamicPerms, true)): ?>
-            <a href="../billing/orders.php" class="btn-action green">🛒 View Orders</a>
+            <a href="billing/orders.php" class="btn-action green">🛒 View Orders</a>
         <?php endif; ?>
     <?php endif; ?>
 </div>
@@ -541,75 +541,75 @@ include __DIR__ . '/../includes/header.php';
 <div class="nav-hub">
     <!-- SALES MODULES -->
     <?php if (canAccess('primary.php', $allowedPages, $isAdmin, $useDynamicPerms, $isSales)): ?>
-        <a href="../sales/primary.php" class="nav-tile sales"><span class="icon">📊</span><span class="lbl">Primary</span><span class="sub"><?= $isAdmin ? 'Sales Report' : 'View Report' ?></span></a>
+        <a href="sales/primary.php" class="nav-tile sales"><span class="icon">📊</span><span class="lbl">Primary</span><span class="sub"><?= $isAdmin ? 'Sales Report' : 'View Report' ?></span></a>
     <?php endif; ?>
     <?php if (canAccess('secondary.php', $allowedPages, $isAdmin, $useDynamicPerms, $isSales)): ?>
-        <a href="../sales/secondary.php" class="nav-tile sales"><span class="icon">📈</span><span class="lbl">Secondary</span><span class="sub"><?= $isAdmin ? 'Collections' : 'View Collections' ?></span></a>
+        <a href="sales/secondary.php" class="nav-tile sales"><span class="icon">📈</span><span class="lbl">Secondary</span><span class="sub"><?= $isAdmin ? 'Collections' : 'View Collections' ?></span></a>
     <?php endif; ?>
     <?php if (canAccess('collections.php', $allowedPages, $isAdmin, $useDynamicPerms, $isSales)): ?>
-        <a href="../accounts/collections.php" class="nav-tile sales"><span class="icon">💰</span><span class="lbl">Collections</span><span class="sub"><?= $isAdmin ? 'Add / View' : 'View Only' ?></span></a>
+        <a href="accounts/collections.php" class="nav-tile sales"><span class="icon">💰</span><span class="lbl">Collections</span><span class="sub"><?= $isAdmin ? 'Add / View' : 'View Only' ?></span></a>
     <?php endif; ?>
     <?php if (canAccess('achievements.php', $allowedPages, $isAdmin, $useDynamicPerms, $isSales)): ?>
-        <a href="../sales/achievements.php" class="nav-tile sales"><span class="icon">🏆</span><span class="lbl">Achievements</span><span class="sub">Leaderboard</span></a>
+        <a href="sales/achievements.php" class="nav-tile sales"><span class="icon">🏆</span><span class="lbl">Achievements</span><span class="sub">Leaderboard</span></a>
     <?php endif; ?>
     <?php if (canAccess('salestrend.php', $allowedPages, $isAdmin, $useDynamicPerms, $isSales)): ?>
-        <a href="../sales/salestrend.php" class="nav-tile sales"><span class="icon">📉</span><span class="lbl">Trends</span><span class="sub">Sales Graph</span></a>
+        <a href="sales/salestrend.php" class="nav-tile sales"><span class="icon">📉</span><span class="lbl">Trends</span><span class="sub">Sales Graph</span></a>
     <?php endif; ?>
     <?php if (canAccess('orders.php', $allowedPages, $isAdmin, $useDynamicPerms, $isSales)): ?>
-        <a href="../billing/orders.php" class="nav-tile sales"><span class="icon">🛒</span><span class="lbl">Orders</span><span class="sub"><?= $isAdmin ? 'Sales Orders' : 'View Pipeline' ?></span></a>
+        <a href="billing/orders.php" class="nav-tile sales"><span class="icon">🛒</span><span class="lbl">Orders</span><span class="sub"><?= $isAdmin ? 'Sales Orders' : 'View Pipeline' ?></span></a>
     <?php endif; ?>
     
     <!-- FIELD OPERATIONS -->
     <?php if (canAccess('doctors.php', $allowedPages, $isAdmin, $useDynamicPerms, $isSales)): ?>
-        <a href="../fieldforce/doctors.php" class="nav-tile sales"><span class="icon">🩺</span><span class="lbl">Doctors</span><span class="sub">Manage List</span></a>
+        <a href="fieldforce/doctors.php" class="nav-tile sales"><span class="icon">🩺</span><span class="lbl">Doctors</span><span class="sub">Manage List</span></a>
     <?php endif; ?>
     <?php if (canAccess('tourplan.php', $allowedPages, $isAdmin, $useDynamicPerms, $isSales)): ?>
-        <a href="../fieldforce/tourplan.php" class="nav-tile sales"><span class="icon">📅</span><span class="lbl">Tour Plan</span><span class="sub"><?= $isAdmin ? 'STP' : 'View STP' ?></span></a>
+        <a href="fieldforce/tourplan.php" class="nav-tile sales"><span class="icon">📅</span><span class="lbl">Tour Plan</span><span class="sub"><?= $isAdmin ? 'STP' : 'View STP' ?></span></a>
     <?php endif; ?>
     <?php if (canAccess('dailyvisit.php', $allowedPages, $isAdmin, $useDynamicPerms, $isSales)): ?>
-        <a href="../fieldforce/dailyvisit.php" class="nav-tile sales"><span class="icon">📝</span><span class="lbl">DCR</span><span class="sub">Manage Visits</span></a>
+        <a href="fieldforce/dailyvisit.php" class="nav-tile sales"><span class="icon">📝</span><span class="lbl">DCR</span><span class="sub">Manage Visits</span></a>
     <?php endif; ?>
     <?php if (canAccess('secondaryentry.php', $allowedPages, $isAdmin, $useDynamicPerms, $isSales)): ?>
-        <a href="../fieldforce/secondaryentry.php" class="nav-tile sales"><span class="icon">🧪</span><span class="lbl">Sec. Entry</span><span class="sub"><?= $isAdmin ? 'Chemist POB' : 'View POB' ?></span></a>
+        <a href="fieldforce/secondaryentry.php" class="nav-tile sales"><span class="icon">🧪</span><span class="lbl">Sec. Entry</span><span class="sub"><?= $isAdmin ? 'Chemist POB' : 'View POB' ?></span></a>
     <?php endif; ?>
     <?php if (canAccess('stockstatement.php', $allowedPages, $isAdmin, $useDynamicPerms, $isSales)): ?>
-        <a href="../inventory/stockstatement.php" class="nav-tile sales"><span class="icon">📦</span><span class="lbl">Stock</span><span class="sub">Manage Entry</span></a>
+        <a href="inventory/stockstatement.php" class="nav-tile sales"><span class="icon">📦</span><span class="lbl">Stock</span><span class="sub">Manage Entry</span></a>
     <?php endif; ?>
 
     <!-- HR & OPERATIONS -->
     <?php if (canAccess('leave.php', $allowedPages, $isAdmin, $useDynamicPerms, ($isSales || $isHR))): ?>
-        <a href="../hr/leave.php" class="nav-tile hr"><span class="icon">🏖️</span><span class="lbl">Leave</span><span class="sub">Manage App</span></a>
+        <a href="hr/leave.php" class="nav-tile hr"><span class="icon">🏖️</span><span class="lbl">Leave</span><span class="sub">Manage App</span></a>
     <?php endif; ?>
     <?php if (canAccess('expense.php', $allowedPages, $isAdmin, $useDynamicPerms, ($isSales || $isHR))): ?>
-        <a href="../fieldforce/expense.php" class="nav-tile hr"><span class="icon">💳</span><span class="lbl">Expenses</span><span class="sub"><?= $isAdmin ? 'TA / DA' : 'View Claims' ?></span></a>
+        <a href="fieldforce/expense.php" class="nav-tile hr"><span class="icon">💳</span><span class="lbl">Expenses</span><span class="sub"><?= $isAdmin ? 'TA / DA' : 'View Claims' ?></span></a>
     <?php endif; ?>
     <?php if (canAccess('attendance.php', $allowedPages, $isAdmin, $useDynamicPerms, ($isSales || $isHR))): ?>
-        <a href="../hr/attendance.php" class="nav-tile hr"><span class="icon">⏱️</span><span class="lbl">Attendance</span><span class="sub">Daily</span></a>
+        <a href="hr/attendance.php" class="nav-tile hr"><span class="icon">⏱️</span><span class="lbl">Attendance</span><span class="sub">Daily</span></a>
     <?php endif; ?>
 
     <!-- MANAGER & ADMIN ONLY -->
     <?php if (canAccess('salesdata.php', $allowedPages, $isAdmin, $useDynamicPerms, false)): ?>
-        <a href="../sales/salesdata.php" class="nav-tile sales"><span class="icon">⬆</span><span class="lbl">Upload</span><span class="sub">Invoices</span></a>
+        <a href="sales/salesdata.php" class="nav-tile sales"><span class="icon">⬆</span><span class="lbl">Upload</span><span class="sub">Invoices</span></a>
     <?php endif; ?>
     <?php if (canAccess('targets.php', $allowedPages, $isAdmin, $useDynamicPerms, false)): ?>
-        <a href="../sales/targets.php" class="nav-tile sales"><span class="icon">🎯</span><span class="lbl">Targets</span><span class="sub">Set / Track</span></a>
+        <a href="sales/targets.php" class="nav-tile sales"><span class="icon">🎯</span><span class="lbl">Targets</span><span class="sub">Set / Track</span></a>
     <?php endif; ?>
     <?php if (canAccess('billing.php', $allowedPages, $isAdmin, $useDynamicPerms, false)): ?>
-        <a href="../billing/billing.php" class="nav-tile sales"><span class="icon">🧾</span><span class="lbl">Billing</span><span class="sub">Pending Bills</span></a>
+        <a href="billing/billing.php" class="nav-tile sales"><span class="icon">🧾</span><span class="lbl">Billing</span><span class="sub">Pending Bills</span></a>
     <?php endif; ?>
     <?php if (canAccess('leaveapproval.php', $allowedPages, $isAdmin, $useDynamicPerms, false)): ?>
-        <a href="../hr/leaveapproval.php" class="nav-tile hr"><span class="icon">✅</span><span class="lbl">Leave Appr.</span><span class="sub">Approve</span></a>
+        <a href="hr/leaveapproval.php" class="nav-tile hr"><span class="icon">✅</span><span class="lbl">Leave Appr.</span><span class="sub">Approve</span></a>
     <?php endif; ?>
     <?php if (canAccess('expenseapproval.php', $allowedPages, $isAdmin, $useDynamicPerms, false)): ?>
-        <a href="../fieldforce/expenseapproval.php" class="nav-tile hr"><span class="icon">📋</span><span class="lbl">Exp. Appr.</span><span class="sub">Settle</span></a>
+        <a href="fieldforce/expenseapproval.php" class="nav-tile hr"><span class="icon">📋</span><span class="lbl">Exp. Appr.</span><span class="sub">Settle</span></a>
     <?php endif; ?>
     <?php if (canAccess('tourplanapproval.php', $allowedPages, $isAdmin, $useDynamicPerms, false)): ?>
-        <a href="../fieldforce/tourplanapproval.php" class="nav-tile hr"><span class="icon">🗓️</span><span class="lbl">STP Appr.</span><span class="sub">Authorize</span></a>
+        <a href="fieldforce/tourplanapproval.php" class="nav-tile hr"><span class="icon">🗓️</span><span class="lbl">STP Appr.</span><span class="sub">Authorize</span></a>
     <?php endif; ?>
 
     <!-- DISPATCH & PURCHASE -->
     <?php if (canAccess('dispatch.php', $allowedPages, $isAdmin, $useDynamicPerms, $isDispatch)): ?>
-        <a href="../dispatch/dispatch.php" class="nav-tile dispatch"><span class="icon">🚚</span><span class="lbl">Dispatch</span><span class="sub">Console</span></a>
+        <a href="dispatch/dispatch.php" class="nav-tile dispatch"><span class="icon">🚚</span><span class="lbl">Dispatch</span><span class="sub">Console</span></a>
     <?php endif; ?>
     <?php if (canAccess('purchase.php', $allowedPages, $isAdmin, $useDynamicPerms, $isPurchase)): ?>
         <a href="purchase.php" class="nav-tile purchase"><span class="icon">🛒</span><span class="lbl">Purchase</span><span class="sub">Orders</span></a>
@@ -620,11 +620,11 @@ include __DIR__ . '/../includes/header.php';
 
     <!-- ADMIN MASTER TABS -->
     <?php if ($isAdmin): ?>
-        <a href="../masters/parties.php" class="nav-tile dispatch"><span class="icon">👥</span><span class="lbl">Parties</span><span class="sub">Customers</span></a>
-        <a href="../hr/employees.php" class="nav-tile hr"><span class="icon">🧑‍💼</span><span class="lbl">Employees</span><span class="sub">Master</span></a>
+        <a href="masters/parties.php" class="nav-tile dispatch"><span class="icon">👥</span><span class="lbl">Parties</span><span class="sub">Customers</span></a>
+        <a href="hr/employees.php" class="nav-tile hr"><span class="icon">🧑‍💼</span><span class="lbl">Employees</span><span class="sub">Master</span></a>
         <a href="reports.php" class="nav-tile reports"><span class="icon">📑</span><span class="lbl">All Reports</span><span class="sub">Export Hub</span></a>
-        <a href="../admin/users.php" class="nav-tile admin"><span class="icon">🔐</span><span class="lbl">Users</span><span class="sub">Access</span></a>
-        <a href="../admin/settings.php" class="nav-tile admin"><span class="icon">⚙️</span><span class="lbl">Settings</span><span class="sub">Config</span></a>
+        <a href="admin/users.php" class="nav-tile admin"><span class="icon">🔐</span><span class="lbl">Users</span><span class="sub">Access</span></a>
+        <a href="admin/settings.php" class="nav-tile admin"><span class="icon">⚙️</span><span class="lbl">Settings</span><span class="sub">Config</span></a>
     <?php endif; ?>
 </div>
 
@@ -716,7 +716,7 @@ include __DIR__ . '/../includes/header.php';
         <div class="panel-title">
             <div class="title-left">Top Parties (YTD) <span class="badge-sub">By Primary Value</span></div>
             <div class="panel-actions">
-                <a href="../sales/primary.php" class="btn-viewall">View All →</a>
+                <a href="sales/primary.php" class="btn-viewall">View All →</a>
             </div>
         </div>
         <?php if (empty($topParties)): ?>
@@ -742,7 +742,7 @@ include __DIR__ . '/../includes/header.php';
         <div class="panel-title">
             <div class="title-left">Top Performers (Company) <span class="badge-sub">Primary Sales (YTD)</span></div>
             <div class="panel-actions">
-                <a href="../sales/achievements.php" class="btn-viewall">View All →</a>
+                <a href="sales/achievements.php" class="btn-viewall">View All →</a>
             </div>
         </div>
         <?php if (empty($globalTopEmployees)): ?>
@@ -779,7 +779,7 @@ include __DIR__ . '/../includes/header.php';
         <div class="panel-title">
             <div class="title-left">Recent Primary Invoices <span class="badge-sub">Latest 10</span></div>
             <div class="panel-actions">
-                <a href="../sales/primary.php" class="btn-viewall">View All →</a>
+                <a href="sales/primary.php" class="btn-viewall">View All →</a>
             </div>
         </div>
         <?php if (empty($recentInvoices)): ?>
@@ -805,7 +805,7 @@ include __DIR__ . '/../includes/header.php';
         <div class="panel-title">
             <div class="title-left">Recent Collections <span class="badge-sub">Latest 10</span></div>
             <div class="panel-actions">
-                <a href="../accounts/collections.php" class="btn-viewall">View All →</a>
+                <a href="accounts/collections.php" class="btn-viewall">View All →</a>
             </div>
         </div>
         <?php if (empty($recentCollections)): ?>
@@ -925,4 +925,4 @@ if (document.getElementById('compareChart')) {
 }
 </script>
 
-<?php include __DIR__ . '/../includes/footer.php'; ?>
+<?php include __DIR__ . '/includes/footer.php'; ?>
