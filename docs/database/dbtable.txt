@@ -1,0 +1,1022 @@
+Database Schema Details
+Active MySQL Connection Data
+Connected Database:
+dispatch
+Total Tables: 72
+📁 Table: advance_recoveries
+8 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+advance_id	int(11)	NO	INDEX	NULL	
+empcode	varchar(50)	NO		NULL	
+recovery_month	int(11)	NO		NULL	
+recovery_year	int(11)	NO		NULL	
+amount	decimal(12,2)	NO		NULL	
+salary_id	int(11)	YES		NULL	
+recovered_on	timestamp	NO		current_timestamp()	
+📁 Table: appraisals
+14 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+empcode	varchar(50)	NO		NULL	
+empname	varchar(150)	NO		NULL	
+appraisal_year	int(11)	NO		NULL	
+current_salary	decimal(12,2)	YES		0.00	
+proposed_salary	decimal(12,2)	YES		0.00	
+increment_pct	decimal(5,2)	YES		0.00	
+rating	enum('Outstanding','Excellent','Good','Average','Below Average')	YES		Good	
+remarks	text	YES		NULL	
+status	enum('Draft','Submitted','Approved','Rejected')	YES		Draft	
+reviewed_by	varchar(100)	YES		NULL	
+reviewed_on	datetime	YES		NULL	
+effective_from	date	YES		NULL	
+created_at	timestamp	NO		current_timestamp()	
+📁 Table: asset_assignments
+11 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+asset_id	int(11)	NO		NULL	
+empcode	varchar(50)	NO		NULL	
+empname	varchar(150)	NO		NULL	
+assigned_on	date	NO		NULL	
+returned_on	date	YES		NULL	
+condition_on_assign	varchar(50)	YES		NULL	
+condition_on_return	varchar(50)	YES		NULL	
+remarks	text	YES		NULL	
+assigned_by	varchar(100)	YES		NULL	
+status	enum('Active','Returned')	YES		Active	
+📁 Table: assets
+12 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+asset_code	varchar(50)	NO	UNIQUE	NULL	
+asset_type	enum('Mobile','TAB','Bag','Laptop','Computer','AC','Table','Chair','Sample','Gift','Other')	NO		NULL	
+asset_name	varchar(150)	NO		NULL	
+brand	varchar(100)	YES		NULL	
+serial_no	varchar(100)	YES		NULL	
+purchase_date	date	YES		NULL	
+purchase_value	decimal(12,2)	YES		0.00	
+condition_status	enum('New','Good','Fair','Damaged','Scrap')	YES		Good	
+status	enum('Available','Assigned','Under Repair','Returned','Lost','Scrapped')	YES		Available	
+remarks	text	YES		NULL	
+created_at	timestamp	NO		current_timestamp()	
+📁 Table: assignparties
+5 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+empcode	varchar(50)	NO	INDEX	NULL	
+partyname	varchar(150)	NO	INDEX	NULL	
+percentage	int(11)	YES		100	
+assignedat	timestamp	NO		current_timestamp()	
+📁 Table: attendance
+10 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+empcode	varchar(50)	NO	INDEX	NULL	
+empname	varchar(150)	NO		NULL	
+att_date	date	NO		NULL	
+status	enum('Present','Absent','Half Day','Leave','Holiday','Week Off')	YES		Present	
+check_in	time	YES		NULL	
+check_out	time	YES		NULL	
+remarks	varchar(255)	YES		NULL	
+marked_by	varchar(100)	YES		NULL	
+created_at	timestamp	NO		current_timestamp()	
+📁 Table: backup_settings
+11 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+auto_email	tinyint(1)	YES		0	
+email_address	varchar(150)	YES			
+email_frequency	varchar(20)	YES		Daily	
+auto_cloud	tinyint(1)	YES		0	
+cloud_provider	varchar(50)	YES		GoogleDrive	
+cloud_api_key	varchar(255)	YES			
+cloud_folder	varchar(100)	YES			
+cloud_frequency	varchar(20)	YES		Daily	
+last_backup_time	datetime	YES		NULL	
+updated_at	timestamp	NO		current_timestamp()	on update current_timestamp()
+📁 Table: chemist_requests
+22 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+empcode	varchar(50)	NO	INDEX	NULL	
+empname	varchar(150)	NO		NULL	
+request_type	enum('Add','Edit','Delete')	NO		Add	
+chemist_name	varchar(200)	NO		NULL	
+chemist_code	varchar(50)	YES		NULL	
+address	text	YES		NULL	
+city	varchar(100)	YES		NULL	
+district	varchar(100)	YES		NULL	
+state	varchar(100)	YES		NULL	
+pincode	varchar(10)	YES		NULL	
+mobile	varchar(15)	YES		NULL	
+email	varchar(100)	YES		NULL	
+contact_person	varchar(150)	YES		NULL	
+dl_no	varchar(100)	YES		NULL	
+gstin	varchar(20)	YES		NULL	
+remarks	text	YES		NULL	
+status	enum('Pending','Approved','Rejected','Cancelled')	YES	INDEX	Pending	
+requested_on	timestamp	NO	INDEX	current_timestamp()	
+approved_by	varchar(100)	YES		NULL	
+approved_on	datetime	YES		NULL	
+rejection_reason	text	YES		NULL	
+📁 Table: cities
+3 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+hqid	int(11)	NO	INDEX	NULL	
+cityname	varchar(100)	NO		NULL	
+📁 Table: collections
+9 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+partyname	varchar(150)	NO		NULL	
+empcode	varchar(50)	NO	INDEX	NULL	
+collection_date	date	NO	INDEX	NULL	
+amount	decimal(15,2)	NO		NULL	
+payment_mode	varchar(50)	YES		NULL	
+reference_no	varchar(100)	YES		NULL	
+remarks	text	YES		NULL	
+created_at	timestamp	NO		current_timestamp()	
+📁 Table: companies
+33 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO		NULL	
+companyname	varchar(200)	NO		NULL	
+address	text	NO		NULL	
+regoffice	varchar(255)	YES		NULL	
+hooffice	varchar(255)	YES		NULL	
+city	varchar(100)	YES		NULL	
+pincode	varchar(20)	YES		NULL	
+location	varchar(100)	NO		NULL	
+phone	varchar(50)	YES		NULL	
+email	varchar(100)	YES		NULL	
+website	varchar(100)	YES		NULL	
+gstin	varchar(20)	YES		NULL	
+panno	varchar(20)	YES		NULL	
+dlno	varchar(100)	YES		NULL	
+foodlicno	varchar(100)	YES		NULL	
+invoiceterms	text	YES		NULL	
+license_expiry	date	YES		NULL	
+bankname	varchar(100)	YES		NULL	
+accountno	varchar(50)	YES		NULL	
+ifsccode	varchar(30)	YES		NULL	
+upiid	varchar(100)	YES		NULL	
+passwordexpirydays	int(11)	YES		90	
+warningwindow	int(11)	YES		5	
+applicensekey	varchar(255)	YES		NULL	
+applicenseexpiry	date	YES		NULL	
+logotype	enum('image','html')	YES		image	
+logopath	varchar(255)	YES		NULL	
+logohtml	text	YES		NULL	
+aboutus	text	YES		NULL	
+businesshours	varchar(100)	YES		Mon - Sat, 9:00 AM - 6:00 PM	
+establishedyear	varchar(4)	YES		2010	
+linkedinlink	varchar(255)	YES		NULL	
+supportemail	varchar(100)	YES		NULL	
+📁 Table: cop_settings
+6 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+parameter_name	varchar(150)	NO	UNIQUE	NULL	
+parameter_value	varchar(255)	NO		NULL	
+description	text	YES		NULL	
+status	enum('active','inactive')	YES		active	
+updated_at	timestamp	NO		current_timestamp()	on update current_timestamp()
+📁 Table: countries
+2 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+countryname	varchar(100)	NO	UNIQUE	NULL	
+📁 Table: departments
+2 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+deptid	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+deptname	varchar(100)	NO	UNIQUE	NULL	
+📁 Table: designations
+3 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+desigid	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+deptid	int(11)	NO	INDEX	NULL	
+designame	varchar(100)	NO		NULL	
+📁 Table: device_sessions
+11 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(10) unsigned	NO	PRIMARY KEY	NULL	auto_increment
+username	varchar(50)	NO	INDEX	NULL	
+device_name	varchar(100)	YES		NULL	
+device_model	varchar(100)	YES		NULL	
+imei_or_fingerprint	varchar(100)	YES		NULL	
+menu_accessed	varchar(100)	YES		NULL	
+login_location	varchar(150)	YES		NULL	
+logout_location	varchar(150)	YES		NULL	
+login_time	timestamp	NO		current_timestamp()	
+logout_time	timestamp	YES		NULL	
+status	enum('Active','Completed')	YES	INDEX	Active	
+📁 Table: dispatch_records
+19 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+dispatch_no	varchar(20)	NO	UNIQUE	NULL	
+state	varchar(100)	NO		NULL	
+empcode	varchar(50)	NO		NULL	
+empname	varchar(150)	NO		NULL	
+hq	varchar(100)	NO		NULL	
+partyname	varchar(150)	NO		NULL	
+area	varchar(100)	NO		NULL	
+transporter	varchar(150)	NO		NULL	
+invoice_no	varchar(50)	NO	INDEX	NULL	
+cases	int(11)	NO		NULL	
+dispatch_date	date	NO		NULL	
+status	varchar(20)	YES	INDEX	Pending	
+hold_reason	text	YES		NULL	
+picked_by	varchar(100)	YES		NULL	
+matched_by	varchar(100)	YES		NULL	
+packed_by	varchar(100)	YES		NULL	
+dispatched_by	varchar(100)	YES		NULL	
+created_at	timestamp	NO		current_timestamp()	
+📁 Table: districts
+3 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+stateid	int(11)	NO	INDEX	NULL	
+districtname	varchar(100)	NO		NULL	
+📁 Table: divisions
+2 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+divname	varchar(100)	NO		NULL	
+📁 Table: doctor_requests
+10 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+empcode	varchar(50)	NO		NULL	
+doc_id	int(11)	YES		0	
+request_type	varchar(20)	NO		NULL	
+doc_name	varchar(150)	NO		NULL	
+specialty	varchar(100)	YES		NULL	
+hq	varchar(100)	YES		NULL	
+status	varchar(20)	YES		Pending	
+created_at	timestamp	NO		current_timestamp()	
+remarks	text	YES		NULL	
+📁 Table: doctors
+40 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+empcode	varchar(50)	NO		NULL	
+doc_name	varchar(150)	NO		NULL	
+specialty	varchar(100)	YES		NULL	
+hq	varchar(100)	YES		NULL	
+created_at	timestamp	NO		current_timestamp()	
+category	varchar(50)	YES		NULL	
+qualification	varchar(100)	YES		NULL	
+category_1	varchar(50)	YES		NULL	
+category_2	varchar(50)	YES		NULL	
+category_3	varchar(50)	YES		NULL	
+clinic_add1	varchar(255)	YES		NULL	
+clinic_add2	varchar(255)	YES		NULL	
+clinic_add3	varchar(255)	YES		NULL	
+clinic_city	varchar(100)	YES		NULL	
+clinic_state	varchar(100)	YES		NULL	
+clinic_pin	varchar(20)	YES		NULL	
+clinic_phone	varchar(50)	YES		NULL	
+res_add1	varchar(255)	YES		NULL	
+res_add2	varchar(255)	YES		NULL	
+res_add3	varchar(255)	YES		NULL	
+res_city	varchar(100)	YES		NULL	
+res_state	varchar(100)	YES		NULL	
+res_pin	varchar(20)	YES		NULL	
+res_phone	varchar(50)	YES		NULL	
+doc_type	varchar(50)	YES		NULL	
+mobile	varchar(20)	YES		NULL	
+email	varchar(100)	YES		NULL	
+pref_day_time	varchar(100)	YES		NULL	
+visits_expected	int(11)	YES		0	
+hospital_name	varchar(150)	YES		NULL	
+doa	date	YES		NULL	
+contact_person	varchar(100)	YES		NULL	
+patients_count	int(11)	YES		0	
+reg_no	varchar(100)	YES		NULL	
+pan_no	varchar(50)	YES		NULL	
+gender	varchar(20)	YES		NULL	
+religion	varchar(50)	YES		NULL	
+dob	date	YES		NULL	
+doc	date	YES		NULL	
+📁 Table: employee_salary_structure
+4 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+empcode	varchar(50)	NO	INDEX	NULL	
+component_code	varchar(30)	NO		NULL	
+amount	decimal(12,2)	NO		0.00	
+📁 Table: employee_shifts
+5 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+empcode	varchar(50)	NO		NULL	
+shift_id	int(11)	NO	INDEX	NULL	
+effective_from	date	NO		NULL	
+effective_to	date	YES		NULL	
+📁 Table: employees
+25 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+empcode	varchar(50)	NO	UNIQUE	NULL	
+division	varchar(100)	YES		NULL	
+empname	varchar(100)	NO		NULL	
+department	varchar(100)	YES		NULL	
+designation	varchar(100)	NO		NULL	
+mobile	varchar(20)	YES		NULL	
+email	varchar(100)	YES		NULL	
+reporting_manager	varchar(150)	YES	INDEX	NULL	
+hq	varchar(100)	NO		NULL	
+state	varchar(100)	NO		NULL	
+joining_date	date	YES		NULL	
+dob	date	YES		NULL	
+resignation_date	date	YES		NULL	
+bank_name	varchar(100)	YES		NULL	
+bank_account	varchar(50)	YES		NULL	
+ifsc_code	varchar(20)	YES		NULL	
+pan_no	varchar(20)	YES		NULL	
+aadhar_no	varchar(20)	YES		NULL	
+dl_no	varchar(50)	YES		NULL	
+education	varchar(100)	YES		NULL	
+address	text	YES		NULL	
+gender	varchar(15)	YES		NULL	
+marital_status	varchar(20)	YES		NULL	
+anniversary_date	date	YES		NULL	
+📁 Table: expenses
+8 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+empcode	varchar(50)	NO		NULL	
+expense_date	date	NO		NULL	
+expense_type	varchar(100)	NO		NULL	
+amount	decimal(10,2)	NO		0.00	
+remarks	text	YES		NULL	
+status	varchar(20)	YES		Pending	
+created_at	timestamp	NO		current_timestamp()	
+📁 Table: form16_documents
+9 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+empcode	varchar(50)	NO	INDEX	NULL	
+empname	varchar(150)	NO		NULL	
+financial_year	varchar(9)	NO		NULL	
+file_path	varchar(255)	NO		NULL	
+file_name	varchar(150)	NO		NULL	
+uploaded_by	varchar(100)	YES		NULL	
+uploaded_on	timestamp	NO		current_timestamp()	
+remarks	varchar(255)	YES		NULL	
+📁 Table: full_final
+42 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+empcode	varchar(50)	NO		NULL	
+empname	varchar(150)	NO		NULL	
+division	varchar(100)	YES		NULL	
+department	varchar(100)	YES		NULL	
+designation	varchar(100)	YES		NULL	
+hq	varchar(100)	YES		NULL	
+state	varchar(100)	YES		NULL	
+joining_date	date	YES		NULL	
+resignation_date	date	YES		NULL	
+last_working_date	date	YES		NULL	
+experience	varchar(50)	YES		NULL	
+reason	enum('Resignation','Termination','End of Contract','Retirement','Mutual Separation')	YES		Resignation	
+notice_period	enum('Fully Served','Partially Served','Not Served (Waived)','Not Served (Recovered)')	YES		Fully Served	
+bank_name	varchar(150)	YES		NULL	
+account_no	varchar(50)	YES		NULL	
+ifsc	varchar(20)	YES		NULL	
+pan	varchar(20)	YES		NULL	
+aadhaar	varchar(20)	YES		NULL	
+last_paid_sal_month	varchar(10)	YES		NULL	
+last_paid_sal_amount	decimal(12,2)	YES		0.00	
+last_paid_exp_month	varchar(10)	YES		NULL	
+last_paid_exp_amount	decimal(12,2)	YES		0.00	
+earnings_json	text	YES		NULL	
+deductions_json	text	YES		NULL	
+total_earnings	decimal(12,2)	YES		0.00	
+total_deductions	decimal(12,2)	YES		0.00	
+net_payable	decimal(12,2)	YES		0.00	
+leave_encashment	decimal(12,2)	YES		0.00	
+gratuity	decimal(12,2)	YES		0.00	
+pending_salary	decimal(12,2)	YES		0.00	
+advance_recovery	decimal(12,2)	YES		0.00	
+other_recovery	decimal(12,2)	YES		0.00	
+prepared_by	varchar(100)	YES		NULL	
+approved_by	varchar(100)	YES		NULL	
+status	enum('Draft','Calculated','Approved','Paid','Cancelled')	YES		Draft	
+remarks	text	YES		NULL	
+letter_ref	varchar(50)	YES		NULL	
+processed_by	varchar(100)	YES		NULL	
+processed_on	timestamp	NO		current_timestamp()	
+approved_on	datetime	YES		NULL	
+paid_on	date	YES		NULL	
+📁 Table: full_final_items
+6 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+ff_id	int(11)	NO	INDEX	NULL	
+item_type	enum('Earning','Deduction')	NO		NULL	
+item_month	varchar(10)	YES		NULL	
+description	varchar(150)	NO		NULL	
+amount	decimal(12,2)	NO		0.00	
+📁 Table: holidays
+7 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+holiday_date	date	NO	UNIQUE	NULL	
+holiday_name	varchar(150)	NO		NULL	
+holiday_type	enum('National','Regional','Company','Optional')	YES		Company	
+is_optional	tinyint(1)	YES		0	
+year	int(11)	NO		NULL	
+created_at	timestamp	NO		current_timestamp()	
+📁 Table: hqs
+3 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+districtid	int(11)	NO	INDEX	NULL	
+hqname	varchar(100)	NO		NULL	
+📁 Table: hr_letters
+26 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+letter_type	enum('Offer','Appointment','Increment','Promotion','Demotion','Transfer')	NO		NULL	
+letter_ref	varchar(50)	YES		NULL	
+empcode	varchar(50)	NO		NULL	
+empname	varchar(150)	NO		NULL	
+designation	varchar(100)	YES		NULL	
+department	varchar(100)	YES		NULL	
+hq	varchar(100)	YES		NULL	
+joining_date	date	YES		NULL	
+effective_date	date	YES		NULL	
+current_designation	varchar(100)	YES		NULL	
+new_designation	varchar(100)	YES		NULL	
+current_hq	varchar(100)	YES		NULL	
+new_hq	varchar(100)	YES		NULL	
+current_salary	decimal(12,2)	YES		0.00	
+new_salary	decimal(12,2)	YES		0.00	
+increment_pct	decimal(5,2)	YES		0.00	
+reporting_to	varchar(150)	YES		NULL	
+work_location	varchar(150)	YES		NULL	
+probation_months	int(11)	YES		6	
+notice_days	int(11)	YES		30	
+body_extra	text	YES		NULL	
+status	enum('Draft','Issued','Acknowledged','Cancelled')	YES		Draft	
+prepared_by	varchar(100)	YES		NULL	
+issued_on	date	YES		NULL	
+created_at	timestamp	NO		current_timestamp()	
+📁 Table: invoice_items
+16 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+invoice_id	int(11)	NO		NULL	
+product_name	varchar(200)	NO		NULL	
+hsn	varchar(20)	YES		NULL	
+batch_no	varchar(50)	YES		NULL	
+expiry	date	YES		NULL	
+mrp	decimal(12,2)	YES		0.00	
+qty	decimal(12,2)	YES		0.00	
+free_qty	decimal(12,2)	YES		0.00	
+rate	decimal(12,2)	YES		0.00	
+disc_pct	decimal(5,2)	YES		0.00	
+gst_pct	decimal(5,2)	YES		0.00	
+taxable	decimal(14,2)	YES		0.00	
+cgst	decimal(14,2)	YES		0.00	
+sgst	decimal(14,2)	YES		0.00	
+igst	decimal(14,2)	YES		0.00	
+📁 Table: invoices
+12 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+partyname	varchar(150)	YES	INDEX	NULL	
+invoice_no	varchar(50)	YES	INDEX	NULL	
+invoice_date	date	YES	INDEX	NULL	
+product_name	varchar(150)	YES		NULL	
+batch_no	varchar(50)	YES		NULL	
+qty	int(11)	YES		NULL	
+free_qty	int(11)	YES		NULL	
+total_qty	int(11)	YES		NULL	
+mrp	decimal(10,2)	YES		NULL	
+total_value	decimal(15,2)	YES		NULL	
+created_at	timestamp	NO	INDEX	current_timestamp()	
+📁 Table: leave_applications
+13 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+empcode	varchar(50)	NO		NULL	
+empname	varchar(150)	NO		NULL	
+leave_type	varchar(20)	NO		NULL	
+from_date	date	NO		NULL	
+to_date	date	NO		NULL	
+days	decimal(4,1)	NO		NULL	
+reason	text	YES		NULL	
+status	enum('Pending','Approved','Rejected','Cancelled')	YES		Pending	
+applied_on	timestamp	NO		current_timestamp()	
+approved_by	varchar(100)	YES		NULL	
+approved_on	datetime	YES		NULL	
+approver_remarks	varchar(255)	YES		NULL	
+📁 Table: leave_types
+7 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+leave_code	varchar(20)	NO	UNIQUE	NULL	
+leave_name	varchar(100)	NO		NULL	
+max_days_per_year	int(11)	YES		0	
+is_paid	tinyint(1)	YES		1	
+description	varchar(255)	YES		NULL	
+created_at	timestamp	NO		current_timestamp()	
+📁 Table: monthly_salary
+14 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+empcode	varchar(50)	NO	INDEX	NULL	
+empname	varchar(150)	NO		NULL	
+salary_month	int(11)	NO		NULL	
+salary_year	int(11)	NO		NULL	
+present_days	decimal(4,1)	YES		0.0	
+paid_days	decimal(4,1)	YES		0.0	
+gross_earning	decimal(12,2)	YES		0.00	
+total_deduction	decimal(12,2)	YES		0.00	
+net_salary	decimal(12,2)	YES		0.00	
+components_json	text	YES		NULL	
+status	enum('Draft','Generated','Paid')	YES		Generated	
+generated_by	varchar(100)	YES		NULL	
+generated_on	timestamp	NO		current_timestamp()	
+📁 Table: mr_sample_stock
+14 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+empcode	varchar(50)	NO	INDEX	NULL	
+empname	varchar(150)	NO		NULL	
+product_id	int(11)	YES		NULL	
+product_name	varchar(200)	NO		NULL	
+product_type	enum('Sample','Gift','Promotional')	YES		Sample	
+batch_no	varchar(50)	YES		NULL	
+quantity	decimal(12,2)	NO		0.00	
+unit	varchar(20)	YES		Nos	
+allocated_on	date	YES		NULL	
+allocated_by	varchar(100)	YES		NULL	
+expiry_date	date	YES		NULL	
+remarks	text	YES		NULL	
+updated_at	timestamp	NO		current_timestamp()	on update current_timestamp()
+📁 Table: mr_sample_transactions
+15 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+empcode	varchar(50)	NO	INDEX	NULL	
+empname	varchar(150)	NO		NULL	
+product_name	varchar(200)	NO		NULL	
+product_type	enum('Sample','Gift','Promotional')	YES		Sample	
+batch_no	varchar(50)	YES		NULL	
+txn_type	enum('Receipt','Issue','Distribution','Adjustment','Return')	NO	INDEX	NULL	
+quantity	decimal(12,2)	NO		NULL	
+party_type	enum('Doctor','Chemist','Stockist','Other')	YES		NULL	
+party_name	varchar(200)	YES		NULL	
+visit_id	int(11)	YES		NULL	
+txn_date	date	NO	INDEX	NULL	
+remarks	text	YES		NULL	
+created_by	varchar(100)	YES		NULL	
+created_at	timestamp	NO		current_timestamp()	
+📁 Table: notifications_log
+9 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+channel	enum('WhatsApp','Email','SMS')	YES		WhatsApp	
+recipient	varchar(150)	YES		NULL	
+subject	varchar(200)	YES		NULL	
+body	text	YES		NULL	
+ref_type	varchar(40)	YES		NULL	
+ref_no	varchar(50)	YES		NULL	
+status	varchar(30)	YES		Queued	
+created_at	timestamp	NO		current_timestamp()	
+📁 Table: page_permissions
+5 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+role_name	varchar(50)	NO	INDEX	NULL	
+page_name	varchar(100)	NO		NULL	
+can_view	tinyint(1)	YES		1	
+can_write	tinyint(1)	YES		0	
+📁 Table: parties
+8 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+division	varchar(100)	YES		NULL	
+state	varchar(100)	YES		NULL	
+partycode	varchar(50)	YES		NULL	
+partyname	varchar(150)	NO		NULL	
+hq	varchar(100)	NO		NULL	
+area	varchar(100)	NO		NULL	
+contact	varchar(50)	YES		NULL	
+📁 Table: party_ledger
+11 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+party_name	varchar(200)	NO	INDEX	NULL	
+entry_date	date	NO	INDEX	NULL	
+entry_type	enum('Invoice','Collection','Credit Note','Debit Note','Opening','Adjustment')	NO		NULL	
+ref_no	varchar(50)	YES	INDEX	NULL	
+debit	decimal(14,2)	YES		0.00	
+credit	decimal(14,2)	YES		0.00	
+balance	decimal(14,2)	YES		0.00	
+empcode	varchar(50)	YES		NULL	
+remarks	varchar(255)	YES		NULL	
+created_at	timestamp	NO		current_timestamp()	
+📁 Table: party_rates
+13 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+party_name	varchar(200)	NO	INDEX	NULL	
+product_name	varchar(200)	NO		NULL	
+rate_type	varchar(100)	YES		PTR	
+rate	decimal(12,2)	NO		0.00	
+disc_pct	decimal(5,2)	YES		0.00	
+scheme	varchar(50)	YES		NULL	
+gst_pct	decimal(5,2)	YES		12.00	
+effective_from	date	YES		NULL	
+effective_to	date	YES		NULL	
+is_active	tinyint(1)	YES		1	
+updated_by	varchar(100)	YES		NULL	
+updated_at	timestamp	NO		current_timestamp()	on update current_timestamp()
+📁 Table: product_batches
+5 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+product_name	varchar(150)	YES	INDEX	NULL	
+batch_no	varchar(100)	YES		NULL	
+mrp	decimal(15,2)	YES		0.00	
+expiry_date	date	YES		NULL	
+📁 Table: products
+12 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO		NULL	
+companyid	int(11)	NO		NULL	
+productcode	varchar(50)	YES		NULL	
+product_name	varchar(150)	YES		NULL	
+mrp	decimal(12,2)	YES		0.00	
+producttype	varchar(50)	YES		NULL	
+packing	varchar(50)	YES		NULL	
+mfgcompany	varchar(100)	YES		NULL	
+hsnsac	varchar(20)	NO		NULL	
+defaultsgst	decimal(5,2)	YES		2.50	
+defaultcgst	decimal(5,2)	YES		2.50	
+status	enum('active','inactive')	YES		active	
+📁 Table: reimbursement_types
+5 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+type_code	varchar(20)	NO	UNIQUE	NULL	
+type_name	varchar(100)	NO		NULL	
+max_limit	decimal(12,2)	YES		0.00	
+is_active	tinyint(1)	YES		1	
+📁 Table: reimbursements
+13 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+empcode	varchar(50)	NO		NULL	
+empname	varchar(150)	NO		NULL	
+type_code	varchar(20)	NO		NULL	
+claim_date	date	NO		NULL	
+amount	decimal(12,2)	NO		NULL	
+description	text	YES		NULL	
+bill_file	varchar(255)	YES		NULL	
+status	enum('Pending','Approved','Rejected','Paid')	YES		Pending	
+approved_by	varchar(100)	YES		NULL	
+approved_on	datetime	YES		NULL	
+paid_on	date	YES		NULL	
+created_at	timestamp	NO		current_timestamp()	
+📁 Table: route_party_map
+5 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+empcode	varchar(50)	NO	INDEX	NULL	
+route_name	varchar(100)	NO		NULL	
+party_id	int(11)	NO		NULL	
+updated_at	timestamp	NO		current_timestamp()	on update current_timestamp()
+📁 Table: salary_advances
+16 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+empcode	varchar(50)	NO		NULL	
+empname	varchar(150)	NO		NULL	
+advance_type	enum('Advance','Loan')	YES		Advance	
+amount	decimal(12,2)	NO		NULL	
+emi_amount	decimal(12,2)	YES		0.00	
+total_emis	int(11)	YES		1	
+emis_paid	int(11)	YES		0	
+balance	decimal(12,2)	YES		0.00	
+reason	text	YES		NULL	
+status	enum('Pending','Approved','Rejected','Closed')	YES		Pending	
+applied_on	date	YES		curdate()	
+approved_by	varchar(100)	YES		NULL	
+approved_on	datetime	YES		NULL	
+start_recovery_month	int(11)	YES		NULL	
+start_recovery_year	int(11)	YES		NULL	
+📁 Table: salary_components
+8 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+component_code	varchar(30)	NO	UNIQUE	NULL	
+component_name	varchar(100)	NO		NULL	
+component_type	enum('Earning','Deduction')	NO		Earning	
+is_percentage	tinyint(1)	YES		0	
+default_value	decimal(12,2)	YES		0.00	
+is_active	tinyint(1)	YES		1	
+sort_order	int(11)	YES		0	
+📁 Table: sales_order_items
+13 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+order_id	int(11)	NO		NULL	
+product_name	varchar(200)	NO		NULL	
+mrp	decimal(12,2)	YES		0.00	
+rate_type	varchar(100)	YES		NULL	
+scheme	varchar(50)	YES		NULL	
+actual_qty	decimal(12,2)	YES		0.00	
+bonus_qty	decimal(12,2)	YES		0.00	
+gst_pct	decimal(5,2)	YES		0.00	
+disc_pct	decimal(5,2)	YES		0.00	
+req_rate	decimal(12,2)	YES		0.00	
+final_rate	decimal(12,2)	YES		0.00	
+taxable	decimal(14,2)	YES		0.00	
+📁 Table: sales_orders
+25 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+order_no	varchar(40)	NO	UNIQUE	NULL	
+order_date	date	NO		NULL	
+empcode	varchar(50)	NO		NULL	
+empname	varchar(150)	NO		NULL	
+hq	varchar(100)	YES		NULL	
+state	varchar(100)	YES		NULL	
+party_name	varchar(200)	NO		NULL	
+party_address	text	YES		NULL	
+transporter_name	varchar(150)	YES		NULL	
+transporter_address	text	YES		NULL	
+mobile	varchar(20)	YES		NULL	
+email	varchar(100)	YES		NULL	
+status	varchar(40)	YES		Draft	
+total_qty	decimal(12,2)	YES		0.00	
+taxable_value	decimal(14,2)	YES		0.00	
+total_gst	decimal(14,2)	YES		0.00	
+grand_total	decimal(14,2)	YES		0.00	
+total_discount	decimal(14,2)	YES		0.00	
+invoice_id	int(11)	YES		NULL	
+invoice_no	varchar(50)	YES		NULL	
+created_at	timestamp	NO		current_timestamp()	
+mgr_by	varchar(100)	YES		NULL	
+mgr_on	datetime	YES		NULL	
+mgr_remarks	text	YES		NULL	
+📁 Table: sales_support_requests
+19 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+empcode	varchar(50)	NO	INDEX	NULL	
+empname	varchar(150)	NO		NULL	
+support_for	enum('Stockist','Chemist','Doctor')	NO	INDEX	NULL	
+party_name	varchar(200)	NO		NULL	
+party_code	varchar(50)	YES		NULL	
+product_id	int(11)	YES		NULL	
+product_name	varchar(200)	YES		NULL	
+support_type	varchar(100)	YES		NULL	
+quantity	decimal(12,2)	YES		0.00	
+amount	decimal(12,2)	YES		0.00	
+from_date	date	YES		NULL	
+to_date	date	YES		NULL	
+reason	text	YES		NULL	
+status	enum('Pending','Approved','Rejected','Cancelled')	YES	INDEX	Pending	
+requested_on	timestamp	NO		current_timestamp()	
+approved_by	varchar(100)	YES		NULL	
+approved_on	datetime	YES		NULL	
+rejection_reason	text	YES		NULL	
+📁 Table: secondary_sales
+9 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+empcode	varchar(50)	NO		NULL	
+order_date	date	NO		NULL	
+chemist_name	varchar(150)	NO		NULL	
+stockist_name	varchar(150)	NO		NULL	
+product_name	varchar(150)	NO		NULL	
+qty	int(11)	NO		0	
+amount	decimal(12,2)	NO		0.00	
+created_at	timestamp	NO		current_timestamp()	
+📁 Table: senders
+3 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+senderid	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+sendername	varchar(100)	NO		NULL	
+mobile	varchar(20)	NO		NULL	
+📁 Table: shifts
+8 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+shift_code	varchar(20)	NO	UNIQUE	NULL	
+shift_name	varchar(100)	NO		NULL	
+start_time	time	NO		NULL	
+end_time	time	NO		NULL	
+grace_minutes	int(11)	YES		15	
+is_night_shift	tinyint(1)	YES		0	
+is_active	tinyint(1)	YES		1	
+📁 Table: src_master
+8 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+empcode	varchar(50)	NO		NULL	
+route_name	varchar(100)	NO		NULL	
+town_name	varchar(150)	NO		NULL	
+category	enum('HQ','EX-HQ','OS')	YES		HQ	
+distance_km	decimal(8,2)	YES		0.00	
+fare_allowance	decimal(10,2)	YES		0.00	
+updated_at	timestamp	NO		current_timestamp()	on update current_timestamp()
+📁 Table: states
+3 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+statename	varchar(100)	NO	UNIQUE	NULL	
+countryid	int(11)	NO	INDEX	1	
+📁 Table: stock
+7 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+product_name	varchar(200)	NO	INDEX	NULL	
+batch_no	varchar(50)	YES			
+expiry	date	YES		NULL	
+qty	decimal(12,2)	NO		0.00	
+mrp	decimal(12,2)	YES		0.00	
+updated_at	timestamp	NO		current_timestamp()	on update current_timestamp()
+📁 Table: stock_ledger
+10 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+product_name	varchar(200)	NO	INDEX	NULL	
+batch_no	varchar(50)	YES			
+txn_type	enum('IN','OUT','ADJUST')	NO		NULL	
+qty	decimal(12,2)	NO		NULL	
+ref_type	varchar(40)	YES		NULL	
+ref_no	varchar(50)	YES	INDEX	NULL	
+remarks	varchar(255)	YES		NULL	
+created_by	varchar(100)	YES		NULL	
+created_at	timestamp	NO		current_timestamp()	
+📁 Table: stock_statements
+7 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+empcode	varchar(50)	NO		NULL	
+statement_date	date	NO		NULL	
+party_name	varchar(150)	NO		NULL	
+product_name	varchar(150)	NO		NULL	
+closing_qty	int(11)	NO		0	
+created_at	timestamp	NO		current_timestamp()	
+📁 Table: system_logs
+6 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+log_level	varchar(20)	NO		NULL	
+module	varchar(50)	NO		NULL	
+message	text	NO		NULL	
+user_name	varchar(100)	YES		NULL	
+created_at	timestamp	NO		current_timestamp()	
+📁 Table: tada_master
+9 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+designation	varchar(100)	NO	UNIQUE	NULL	
+da_hq	decimal(10,2)	YES		0.00	
+da_exhq	decimal(10,2)	YES		0.00	
+da_os	decimal(10,2)	YES		0.00	
+ta_local	decimal(10,2)	YES		0.00	
+ta_os	decimal(10,2)	YES		0.00	
+remarks	varchar(255)	YES		NULL	
+updated_at	timestamp	NO		current_timestamp()	on update current_timestamp()
+📁 Table: targets
+6 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+empcode	varchar(50)	NO	INDEX	NULL	
+target_month	int(11)	NO		NULL	
+target_year	int(11)	NO	INDEX	NULL	
+sales_target	decimal(15,2)	YES		0.00	
+collection_target	decimal(15,2)	YES		0.00	
+📁 Table: tax_invoice_items
+16 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+invoice_id	int(11)	NO	INDEX	NULL	
+product_name	varchar(200)	NO		NULL	
+hsn	varchar(20)	YES		NULL	
+batch_no	varchar(50)	YES		NULL	
+expiry	date	YES		NULL	
+mrp	decimal(12,2)	YES		0.00	
+qty	decimal(12,2)	YES		0.00	
+free_qty	decimal(12,2)	YES		0.00	
+rate	decimal(12,2)	YES		0.00	
+disc_pct	decimal(5,2)	YES		0.00	
+gst_pct	decimal(5,2)	YES		0.00	
+taxable	decimal(14,2)	YES		0.00	
+cgst	decimal(14,2)	YES		0.00	
+sgst	decimal(14,2)	YES		0.00	
+igst	decimal(14,2)	YES		0.00	
+📁 Table: tax_invoices
+32 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+invoice_no	varchar(50)	NO	UNIQUE	NULL	
+invoice_date	date	NO	INDEX	NULL	
+invoice_type	enum('Tax Invoice','Bill of Supply','Credit Note','Debit Note')	YES		Tax Invoice	
+order_id	int(11)	YES	INDEX	NULL	
+order_no	varchar(40)	YES		NULL	
+empcode	varchar(50)	YES		NULL	
+empname	varchar(150)	YES		NULL	
+party_name	varchar(200)	NO	INDEX	NULL	
+party_address	text	YES		NULL	
+party_gstin	varchar(20)	YES		NULL	
+party_state	varchar(100)	YES		NULL	
+place_of_supply	varchar(100)	YES		NULL	
+transporter_name	varchar(150)	YES		NULL	
+transporter_address	text	YES		NULL	
+lr_no	varchar(50)	YES		NULL	
+vehicle_no	varchar(30)	YES		NULL	
+payment_mode	varchar(50)	YES		Credit	
+due_days	int(11)	YES		30	
+taxable_value	decimal(14,2)	YES		0.00	
+cgst_amount	decimal(14,2)	YES		0.00	
+sgst_amount	decimal(14,2)	YES		0.00	
+igst_amount	decimal(14,2)	YES		0.00	
+total_gst	decimal(14,2)	YES		0.00	
+total_discount	decimal(14,2)	YES		0.00	
+round_off	decimal(8,2)	YES		0.00	
+grand_total	decimal(14,2)	YES		0.00	
+total_qty	decimal(12,2)	YES		0.00	
+remarks	text	YES		NULL	
+status	enum('Generated','Cancelled','Paid')	YES		Generated	
+created_by	varchar(100)	YES		NULL	
+created_at	timestamp	NO		current_timestamp()	
+📁 Table: tour_plans
+8 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+empcode	varchar(50)	NO		NULL	
+tour_date	date	NO		NULL	
+work_type	varchar(50)	NO		NULL	
+station	varchar(150)	NO		NULL	
+remarks	text	YES		NULL	
+status	varchar(20)	YES		Pending	
+created_at	timestamp	NO		current_timestamp()	
+📁 Table: transporters
+6 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+transportername	varchar(150)	NO		NULL	
+servicearea	text	NO		NULL	
+phone	varchar(50)	YES		NULL	
+branch_name	varchar(150)	YES		NULL	
+auth_person	varchar(100)	YES		NULL	
+📁 Table: upload_logs
+4 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+entity_name	varchar(100)	NO	UNIQUE	NULL	
+uploaded_by	varchar(150)	YES			
+uploaded_on	datetime	YES		current_timestamp()	on update current_timestamp()
+📁 Table: user_notifications
+9 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+empcode	varchar(50)	NO	INDEX	NULL	
+title	varchar(200)	NO		NULL	
+message	text	NO		NULL	
+related_module	varchar(50)	YES		NULL	
+related_id	int(11)	YES		NULL	
+is_read	tinyint(1)	YES		0	
+created_at	timestamp	NO	INDEX	current_timestamp()	
+read_on	datetime	YES		NULL	
+📁 Table: users
+14 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+empcode	varchar(50)	YES		NULL	
+username	varchar(50)	NO	UNIQUE	NULL	
+fullname	varchar(100)	NO		NULL	
+hq	varchar(100)	YES		NULL	
+department	varchar(100)	YES		NULL	
+designation	varchar(100)	YES		NULL	
+email	varchar(100)	YES		NULL	
+mobile	varchar(20)	YES		NULL	
+password	varchar(255)	NO		NULL	
+role	varchar(50)	YES		NULL	
+max_attempts	int(11)	NO		3	
+failed_attempts	int(11)	NO		0	
+createdat	timestamp	NO		current_timestamp()	
+📁 Table: visit_reports
+7 Columns
+Field Name	Data Type	Null	Key	Default Value	Extra
+id	int(11)	NO	PRIMARY KEY	NULL	auto_increment
+empcode	varchar(50)	NO		NULL	
+visit_date	date	NO		NULL	
+party_type	varchar(50)	NO		NULL	
+party_name	varchar(150)	NO		NULL	
+remarks	text	YES		NULL	
+created_at	timestamp	NO		current_timestamp()	

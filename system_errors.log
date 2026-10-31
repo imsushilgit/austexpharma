@@ -1,0 +1,32 @@
+[30-Oct-2026 04:28:33 Europe/Berlin] PHP Warning:  Undefined variable $viewContext in C:\xampp\htdocs\salesmgmtorganized\salesmgmt\dashboard\dashboard.php on line 572
+[30-Oct-2026 04:28:33 Europe/Berlin] PHP Warning:  Undefined variable $collVsPrimary in C:\xampp\htdocs\salesmgmtorganized\salesmgmt\dashboard\dashboard.php on line 599
+[30-Oct-2026 04:47:00 Europe/Berlin] PHP Warning:  Undefined variable $viewContext in C:\xampp\htdocs\salesmanagement\dashboard\dashboard.php on line 572
+[30-Oct-2026 04:47:00 Europe/Berlin] PHP Warning:  Undefined variable $collVsPrimary in C:\xampp\htdocs\salesmanagement\dashboard\dashboard.php on line 599
+[30-Oct-2026 17:24:02 Europe/Berlin] PHP Warning:  Undefined variable $viewContext in C:\xampp\htdocs\salesmanagement\dashboard\dashboard.php on line 389
+[30-Oct-2026 17:24:02 Europe/Berlin] PHP Warning:  Undefined variable $collVsPrimary in C:\xampp\htdocs\salesmanagement\dashboard\dashboard.php on line 416
+[30-Oct-2026 17:24:15 Europe/Berlin] PHP Warning:  Undefined variable $viewContext in C:\xampp\htdocs\salesmanagement\dashboard\dashboard.php on line 389
+[30-Oct-2026 17:24:15 Europe/Berlin] PHP Warning:  Undefined variable $collVsPrimary in C:\xampp\htdocs\salesmanagement\dashboard\dashboard.php on line 416
+[30-Oct-2026 17:24:29 Europe/Berlin] PHP Warning:  Undefined variable $viewContext in C:\xampp\htdocs\salesmanagement\dashboard\dashboard.php on line 389
+[30-Oct-2026 17:24:29 Europe/Berlin] PHP Warning:  Undefined variable $collVsPrimary in C:\xampp\htdocs\salesmanagement\dashboard\dashboard.php on line 416
+[30-Oct-2026 17:24:46 Europe/Berlin] PHP Warning:  Undefined variable $viewContext in C:\xampp\htdocs\salesmanagement\dashboard\dashboard.php on line 389
+[30-Oct-2026 17:24:46 Europe/Berlin] PHP Warning:  Undefined variable $collVsPrimary in C:\xampp\htdocs\salesmanagement\dashboard\dashboard.php on line 416
+[30-Oct-2026 17:24:47 Europe/Berlin] PHP Warning:  Undefined variable $viewContext in C:\xampp\htdocs\salesmanagement\dashboard\dashboard.php on line 389
+[30-Oct-2026 17:24:47 Europe/Berlin] PHP Warning:  Undefined variable $collVsPrimary in C:\xampp\htdocs\salesmanagement\dashboard\dashboard.php on line 416
+[30-Oct-2026 17:24:48 Europe/Berlin] PHP Warning:  Undefined variable $viewContext in C:\xampp\htdocs\salesmanagement\dashboard\dashboard.php on line 389
+[30-Oct-2026 17:24:48 Europe/Berlin] PHP Warning:  Undefined variable $collVsPrimary in C:\xampp\htdocs\salesmanagement\dashboard\dashboard.php on line 416
+[30-Oct-2026 17:35:36 Europe/Berlin] PHP Warning:  Undefined variable $viewContext in C:\xampp\htdocs\salesmanagement\dashboard\dashboard.php on line 389
+[30-Oct-2026 17:35:36 Europe/Berlin] PHP Warning:  Undefined variable $collVsPrimary in C:\xampp\htdocs\salesmanagement\dashboard\dashboard.php on line 416
+[30-Oct-2026 17:41:49 Europe/Berlin] PHP Warning:  Undefined variable $viewContext in C:\xampp\htdocs\salesmanagement\dashboard\dashboard.php on line 389
+[30-Oct-2026 17:41:49 Europe/Berlin] PHP Warning:  Undefined variable $collVsPrimary in C:\xampp\htdocs\salesmanagement\dashboard\dashboard.php on line 416
+[30-Oct-2026 17:57:17 Europe/Berlin] PHP Warning:  Undefined variable $viewContext in C:\xampp\htdocs\salesmanagement\dashboard\dashboard.php on line 389
+[30-Oct-2026 17:57:17 Europe/Berlin] PHP Warning:  Undefined variable $collVsPrimary in C:\xampp\htdocs\salesmanagement\dashboard\dashboard.php on line 416
+[30-Oct-2026 17:58:59 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'plan_date' in 'where clause' in C:\xampp\htdocs\salesmanagement\fieldforce\tourplancalendar.php:36
+Stack trace:
+#0 C:\xampp\htdocs\salesmanagement\fieldforce\tourplancalendar.php(36): PDO->prepare('SELECT * FROM t...')
+#1 {main}
+  thrown in C:\xampp\htdocs\salesmanagement\fieldforce\tourplancalendar.php on line 36
+[30-Oct-2026 17:59:21 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'plan_date' in 'where clause' in C:\xampp\htdocs\salesmanagement\fieldforce\tourplancalendar.php:36
+Stack trace:
+#0 C:\xampp\htdocs\salesmanagement\fieldforce\tourplancalendar.php(36): PDO->prepare('SELECT * FROM t...')
+#1 {main}
+  thrown in C:\xampp\htdocs\salesmanagement\fieldforce\tourplancalendar.php on line 36
