@@ -1,14 +1,12 @@
-<?php
 // ==========================================
 // 1. SYSTEM PATHS & URL CONFIGURATION
 // ==========================================
-// Automatically detects the root directory (e.g., C:\xampp\htdocs\salesmanagement)
+
 define('BASE_PATH', dirname(__DIR__)); 
 
-// Automatically detects the base URL (e.g., /salesmanagement/)
+// FORCE BASE_URL to Root for Render deployment
 if (!defined('BASE_URL')) {
-    $baseDir = basename(BASE_PATH);
-    define('BASE_URL', '/' . $baseDir . '/');
+    define('BASE_URL', '/');
 }
 
 // SERVER DIRECTORY CONSTANTS (For PHP includes, requires, and uploads)
@@ -43,7 +41,7 @@ if (!function_exists('asset_css')) {
 
 // FRONT-END URL CONSTANTS (For HTML hrefs, redirects, and image sources)
 define('URL_AUTH',       BASE_URL . 'auth/');
-define('URL_DASHBOARD',  BASE_URL . 'dashboard/');
+define('URL_DASHBOARD',  BASE_URL); 
 define('URL_UPLOADS',    BASE_URL . 'uploads/');
 define('URL_ASSETS',     BASE_URL . 'assets/');
 
