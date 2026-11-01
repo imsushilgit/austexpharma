@@ -53,23 +53,18 @@ if ($isSales && !$isAdmin) {
     }
 }
 
-
-
 // ============================================================
 // 3. DYNAMIC PAGE PERMISSIONS FETCH
 // ============================================================
 $allowedPages = [];
 try {
-    // Fetch accessible pages for the user's explicit Role OR Designation
     $permStmt = $pdo->prepare("SELECT page_name FROM page_permissions WHERE role = ? OR role = ?");
     $permStmt->execute([$userRole, $designation]);
     $rawPages = $permStmt->fetchAll(PDO::FETCH_COLUMN);
     foreach ($rawPages as $p) {
         $allowedPages[] = strtolower(trim($p));
     }
-} catch (Exception $e) {
-    // Failsafe: Table might not exist yet
-}
+} catch (Exception $e) {}
 
 $useDynamicPerms = count($allowedPages) > 0;
 
@@ -107,12 +102,10 @@ $dispatchDelivered = 0; $dispatchHold = 0; $dispatchTotalCases = 0;
 $topHQs = [];
 $collectionTrend = [];
 
-// Specific Metrics for MR / Manager
 $myDoctors = 0; $myPendingBilling = 0; $myRejectedOrders = 0; $myPlacedOrders = 0;
 $myLeaveTaken = 0; $myLeaveStatus = 'No recent'; $myExpenseYTD = 0;
 $myDispatchPending = 0; $myDispatched = 0;
 
-// HR / Admin metrics
 $totalEmployees = 0; $activeEmployees = 0; 
 $pendingLeaves = 0; $pendingExpenses = 0; $pendingTourPlans = 0; 
 $absentToday = 0; $presentToday = 0;
@@ -134,12 +127,10 @@ $cteSQL = "
 ";
 
 try {
-    // ---------------- GLOBAL TOP PERFORMERS (Company-Wide for All) ----------------
     $stmtGlobal = $pdo->prepare("SELECT ap.empcode, COALESCE(e.empname, ap.empcode) AS empname, SUM(i.total_value) AS val FROM invoices i INNER JOIN assignparties ap ON i.partyname = ap.partyname LEFT JOIN employees e ON e.empcode = ap.empcode WHERE i.invoice_date BETWEEN ? AND ? GROUP BY ap.empcode, e.empname ORDER BY val DESC LIMIT 8");
     $stmtGlobal->execute([$fyStartDate, $today]);
     $globalTopEmployees = $stmtGlobal->fetchAll(PDO::FETCH_ASSOC);
 
-    // ---------- ADMIN / FULL COMPANY ----------
     if ($isAdmin) {
         $stmt = $pdo->prepare("SELECT COALESCE(SUM(sales_target), 0) AS ytd, COALESCE(SUM(CASE WHEN target_month = ? AND target_year = ? THEN sales_target ELSE 0 END), 0) AS mtd FROM targets WHERE (target_year = ? AND target_month >= 4) OR (target_year = ? AND target_month <= 3)");
         $stmt->execute([$currentMonth, $currentYear, $fyStartYear, $fyStartYear + 1]);
@@ -187,7 +178,6 @@ try {
         try { $wPendingOrders = (int)$pdo->query("SELECT COUNT(*) FROM sales_orders WHERE status IN ('Submitted','Manager_Approved','Pending_Billing')")->fetchColumn(); } catch(Exception $e){}
         try { $wPendingBilling = (int)$pdo->query("SELECT COUNT(*) FROM sales_orders WHERE status='Pending_Billing'")->fetchColumn(); } catch(Exception $e){}
 
-    // ---------- MANAGER & MR ----------
     } elseif ($isManager || $isMR) {
         if ($isManager) {
             $stmt = $pdo->prepare($cteSQL . " SELECT DISTINCT empcode, empname FROM Subordinates");
@@ -204,7 +194,6 @@ try {
 
         $ph = implode(',', array_fill(0, count($teamCodes), '?'));
 
-        // Core KPIs
         $stmt = $pdo->prepare("SELECT COALESCE(SUM(sales_target), 0) AS ytd, COALESCE(SUM(CASE WHEN target_month = ? AND target_year = ? THEN sales_target ELSE 0 END), 0) AS mtd FROM targets WHERE ((target_year = ? AND target_month >= 4) OR (target_year = ? AND target_month <= 3)) AND empcode IN ($ph)");
         $stmt->execute(array_merge([$currentMonth, $currentYear, $fyStartYear, $fyStartYear + 1], $teamCodes));
         $row = $stmt->fetch(PDO::FETCH_ASSOC); $targetYTD = (float)($row['ytd'] ?? 0); $targetMTD = (float)($row['mtd'] ?? 0);
@@ -235,7 +224,6 @@ try {
         $stmt = $pdo->prepare("SELECT DATE_FORMAT(collection_date, '%Y-%m') AS ym, SUM(amount) AS val FROM collections WHERE empcode IN ($ph) AND collection_date >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH) GROUP BY ym ORDER BY ym ASC");
         $stmt->execute($teamCodes); $collectionTrend = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        // Detailed MR/Manager Activity Pipeline
         try {
             $stmt = $pdo->prepare("SELECT COUNT(*) FROM doctors WHERE empcode IN ($ph)");
             $stmt->execute($teamCodes); $myDoctors = (int)$stmt->fetchColumn();
@@ -280,7 +268,6 @@ try {
         } catch (Exception $e) {}
     }
 
-    // ---------- DISPATCH-SPECIFIC ----------
     if ($isDispatch && !$isAdmin) {
         $disp = $pdo->query("SELECT SUM(status = 'Invoiced') AS invoiced, SUM(status = 'Dispatched') AS dispatched, SUM(status = 'Delivered') AS delivered, SUM(status = 'Hold') AS hold, COALESCE(SUM(cases), 0) AS total_cases FROM dispatch_records")->fetch(PDO::FETCH_ASSOC);
         $dispatchInvoiced   = (int)($disp['invoiced'] ?? 0);
@@ -296,7 +283,6 @@ try {
     error_log("Dashboard KPI error: " . $e->getMessage());
 }
 
-// Derived KPIs
 $primaryAchPct   = $targetYTD > 0 ? round(($primaryYTD / $targetYTD) * 100, 1) : 0;
 $mtdAchPct       = $targetMTD > 0 ? round(($primaryMTD / $targetMTD) * 100, 1) : 0;
 $salesGap        = $primaryYTD - $secondaryYTD;
@@ -324,8 +310,107 @@ $pageTitle = "Dashboard";
 include __DIR__ . '/includes/header.php';
 ?>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+/* ============================================================
+   MODERN DASHBOARD CSS (Clean, SaaS-style)
+   ============================================================ */
+body.pg-dashboard-dashboard {
+    --card-shadow: 0 2px 12px rgba(15, 23, 42, 0.06);
+    --card-shadow-hover: 0 12px 32px rgba(15, 23, 42, 0.12);
+    --radius: 16px;
+    --radius-sm: 10px;
+    --navy: #1e293b;       
+    --navy-950: #0f172a;   
+    --sky: #0ea5e9;        
+    --line: #e2e8f0;       
+}
 
+body.pg-dashboard-dashboard { background: #f8fafc; color: var(--navy-950); font-family: 'Inter', sans-serif; }
+
+/* Header & Context Banner */
+body.pg-dashboard-dashboard .dash-header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 24px; }
+body.pg-dashboard-dashboard .context-banner {
+    background: #ffffff; border: 1px solid var(--line); border-left: 5px solid var(--sky); border-radius: var(--radius-sm);
+    padding: 18px 24px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px;
+    font-size: 13px; flex: 1; box-shadow: var(--card-shadow);
+}
+body.pg-dashboard-dashboard .role-badge { background: var(--navy); color: #ffffff; padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+body.pg-dashboard-dashboard .fy-pill { background: #f1f5f9; color: var(--navy); border: 1px solid var(--line); padding: 6px 16px; border-radius: 20px; font-weight: 600; font-size: 11.5px; }
+
+/* Section Titles */
+body.pg-dashboard-dashboard .ops-section-title {
+    font-family: 'Sora', sans-serif; font-size: 14px; font-weight: 700; color: var(--navy-950); text-transform: uppercase; 
+    margin: 32px 0 16px; padding-bottom: 10px; border-bottom: 2px solid var(--line); display: flex; justify-content: space-between; align-items: center; letter-spacing: 0.5px;
+}
+body.pg-dashboard-dashboard .ops-section-title .badge-sub { font-size: 10px; font-weight: 600; color: #64748b; background: #f1f5f9; padding: 4px 12px; border-radius: 12px; text-transform: none; letter-spacing: normal; }
+
+/* Navigation Hub */
+body.pg-dashboard-dashboard .nav-hub { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 14px; margin-bottom: 28px; }
+body.pg-dashboard-dashboard .nav-tile {
+    background: #ffffff; border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 18px 12px; text-decoration: none; text-align: center; transition: all 0.2s ease; box-shadow: 0 1px 3px rgba(0,0,0,0.02); display: flex; flex-direction: column; align-items: center; gap: 8px;
+}
+body.pg-dashboard-dashboard .nav-tile:hover { transform: translateY(-4px); box-shadow: var(--card-shadow-hover); border-color: var(--sky); }
+body.pg-dashboard-dashboard .nav-tile .icon { font-size: 26px; line-height: 1; margin-bottom: 4px; }
+body.pg-dashboard-dashboard .nav-tile .lbl { font-size: 11px; font-weight: 700; color: var(--navy-950); text-transform: uppercase; letter-spacing: 0.5px; }
+body.pg-dashboard-dashboard .nav-tile .sub { font-size: 10px; color: #64748b; }
+body.pg-dashboard-dashboard .nav-tile.sales { border-top: 3px solid #3b82f6; }
+body.pg-dashboard-dashboard .nav-tile.hr { border-top: 3px solid #8b5cf6; }
+body.pg-dashboard-dashboard .nav-tile.dispatch { border-top: 3px solid #f59e0b; }
+body.pg-dashboard-dashboard .nav-tile.purchase { border-top: 3px solid #06b6d4; }
+body.pg-dashboard-dashboard .nav-tile.admin { border-top: 3px solid #ef4444; }
+body.pg-dashboard-dashboard .nav-tile.reports { border-top: 3px solid #ec4899; }
+
+/* KPI Cards */
+body.pg-dashboard-dashboard .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 24px; }
+body.pg-dashboard-dashboard .kpi-card { background: #ffffff; border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 20px; position: relative; overflow: hidden; transition: all 0.3s; box-shadow: var(--card-shadow); }
+body.pg-dashboard-dashboard .kpi-card:hover { box-shadow: var(--card-shadow-hover); transform: translateY(-3px); }
+body.pg-dashboard-dashboard .kpi-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--accent, var(--sky)); border-radius: 4px 0 0 4px; }
+body.pg-dashboard-dashboard .kpi-label { font-size: 11px; color: #64748b; text-transform: uppercase; font-weight: 700; margin-bottom: 8px; letter-spacing: 0.5px; }
+body.pg-dashboard-dashboard .kpi-value { font-size: 24px; font-family: 'Sora', sans-serif; font-weight: 800; color: var(--navy-950); margin-bottom: 8px; }
+body.pg-dashboard-dashboard .kpi-sub { font-size: 10.5px; font-weight: 600; display: inline-flex; align-items: center; padding: 4px 10px; border-radius: 20px; }
+body.pg-dashboard-dashboard .progress-bar { height: 6px; background: #f1f5f9; border-radius: 8px; margin-top: 12px; overflow: hidden; }
+body.pg-dashboard-dashboard .progress-fill { height: 100%; border-radius: 8px; transition: width 1s ease-in-out; }
+
+/* Quick Actions & Status Pills */
+body.pg-dashboard-dashboard .quick-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 24px; }
+body.pg-dashboard-dashboard .btn-action { background: #ffffff; color: var(--navy-950); border: 1px solid var(--line); padding: 10px 18px; border-radius: var(--radius-sm); font-size: 11px; font-weight: 700; text-transform: uppercase; text-decoration: none; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 1px 2px rgba(0,0,0,0.03); letter-spacing: 0.5px; }
+body.pg-dashboard-dashboard .btn-action:hover { background: #f8fafc; border-color: var(--sky); transform: translateY(-2px); box-shadow: var(--card-shadow); }
+body.pg-dashboard-dashboard .status-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 14px; }
+body.pg-dashboard-dashboard .status-pill { background: #ffffff; text-align: center; padding: 18px 12px; border-radius: var(--radius-sm); border: 1px solid var(--line); transition: all 0.2s; box-shadow: var(--card-shadow); }
+body.pg-dashboard-dashboard .status-pill:hover { transform: translateY(-3px); box-shadow: var(--card-shadow-hover); border-color: var(--sky); }
+body.pg-dashboard-dashboard .status-pill .s-num { font-size: 24px; font-weight: 800; font-family: 'Sora', sans-serif; }
+body.pg-dashboard-dashboard .status-pill .s-lbl { font-size: 10px; text-transform: uppercase; color: #64748b; margin-top: 6px; font-weight: 700; letter-spacing: 0.5px; }
+
+/* Dashboard Panels (Charts & Tables) */
+body.pg-dashboard-dashboard .dash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+@media (max-width: 950px) { body.pg-dashboard-dashboard .dash-grid { grid-template-columns: 1fr; } }
+body.pg-dashboard-dashboard .panel-card { background: #ffffff; border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; box-shadow: var(--card-shadow); transition: box-shadow 0.3s; }
+body.pg-dashboard-dashboard .panel-card:hover { box-shadow: var(--card-shadow-hover); }
+body.pg-dashboard-dashboard .panel-title { font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 700; color: var(--navy-950); text-transform: uppercase; margin-bottom: 18px; padding-bottom: 12px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; letter-spacing: 0.5px; }
+body.pg-dashboard-dashboard .btn-viewall { font-size: 10px; color: var(--sky); font-weight: 700; text-decoration: none; text-transform: uppercase; padding: 4px 8px; border-radius: 6px; transition: 0.2s; }
+body.pg-dashboard-dashboard .btn-viewall:hover { background: #f0f9ff; color: #0369a1; }
+body.pg-dashboard-dashboard .chart-wrap { position: relative; height: 260px; width: 100%; }
+body.pg-dashboard-dashboard .chart-wrap.sm { height: 220px; }
+
+/* Compact Tables */
+body.pg-dashboard-dashboard .compact-table { width: 100%; border-collapse: collapse; }
+body.pg-dashboard-dashboard .compact-table th, body.pg-dashboard-dashboard .compact-table td { padding: 12px 10px; font-size: 12px; border-bottom: 1px solid #f1f5f9; }
+body.pg-dashboard-dashboard .compact-table th { color: #64748b; font-weight: 700; text-transform: uppercase; font-size: 10px; background: #f8fafc; border-bottom: 2px solid var(--line); letter-spacing: 0.5px; }
+body.pg-dashboard-dashboard .compact-table tbody tr:hover td { background: #f8fafc; }
+body.pg-dashboard-dashboard .compact-table tbody tr:last-child td { border-bottom: none; }
+body.pg-dashboard-dashboard .val-cell { font-family: 'Sora', sans-serif; text-align: right; font-weight: 700; color: #0f172a; }
+body.pg-dashboard-dashboard .rank { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; font-size: 10.5px; font-weight: 700; color: #ffffff; }
+body.pg-dashboard-dashboard .rank-1 { background: #f59e0b; }
+body.pg-dashboard-dashboard .rank-2 { background: #94a3b8; }
+body.pg-dashboard-dashboard .rank-3 { background: #b45309; }
+body.pg-dashboard-dashboard .rank-n { background: #e2e8f0; color: #475569; }
+body.pg-dashboard-dashboard .empty-state { text-align: center; padding: 40px 20px; font-size: 13px; color: #94a3b8; background: #f8fafc; border-radius: var(--radius-sm); border: 1px dashed var(--line); }
+
+/* Remove old app overrides causing conflicts */
+body.app .kpi-card, body.app .pulse-card, body.app .panel-card { border-style: solid !important; padding: 20px !important; }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 
 <!-- ===================== HEADER CONTEXT ===================== -->
 <div class="dash-header">
@@ -386,7 +471,7 @@ include __DIR__ . '/includes/header.php';
 <?php if ($isSales || $isAdmin || $isAccounts): ?>
 <div class="ops-section-title">
     <span>Sales & Collection KPIs</span>
-    <span class="badge-sub"><?= $fyLabel ?> • Scope: <?= $viewContext ?></span>
+    <span class="badge-sub"><?= $fyLabel ?> • Scope: <?= $viewContext ?? 'All Scope' ?></span>
 </div>
 <div class="kpi-grid">
     <div class="kpi-card" style="--accent:#3b82f6;">
@@ -413,7 +498,7 @@ include __DIR__ . '/includes/header.php';
     <div class="kpi-card" style="--accent:#059669;">
         <div class="kpi-label">YTD Collections</div>
         <div class="kpi-value" style="color:#059669;"><?= fmtINR($secondaryYTD) ?></div>
-        <div class="kpi-sub" style="background:#ecfdf5; color:#047857;"><?= $collVsPrimary ?>% of Primary</div>
+        <div class="kpi-sub" style="background:#ecfdf5; color:#047857;"><?= $collVsPrimary ?? 0 ?>% of Primary</div>
     </div>
     <div class="kpi-card" style="--accent:#c9982e;">
         <div class="kpi-label">YTD Sales Target</div>
