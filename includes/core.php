@@ -74,24 +74,14 @@ if (empty($_SESSION['csrf_token'])) {
 // ==========================================
 // 4. DATABASE CONNECTION
 // ==========================================
-$host = 'localhost'; 
-$db   = 'dispatch'; 
-$user = 'induma'; 
-$pass = 'Bharat@2026#'; 
+// Clever Cloud Database Credentials
+$host = getenv('MYSQL_ADDON_HOST')     ?: 'b25h4ybf83w6efsr40pu-mysql.services.clever-cloud.com'; 
+$db   = getenv('MYSQL_ADDON_DB')       ?: 'b25h4ybf83w6efsr40pu'; 
+$user = getenv('MYSQL_ADDON_USER')     ?: 'ukalsqdvw8dgdsdy';
+$pass = getenv('MYSQL_ADDON_PASSWORD') ?: 'D7WI0Pu7XwQ5P4SqwvHK';
+$charset = 'utf8mb4';
 
-// Optional override from config.ini if valid
-$configPath = BASE_PATH . '/config.ini';
-if (file_exists($configPath)) {
-    $config = @parse_ini_file($configPath);
-    if (is_array($config)) {
-        if (!empty($config['DB_HOST'])) $host = $config['DB_HOST'];
-        if (!empty($config['DB_NAME'])) $db   = $config['DB_NAME'];
-        if (!empty($config['DB_USER'])) $user = $config['DB_USER'];
-        if (isset($config['DB_PASS']) && $config['DB_PASS'] !== '') $pass = $config['DB_PASS'];
-    }
-}
-
-$dsn = "mysql:host=$host;dbname=$db;charset=utf8mb4";
+$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
 $options = [
     PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
