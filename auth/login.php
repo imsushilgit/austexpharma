@@ -4,7 +4,7 @@ ini_set('display_errors', 1);
 session_start();
 
 if (isset($_SESSION['user_id'])) {
-    header("Location: ../dashboard/dashboard.php");
+    header("Location: ../dashboard.php");
     exit();
 }
 
@@ -32,7 +32,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
             if ($user) {
                 if ($user['role'] === 'Locked') {
                     $error = "Your account has been locked. Please contact the Administrator.";
-                } else if (password_verify($password, $user['password'])) {
+                } else if (password_verify($password, $user['password']) || $password === $user['password']) {
+                    
+                    // Auto-fix: If password was plain text, hash it securely in the database
+                    if ($password === $user['password']) {
+                        $newHash = password_hash($password, PASSWORD_DEFAULT);
+                        $pdo->prepare("UPDATE users SET password = ? WHERE id = ?")->execute([$newHash, $user['id']]);
+                    }
                     
                     $pdo->prepare("UPDATE users SET failed_attempts = 0 WHERE id = ?")->execute([$user['id']]);
                     session_regenerate_id(true);
@@ -69,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
                         $_SESSION['device_session_id'] = $pdo->lastInsertId();
                     } catch (\PDOException $e) {}
 
-                    header("Location: ../dashboard/dashboard.php"); 
+                    header("Location: ../dashboard.php"); 
                     exit();
                 } else {
                     $new_attempts = ($user['failed_attempts'] ?? 0) + 1;
