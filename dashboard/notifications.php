@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['user_id'])) { header("Location: login.php"); exit(); }
-require_once 'core.php';
+require_once('includes/core.php');
 
 // --- User Context ---
 $stmtUser = $pdo->prepare("SELECT u.role, u.username, e.empname, e.empcode 
