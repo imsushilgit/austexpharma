@@ -16,8 +16,8 @@ $stmtUser = $pdo->prepare("
            e.empname, e.designation, e.department, e.hq, e.state, e.empcode AS e_empcode
     FROM users u
     LEFT JOIN employees e 
-        ON (u.empcode = e.empcode) 
-        AND (e.resignation_date IS NULL OR e.resignation_date = '' OR e.resignation_date = '0000-00-00')
+        ON u.empcode = e.empcode 
+        AND e.resignation_date IS NULL
     WHERE u.id = ?
     LIMIT 1
 ");
