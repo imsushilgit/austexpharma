@@ -388,9 +388,10 @@ function block_access() {
         exit();
     }
     
+    // Fixed literal path for stable redirect
     echo "<script>
-        alert('🛑 ACCESS DENIED\\n\\nYou do not have permission to view or access this page. Please contact your Administrator if you need access.');
-        window.location.href = '" . URL_DASHBOARD . "dashboard.php';
+        alert('🛑 ACCESS DENIED\\n\\nYou do not have permission to view or access this page.');
+        window.location.href = '/dashboard.php';
     </script>";
     exit();
 }
