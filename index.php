@@ -8,7 +8,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 // Fixed: Redirecting directly to dashboard.php in the root folder
-$target = !empty($_SESSION['user_id']) ? 'dashboard.php' : 'hello/auth/login.php';
+$target = !empty($_SESSION['user_id']) ? 'dashboard.php' : 'auth/login.php';
 $qs =$_SERVER['QUERY_STRING'] ?? '';
 header('Location: ' . $target . ($qs !== '' ? '?' .$qs : ''));
 exit;
