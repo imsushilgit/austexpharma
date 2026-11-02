@@ -19,7 +19,6 @@ if (isset($pdo) && function_exists('get_user_context')) {
 $isAdmin   = !empty($ctx['is_admin']);
 $isManager = !empty($ctx['is_manager']);
 $isMR      = !empty($ctx['is_mr']);
-
 $department = strtoupper(trim($_SESSION['department'] ?? ''));
 $isHR       = $isAdmin || ($department === 'HR' || $department === 'ADMIN');
 
@@ -46,11 +45,10 @@ $logoPathDisplay = $logoPath ?? '';
 $logoHtmlDisplay = $logoHtml ?? '';
 ?>
 <aside class="sidebar">
-    <!-- GUARANTEED WHITE LOGO CONTAINER -->
     <div class="sidebar-brand" style="background-color: #ffffff !important; padding: 12px 10px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: center; align-items: center; min-height: 55px;">
         <?php if ($logoTypeDisplay === 'image' && !empty($logoPathDisplay)): ?>
             <div style="height: 44px; display:flex; align-items:center; justify-content:center; flex-shrink: 0; width: 100%;">
-                <img src="<?= BASE_URL . ltrim(htmlspecialchars($logoPathDisplay), '/') ?>" alt="Logo" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                <img src="<?= BASE_URL . ltrim(htmlspecialchars($logoPathDisplay), '/') ?>" alt="Logo" style="max-width: 100%; max-height: 100%; object-fit: contain; transition: max-width 0.15s ease;">
             </div>
         <?php elseif ($logoTypeDisplay === 'html' && !empty($logoHtmlDisplay)): ?>
             <div style="flex-shrink:0; display:flex; align-items:center; width: 100%;">
@@ -82,7 +80,7 @@ $logoHtmlDisplay = $logoHtml ?? '';
         <!-- CORE OPERATIONS -->
         <div class="nav-group" data-group="Core Operations">
             <button class="nav-master" type="button">
-                <span>Core Operations</span>
+                <span><i class="fa-solid fa-briefcase" style="margin-right: 10px; width: 20px; text-align: center;"></i> <span class="text-label">Core Operations</span></span>
                 <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
             </button>
             <div class="nav-submenu">
@@ -130,7 +128,7 @@ $logoHtmlDisplay = $logoHtml ?? '';
         <!-- FIELD FORCE -->
         <div class="nav-group" data-group="Field Force">
             <button class="nav-master" type="button">
-                <span>Field Force</span>
+                <span><i class="fa-solid fa-users" style="margin-right: 10px; width: 20px; text-align: center;"></i> <span class="text-label">Field Force</span></span>
                 <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
             </button>
             <div class="nav-submenu">
@@ -186,7 +184,7 @@ $logoHtmlDisplay = $logoHtml ?? '';
         <!-- HR & PAYROLL -->
         <div class="nav-group" data-group="HR & Payroll">
             <button class="nav-master" type="button">
-                <span>HR & Payroll</span>
+                <span><i class="fa-solid fa-id-card-clip" style="margin-right: 10px; width: 20px; text-align: center;"></i> <span class="text-label">HR & Payroll</span></span>
                 <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
             </button>
             <div class="nav-submenu">
@@ -241,7 +239,7 @@ $logoHtmlDisplay = $logoHtml ?? '';
         <!-- MASTER DATA -->
         <div class="nav-group" data-group="Master Data">
             <button class="nav-master" type="button">
-                <span>Master Data</span>
+                <span><i class="fa-solid fa-database" style="margin-right: 10px; width: 20px; text-align: center;"></i> <span class="text-label">Master Data</span></span>
                 <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
             </button>
             <div class="nav-submenu">
@@ -280,7 +278,7 @@ $logoHtmlDisplay = $logoHtml ?? '';
         <!-- DATA MANAGEMENT -->
         <div class="nav-group" data-group="Data Management">
             <button class="nav-master" type="button">
-                <span>Data Management</span>
+                <span><i class="fa-solid fa-file-import" style="margin-right: 10px; width: 20px; text-align: center;"></i> <span class="text-label">Data Management</span></span>
                 <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
             </button>
             <div class="nav-submenu">
@@ -294,7 +292,7 @@ $logoHtmlDisplay = $logoHtml ?? '';
         <!-- ADMINISTRATION -->
         <div class="nav-group" data-group="Administration">
             <button class="nav-master" type="button" style="color: #fca5a5;">
-                <span>Administration</span>
+                <span><i class="fa-solid fa-gear" style="margin-right: 10px; width: 20px; text-align: center;"></i> <span class="text-label">Administration</span></span>
                 <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
             </button>
             <div class="nav-submenu">
@@ -328,7 +326,7 @@ $logoHtmlDisplay = $logoHtml ?? '';
 
 <script>
 (function() {
-    // Top Level Menu Accordion
+    // 1st Level Menu Accordion
     document.querySelectorAll('.nav-master').forEach(master => {
         master.addEventListener('click', () => {
             const submenu = master.nextElementSibling;
@@ -353,7 +351,6 @@ $logoHtmlDisplay = $logoHtml ?? '';
             const subMenu = subMaster.nextElementSibling;
             const isOpen = subMaster.classList.contains('open');
             
-            // Close other sub-menus in the same master section
             const parentInner = subMaster.closest('.nav-submenu-inner');
             if (parentInner) {
                 parentInner.querySelectorAll('.nav-sub-master').forEach(btn => {
@@ -369,32 +366,7 @@ $logoHtmlDisplay = $logoHtml ?? '';
         });
     });
 
-    // Automatically open active nested menus on page load
-    document.querySelectorAll('.nav-sub-menu a.active').forEach(activeLink => {
-        const subMenu = activeLink.closest('.nav-sub-menu');
-        if (subMenu) {
-            subMenu.style.maxHeight = "2000px";
-            const subMaster = subMenu.previousElementSibling;
-            if (subMaster) subMaster.classList.add('open');
-            
-            const masterMenu = subMenu.closest('.nav-submenu');
-            if (masterMenu) {
-                masterMenu.style.maxHeight = "2000px";
-                const masterBtn = masterMenu.previousElementSibling;
-                if (masterBtn) masterBtn.classList.add('open');
-            }
-        }
-    });
-    
-    // Automatically open active 1st level menus
-    document.querySelectorAll('.nav-submenu-inner > a.active').forEach(activeLink => {
-        const masterMenu = activeLink.closest('.nav-submenu');
-        if (masterMenu) {
-            masterMenu.style.maxHeight = "2000px";
-            const masterBtn = masterMenu.previousElementSibling;
-            if (masterBtn) masterBtn.classList.add('open');
-        }
-    });
+    // NOTE: Auto-expanding logic is completely removed here to ensure all menus are strictly closed on page load.
 
     // SEARCH LOGIC
     const input = document.getElementById('menuSearch');
