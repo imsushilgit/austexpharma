@@ -77,24 +77,82 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        /* Ensure Logo Area is White & Visible */
+        /* Transparent Logo Background Fix */
         .sidebar-brand {
             background-color: #ffffff !important;
             padding: 12px 10px;
             border-bottom: 1px solid #e2e8f0;
         }
-        
-        /* Clean, lightweight typography for nested submenus */
-        .menu-section-title {
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: #1e3a8a; /* Navy blue palette */
-            padding: 18px 15px 6px 15px;
-            font-weight: 400;
+
+        /* 3-Level Menu Styling */
+        .nav-submenu-inner {
+            position: relative;
+            padding-left: 12px;
+            margin-left: 20px;
+            border-left: 1px solid rgba(255, 255, 255, 0.2); /* The vertical connecting line */
         }
-        .nav-submenu-inner a {
-            padding-left: 20px !important; /* Indent links slightly under their titles */
+        
+        /* 2nd Level Items (Nodes with circles) */
+        .nav-submenu-inner > a,
+        .nav-submenu-inner > .nav-sub-group > .nav-sub-master {
+            position: relative;
+            padding-left: 15px !important;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: inherit;
+            text-align: left;
+            cursor: pointer;
+            font-size: 13px;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        /* The Hollow Circle Node */
+        .nav-submenu-inner > a::before,
+        .nav-submenu-inner > .nav-sub-group > .nav-sub-master::before {
+            content: '';
+            position: absolute;
+            left: -16px; /* Positioned exactly over the left border */
+            top: 50%;
+            transform: translateY(-50%);
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            background-color: #0b1930; /* Should match your sidebar background to look hollow */
+            z-index: 2;
+        }
+
+        /* 3rd Level Items (Indented, darker background, no circle) */
+        .nav-sub-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background-color: rgba(0, 0, 0, 0.15); /* Darker inset effect */
+            margin-left: -12px; /* Pull back to edge */
+        }
+        
+        .nav-sub-menu a {
+            padding-left: 45px !important;
+            position: relative;
+            font-size: 12.5px;
+        }
+        
+        .nav-sub-menu a::before {
+            display: none !important; /* Hide circle for 3rd level */
+        }
+
+        /* Sub-master chevron animation */
+        .nav-sub-master .chevron {
+            width: 14px;
+            transition: transform 0.3s ease;
+        }
+        .nav-sub-master.open .chevron {
+            transform: rotate(180deg);
         }
     </style>
     <title><?= htmlspecialchars($pageTitle ?? 'Dashboard') ?> | <?= htmlspecialchars($companyName) ?></title>
