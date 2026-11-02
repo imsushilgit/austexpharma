@@ -71,6 +71,7 @@ try {
 ?>
 <!DOCTYPE html>
 <html lang="en">
+    <style>
     /* --- 1. SIDEBAR COLLAPSE STYLING --- */
     .sidebar {
         transition: width 0.15s ease-out;
@@ -194,6 +195,7 @@ try {
     .nav-sub-master.open .chevron {
         transform: rotate(180deg);
     }
+    </style>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
