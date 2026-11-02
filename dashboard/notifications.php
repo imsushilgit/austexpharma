@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['user_id'])) { header("Location: login.php"); exit(); }
-require_once('includes/core.php');
+require_once('../includes/core.php');
 
 // --- User Context ---
 $stmtUser = $pdo->prepare("SELECT u.role, u.username, e.empname, e.empcode 
@@ -34,7 +34,7 @@ $unreadCount = 0;
 foreach ($notifications as $n) if (!$n['is_read']) $unreadCount++;
 
 $pageTitle = "Notifications";
-require_once 'header.php';
+require_once '../includes/header.php';
 ?>
 
 <div class="page-header d-flex justify-content-between align-items-center">
@@ -80,4 +80,4 @@ require_once 'header.php';
     </div>
 </div>
 
-<?php require_once 'footer.php'; ?>
+<?php require_once '../includes/footer.php'; ?>
