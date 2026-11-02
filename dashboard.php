@@ -307,617 +307,630 @@ function fmtINR($n) {
 }
 
 $pageTitle = "Dashboard";
-include __DIR__ . '/includes/header.php';
+include 'header.php';
 ?>
 
 <style>
 /* ============================================================
-   MODERN DASHBOARD CSS (Clean, SaaS-style)
+   FIXED CSS SCOPE: Applies to .modern-dash-wrapper ONLY
    ============================================================ */
-body.pg-dashboard-dashboard {
-    --card-shadow: 0 2px 12px rgba(15, 23, 42, 0.06);
-    --card-shadow-hover: 0 12px 32px rgba(15, 23, 42, 0.12);
+.modern-dash-wrapper, 
+.modern-dash-wrapper * { 
+    box-sizing: border-box; 
+}
+
+.modern-dash-wrapper {
+    --card-shadow: 0 4px 15px rgba(15, 23, 42, 0.04);
+    --card-shadow-hover: 0 10px 25px rgba(15, 23, 42, 0.08);
     --radius: 16px;
     --radius-sm: 10px;
     --navy: #1e293b;       
     --navy-950: #0f172a;   
     --sky: #0ea5e9;        
     --line: #e2e8f0;       
+    background: #f8fafc; 
+    color: var(--navy-950); 
+    font-family: 'Inter', system-ui, sans-serif; 
+    padding: 20px;
+    width: 100%;
+    min-height: 100vh;
 }
-
-body.pg-dashboard-dashboard { background: #f8fafc; color: var(--navy-950); font-family: 'Inter', sans-serif; }
 
 /* Header & Context Banner */
-body.pg-dashboard-dashboard .dash-header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 24px; }
-body.pg-dashboard-dashboard .context-banner {
-    background: #ffffff; border: 1px solid var(--line); border-left: 5px solid var(--sky); border-radius: var(--radius-sm);
-    padding: 18px 24px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px;
+.modern-dash-wrapper .dash-header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 28px; }
+.modern-dash-wrapper .context-banner {
+    background: linear-gradient(135deg, #ffffff 0%, #fcfdfd 100%); 
+    border: 1px solid var(--line); 
+    border-left: 5px solid var(--sky); 
+    border-radius: var(--radius-sm);
+    padding: 18px 24px; 
+    display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px;
     font-size: 13px; flex: 1; box-shadow: var(--card-shadow);
 }
-body.pg-dashboard-dashboard .role-badge { background: var(--navy); color: #ffffff; padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
-body.pg-dashboard-dashboard .fy-pill { background: #f1f5f9; color: var(--navy); border: 1px solid var(--line); padding: 6px 16px; border-radius: 20px; font-weight: 600; font-size: 11.5px; }
+.modern-dash-wrapper .role-badge { background: var(--navy); color: #ffffff; padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+.modern-dash-wrapper .fy-pill { background: #f1f5f9; color: var(--navy); border: 1px solid var(--line); padding: 6px 16px; border-radius: 20px; font-weight: 600; font-size: 11.5px; }
 
 /* Section Titles */
-body.pg-dashboard-dashboard .ops-section-title {
+.modern-dash-wrapper .ops-section-title {
     font-family: 'Sora', sans-serif; font-size: 14px; font-weight: 700; color: var(--navy-950); text-transform: uppercase; 
     margin: 32px 0 16px; padding-bottom: 10px; border-bottom: 2px solid var(--line); display: flex; justify-content: space-between; align-items: center; letter-spacing: 0.5px;
 }
-body.pg-dashboard-dashboard .ops-section-title .badge-sub { font-size: 10px; font-weight: 600; color: #64748b; background: #f1f5f9; padding: 4px 12px; border-radius: 12px; text-transform: none; letter-spacing: normal; }
+.modern-dash-wrapper .ops-section-title .badge-sub { font-size: 10px; font-weight: 600; color: #64748b; background: #f1f5f9; padding: 4px 12px; border-radius: 12px; text-transform: none; letter-spacing: normal; border: 1px solid #e2e8f0; }
 
 /* Navigation Hub */
-body.pg-dashboard-dashboard .nav-hub { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 14px; margin-bottom: 28px; }
-body.pg-dashboard-dashboard .nav-tile {
-    background: #ffffff; border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 18px 12px; text-decoration: none; text-align: center; transition: all 0.2s ease; box-shadow: 0 1px 3px rgba(0,0,0,0.02); display: flex; flex-direction: column; align-items: center; gap: 8px;
+.modern-dash-wrapper .nav-hub { display: grid; grid-template-columns: repeat(auto-fill, minmax(135px, 1fr)); gap: 16px; margin-bottom: 28px; }
+.modern-dash-wrapper .nav-tile {
+    background: #ffffff; border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 20px 12px; text-decoration: none; text-align: center; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: var(--card-shadow); display: flex; flex-direction: column; align-items: center; gap: 8px; position: relative; overflow: hidden;
 }
-body.pg-dashboard-dashboard .nav-tile:hover { transform: translateY(-4px); box-shadow: var(--card-shadow-hover); border-color: var(--sky); }
-body.pg-dashboard-dashboard .nav-tile .icon { font-size: 26px; line-height: 1; margin-bottom: 4px; }
-body.pg-dashboard-dashboard .nav-tile .lbl { font-size: 11px; font-weight: 700; color: var(--navy-950); text-transform: uppercase; letter-spacing: 0.5px; }
-body.pg-dashboard-dashboard .nav-tile .sub { font-size: 10px; color: #64748b; }
-body.pg-dashboard-dashboard .nav-tile.sales { border-top: 3px solid #3b82f6; }
-body.pg-dashboard-dashboard .nav-tile.hr { border-top: 3px solid #8b5cf6; }
-body.pg-dashboard-dashboard .nav-tile.dispatch { border-top: 3px solid #f59e0b; }
-body.pg-dashboard-dashboard .nav-tile.purchase { border-top: 3px solid #06b6d4; }
-body.pg-dashboard-dashboard .nav-tile.admin { border-top: 3px solid #ef4444; }
-body.pg-dashboard-dashboard .nav-tile.reports { border-top: 3px solid #ec4899; }
+.modern-dash-wrapper .nav-tile:hover { transform: translateY(-4px); box-shadow: var(--card-shadow-hover); border-color: var(--sky); }
+.modern-dash-wrapper .nav-tile::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: var(--tile-color, #94a3b8); }
+.modern-dash-wrapper .nav-tile.sales { --tile-color: #3b82f6; }
+.modern-dash-wrapper .nav-tile.hr { --tile-color: #8b5cf6; }
+.modern-dash-wrapper .nav-tile.dispatch { --tile-color: #f59e0b; }
+.modern-dash-wrapper .nav-tile.purchase { --tile-color: #06b6d4; }
+.modern-dash-wrapper .nav-tile.admin { --tile-color: #ef4444; }
+.modern-dash-wrapper .nav-tile.reports { --tile-color: #ec4899; }
+.modern-dash-wrapper .nav-tile .icon { font-size: 26px; line-height: 1; margin-bottom: 4px; transition: transform 0.2s; }
+.modern-dash-wrapper .nav-tile:hover .icon { transform: scale(1.1); }
+.modern-dash-wrapper .nav-tile .lbl { font-size: 11.5px; font-weight: 700; color: var(--navy-950); text-transform: uppercase; letter-spacing: 0.5px; }
+.modern-dash-wrapper .nav-tile .sub { font-size: 10px; color: #64748b; }
 
 /* KPI Cards */
-body.pg-dashboard-dashboard .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 24px; }
-body.pg-dashboard-dashboard .kpi-card { background: #ffffff; border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 20px; position: relative; overflow: hidden; transition: all 0.3s; box-shadow: var(--card-shadow); }
-body.pg-dashboard-dashboard .kpi-card:hover { box-shadow: var(--card-shadow-hover); transform: translateY(-3px); }
-body.pg-dashboard-dashboard .kpi-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--accent, var(--sky)); border-radius: 4px 0 0 4px; }
-body.pg-dashboard-dashboard .kpi-label { font-size: 11px; color: #64748b; text-transform: uppercase; font-weight: 700; margin-bottom: 8px; letter-spacing: 0.5px; }
-body.pg-dashboard-dashboard .kpi-value { font-size: 24px; font-family: 'Sora', sans-serif; font-weight: 800; color: var(--navy-950); margin-bottom: 8px; }
-body.pg-dashboard-dashboard .kpi-sub { font-size: 10.5px; font-weight: 600; display: inline-flex; align-items: center; padding: 4px 10px; border-radius: 20px; }
-body.pg-dashboard-dashboard .progress-bar { height: 6px; background: #f1f5f9; border-radius: 8px; margin-top: 12px; overflow: hidden; }
-body.pg-dashboard-dashboard .progress-fill { height: 100%; border-radius: 8px; transition: width 1s ease-in-out; }
+.modern-dash-wrapper .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 18px; margin-bottom: 28px; }
+.modern-dash-wrapper .kpi-card { background: #ffffff; border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 22px; position: relative; overflow: hidden; transition: all 0.3s; box-shadow: var(--card-shadow); }
+.modern-dash-wrapper .kpi-card:hover { box-shadow: var(--card-shadow-hover); transform: translateY(-4px); }
+.modern-dash-wrapper .kpi-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--accent, var(--sky)); border-radius: 4px 0 0 4px; }
+.modern-dash-wrapper .kpi-label { font-size: 11px; color: #64748b; text-transform: uppercase; font-weight: 700; margin-bottom: 8px; letter-spacing: 0.5px; }
+.modern-dash-wrapper .kpi-value { font-size: 26px; font-family: 'Sora', sans-serif; font-weight: 800; color: var(--navy-950); margin-bottom: 10px; }
+.modern-dash-wrapper .kpi-sub { font-size: 10.5px; font-weight: 600; display: inline-flex; align-items: center; padding: 4px 10px; border-radius: 20px; }
+.modern-dash-wrapper .progress-bar { height: 6px; background: #f1f5f9; border-radius: 8px; margin-top: 14px; overflow: hidden; box-shadow: inset 0 1px 2px rgba(0,0,0,0.05); }
+.modern-dash-wrapper .progress-fill { height: 100%; border-radius: 8px; transition: width 1s ease-in-out; }
 
 /* Quick Actions & Status Pills */
-body.pg-dashboard-dashboard .quick-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 24px; }
-body.pg-dashboard-dashboard .btn-action { background: #ffffff; color: var(--navy-950); border: 1px solid var(--line); padding: 10px 18px; border-radius: var(--radius-sm); font-size: 11px; font-weight: 700; text-transform: uppercase; text-decoration: none; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 1px 2px rgba(0,0,0,0.03); letter-spacing: 0.5px; }
-body.pg-dashboard-dashboard .btn-action:hover { background: #f8fafc; border-color: var(--sky); transform: translateY(-2px); box-shadow: var(--card-shadow); }
-body.pg-dashboard-dashboard .status-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 14px; }
-body.pg-dashboard-dashboard .status-pill { background: #ffffff; text-align: center; padding: 18px 12px; border-radius: var(--radius-sm); border: 1px solid var(--line); transition: all 0.2s; box-shadow: var(--card-shadow); }
-body.pg-dashboard-dashboard .status-pill:hover { transform: translateY(-3px); box-shadow: var(--card-shadow-hover); border-color: var(--sky); }
-body.pg-dashboard-dashboard .status-pill .s-num { font-size: 24px; font-weight: 800; font-family: 'Sora', sans-serif; }
-body.pg-dashboard-dashboard .status-pill .s-lbl { font-size: 10px; text-transform: uppercase; color: #64748b; margin-top: 6px; font-weight: 700; letter-spacing: 0.5px; }
+.modern-dash-wrapper .quick-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 28px; }
+.modern-dash-wrapper .btn-action { background: #ffffff; color: var(--navy-950); border: 1px solid var(--line); padding: 12px 20px; border-radius: var(--radius-sm); font-size: 11px; font-weight: 700; text-transform: uppercase; text-decoration: none; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); display: inline-flex; align-items: center; gap: 8px; box-shadow: var(--card-shadow); letter-spacing: 0.5px; }
+.modern-dash-wrapper .btn-action:hover { background: #f8fafc; border-color: var(--sky); transform: translateY(-3px); box-shadow: var(--card-shadow-hover); }
+
+.modern-dash-wrapper .status-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 16px; }
+.modern-dash-wrapper .status-pill { background: #ffffff; text-align: center; padding: 20px 14px; border-radius: var(--radius-sm); border: 1px solid var(--line); transition: all 0.25s; box-shadow: var(--card-shadow); }
+.modern-dash-wrapper .status-pill:hover { transform: translateY(-4px); box-shadow: var(--card-shadow-hover); border-color: var(--sky); }
+.modern-dash-wrapper .status-pill .s-num { font-size: 26px; font-weight: 800; font-family: 'Sora', sans-serif; line-height: 1; }
+.modern-dash-wrapper .status-pill .s-lbl { font-size: 10px; text-transform: uppercase; color: #64748b; margin-top: 8px; font-weight: 700; letter-spacing: 0.5px; }
+
+/* Pulse Strip (Real-time counters) */
+.modern-dash-wrapper .pulse-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; margin-bottom: 28px; }
+.modern-dash-wrapper .pulse-card { background: #ffffff; border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 16px; display: flex; align-items: center; gap: 14px; text-decoration: none; transition: all 0.25s; box-shadow: var(--card-shadow); }
+.modern-dash-wrapper .pulse-card:hover { transform: translateY(-3px); box-shadow: var(--card-shadow-hover); border-color: var(--sky); }
+.modern-dash-wrapper .pulse-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+.modern-dash-wrapper .pulse-info .p-num { font-size: 20px; font-weight: 800; color: var(--navy-950); line-height: 1.1; font-family: 'Sora', sans-serif; }
+.modern-dash-wrapper .pulse-info .p-lbl { font-size: 10px; color: #64748b; text-transform: uppercase; font-weight: 700; margin-top: 4px; letter-spacing: 0.5px; }
 
 /* Dashboard Panels (Charts & Tables) */
-body.pg-dashboard-dashboard .dash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
-@media (max-width: 950px) { body.pg-dashboard-dashboard .dash-grid { grid-template-columns: 1fr; } }
-body.pg-dashboard-dashboard .panel-card { background: #ffffff; border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; box-shadow: var(--card-shadow); transition: box-shadow 0.3s; }
-body.pg-dashboard-dashboard .panel-card:hover { box-shadow: var(--card-shadow-hover); }
-body.pg-dashboard-dashboard .panel-title { font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 700; color: var(--navy-950); text-transform: uppercase; margin-bottom: 18px; padding-bottom: 12px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; letter-spacing: 0.5px; }
-body.pg-dashboard-dashboard .btn-viewall { font-size: 10px; color: var(--sky); font-weight: 700; text-decoration: none; text-transform: uppercase; padding: 4px 8px; border-radius: 6px; transition: 0.2s; }
-body.pg-dashboard-dashboard .btn-viewall:hover { background: #f0f9ff; color: #0369a1; }
-body.pg-dashboard-dashboard .chart-wrap { position: relative; height: 260px; width: 100%; }
-body.pg-dashboard-dashboard .chart-wrap.sm { height: 220px; }
+.modern-dash-wrapper .dash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 28px; }
+@media (max-width: 950px) { .modern-dash-wrapper .dash-grid { grid-template-columns: 1fr; } }
+.modern-dash-wrapper .panel-card { background: #ffffff; border: 1px solid var(--line); border-radius: var(--radius); padding: 26px; box-shadow: var(--card-shadow); transition: box-shadow 0.3s; }
+.modern-dash-wrapper .panel-card:hover { box-shadow: var(--card-shadow-hover); }
+.modern-dash-wrapper .panel-title { font-family: 'Sora', sans-serif; font-size: 14px; font-weight: 700; color: var(--navy-950); text-transform: uppercase; margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; letter-spacing: 0.5px; }
+.modern-dash-wrapper .btn-viewall { font-size: 10px; color: var(--sky); font-weight: 700; text-decoration: none; text-transform: uppercase; padding: 6px 10px; border-radius: 6px; transition: 0.2s; border: 1px solid transparent; }
+.modern-dash-wrapper .btn-viewall:hover { background: #f0f9ff; color: #0284c7; border-color: #bae6fd; }
+.modern-dash-wrapper .chart-wrap { position: relative; height: 280px; width: 100%; }
+.modern-dash-wrapper .chart-wrap.sm { height: 240px; }
 
 /* Compact Tables */
-body.pg-dashboard-dashboard .compact-table { width: 100%; border-collapse: collapse; }
-body.pg-dashboard-dashboard .compact-table th, body.pg-dashboard-dashboard .compact-table td { padding: 12px 10px; font-size: 12px; border-bottom: 1px solid #f1f5f9; }
-body.pg-dashboard-dashboard .compact-table th { color: #64748b; font-weight: 700; text-transform: uppercase; font-size: 10px; background: #f8fafc; border-bottom: 2px solid var(--line); letter-spacing: 0.5px; }
-body.pg-dashboard-dashboard .compact-table tbody tr:hover td { background: #f8fafc; }
-body.pg-dashboard-dashboard .compact-table tbody tr:last-child td { border-bottom: none; }
-body.pg-dashboard-dashboard .val-cell { font-family: 'Sora', sans-serif; text-align: right; font-weight: 700; color: #0f172a; }
-body.pg-dashboard-dashboard .rank { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; font-size: 10.5px; font-weight: 700; color: #ffffff; }
-body.pg-dashboard-dashboard .rank-1 { background: #f59e0b; }
-body.pg-dashboard-dashboard .rank-2 { background: #94a3b8; }
-body.pg-dashboard-dashboard .rank-3 { background: #b45309; }
-body.pg-dashboard-dashboard .rank-n { background: #e2e8f0; color: #475569; }
-body.pg-dashboard-dashboard .empty-state { text-align: center; padding: 40px 20px; font-size: 13px; color: #94a3b8; background: #f8fafc; border-radius: var(--radius-sm); border: 1px dashed var(--line); }
+.modern-dash-wrapper .compact-table { width: 100%; border-collapse: collapse; }
+.modern-dash-wrapper .compact-table th, .modern-dash-wrapper .compact-table td { padding: 14px 12px; font-size: 12px; border-bottom: 1px solid #f1f5f9; text-align: left; }
+.modern-dash-wrapper .compact-table th { color: #64748b; font-weight: 700; text-transform: uppercase; font-size: 10px; background: #f8fafc; border-bottom: 2px solid var(--line); letter-spacing: 0.5px; }
+.modern-dash-wrapper .compact-table tbody tr { transition: background 0.2s; }
+.modern-dash-wrapper .compact-table tbody tr:hover { background: #f8fafc; }
+.modern-dash-wrapper .compact-table tbody tr:last-child td { border-bottom: none; }
+.modern-dash-wrapper .val-cell { font-family: 'Sora', sans-serif; text-align: right; font-weight: 700; color: #0f172a; }
+.modern-dash-wrapper .rank { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 50%; font-size: 11px; font-weight: 700; color: #ffffff; }
+.modern-dash-wrapper .rank-1 { background: linear-gradient(135deg, #f59e0b, #d97706); }
+.modern-dash-wrapper .rank-2 { background: linear-gradient(135deg, #94a3b8, #64748b); }
+.modern-dash-wrapper .rank-3 { background: linear-gradient(135deg, #b45309, #92400e); }
+.modern-dash-wrapper .rank-n { background: #f1f5f9; color: #475569; }
+.modern-dash-wrapper .empty-state { text-align: center; padding: 40px 20px; font-size: 13px; color: #94a3b8; background: #f8fafc; border-radius: var(--radius-sm); border: 1px dashed var(--line); }
 
 /* Remove old app overrides causing conflicts */
-body.app .kpi-card, body.app .pulse-card, body.app .panel-card { border-style: solid !important; padding: 20px !important; }
+.app .kpi-card, .app .pulse-card, .app .panel-card { border-style: solid !important; padding: 20px !important; }
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 
-<!-- ===================== HEADER CONTEXT ===================== -->
-<div class="dash-header">
-    <div class="context-banner">
-        <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
-            <span class="role-badge"><?= htmlspecialchars($isAdmin ? 'ADMIN' : strtoupper($designation)) ?></span>
-            <strong style="color:var(--navy-950); font-size:15px;"><?= htmlspecialchars($empName) ?></strong>
-            <?php if ($userHq): ?>
-                <span style="color:#64748b; font-size:11px;">• <?= htmlspecialchars($userHq) ?><?= $userState ? ' / ' . htmlspecialchars($userState) : '' ?></span>
+<!-- WRAPPER START: Protects CSS from Header Theme Conflicts -->
+<div class="modern-dash-wrapper">
+
+    <!-- ===================== HEADER CONTEXT ===================== -->
+    <div class="dash-header">
+        <div class="context-banner">
+            <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+                <span class="role-badge"><?= htmlspecialchars($isAdmin ? 'ADMIN' : strtoupper($designation)) ?></span>
+                <strong style="color:var(--navy-950); font-size:15px;"><?= htmlspecialchars($empName) ?></strong>
+                <?php if ($userHq): ?>
+                    <span style="color:#64748b; font-size:11px;">• <?= htmlspecialchars($userHq) ?><?= $userState ? ' / ' . htmlspecialchars($userState) : '' ?></span>
+                <?php endif; ?>
+            </div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+               
+                <span class="fy-pill"><?= $fyLabel ?> • <?= date('d M Y') ?></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================== LIVE PULSE / ALERTS (Admin Only) ===================== -->
+    <?php if ($isAdmin): ?>
+    <div class="ops-section-title">
+        <span>Live Operational Pulse</span>
+        <span class="badge-sub">Real-time counters (Admin)</span>
+    </div>
+    <div class="pulse-strip">
+        <a href="billing/orders.php" class="pulse-card">
+            <div class="pulse-icon" style="background:#eff6ff; color:#2563eb;">🛒</div>
+            <div class="pulse-info"><div class="p-num"><?= (int)$wPendingOrders ?></div><div class="p-lbl">Orders in Flow</div></div>
+        </a>
+        <a href="billing/billing.php" class="pulse-card">
+            <div class="pulse-icon" style="background:#fff7ed; color:#ea580c;">🧾</div>
+            <div class="pulse-info"><div class="p-num"><?= (int)$wPendingBilling ?></div><div class="p-lbl">Pending Billing</div></div>
+        </a>
+        <a href="hr/leaveapproval.php" class="pulse-card">
+            <div class="pulse-icon" style="background:#fef3c7; color:#d97706;">🏖️</div>
+            <div class="pulse-info"><div class="p-num"><?= (int)$pendingLeaves ?></div><div class="p-lbl">Leave Pending</div></div>
+        </a>
+        <a href="fieldforce/expenseapproval.php" class="pulse-card">
+            <div class="pulse-icon" style="background:#fce7f3; color:#db2777;">💳</div>
+            <div class="pulse-info"><div class="p-num"><?= (int)$pendingExpenses ?></div><div class="p-lbl">Expense Pending</div></div>
+        </a>
+        <a href="fieldforce/tourplanapproval.php" class="pulse-card">
+            <div class="pulse-icon" style="background:#ede9fe; color:#7c3aed;">📅</div>
+            <div class="pulse-info"><div class="p-num"><?= (int)$pendingTourPlans ?></div><div class="p-lbl">STP Pending</div></div>
+        </a>
+        <a href="hr/attendance.php" class="pulse-card">
+            <div class="pulse-icon" style="background:#fef2f2; color:#dc2626;">⏱️</div>
+            <div class="pulse-info"><div class="p-num"><?= (int)$absentToday ?></div><div class="p-lbl">Absent Today</div></div>
+        </a>
+        <a href="dispatch/dispatch.php" class="pulse-card">
+            <div class="pulse-icon" style="background:#fef2f2; color:#dc2626;">🚚</div>
+            <div class="pulse-info"><div class="p-num"><?= (int)$dispatchPending ?></div><div class="p-lbl">Dispatch Pending</div></div>
+        </a>
+    </div>
+    <?php endif; ?>
+
+    <!-- ===================== PRIMARY KPI CARDS (Sales) ===================== -->
+    <?php if ($isSales || $isAdmin || $isAccounts): ?>
+    <div class="ops-section-title">
+        <span>Sales & Collection KPIs</span>
+        <span class="badge-sub"><?= $fyLabel ?> • Scope: <?= $viewContext ?? 'All Scope' ?></span>
+    </div>
+    <div class="kpi-grid">
+        <div class="kpi-card" style="--accent:#3b82f6;">
+            <div class="kpi-label">MTD Primary Sales</div>
+            <div class="kpi-value"><?= fmtINR($primaryMTD) ?></div>
+            <?php if ($targetMTD > 0): ?>
+                <div class="kpi-sub" style="background:<?= achBg($mtdAchPct) ?>; color:<?= achColor($mtdAchPct) ?>;"><?= $mtdAchPct ?>% of MTD Target</div>
+                <div class="progress-bar"><div class="progress-fill" style="width:<?= min(100, $mtdAchPct) ?>%; background:<?= achColor($mtdAchPct) ?>;"></div></div>
+            <?php else: ?>
+                <div class="kpi-sub" style="background:#eff6ff; color:#1d4ed8;"><?= $monthLabel ?></div>
             <?php endif; ?>
         </div>
-        <div style="display:flex; gap:8px; flex-wrap:wrap;">
-           
-            <span class="fy-pill"><?= $fyLabel ?> • <?= date('d M Y') ?></span>
+        <div class="kpi-card" style="--accent:#10b981;">
+            <div class="kpi-label">MTD Collections</div>
+            <div class="kpi-value" style="color:#059669;"><?= fmtINR($secondaryMTD) ?></div>
+            <div class="kpi-sub" style="background:#ecfdf5; color:#047857;">Money in this month</div>
+        </div>
+        <div class="kpi-card" style="--accent:#1e2a78;">
+            <div class="kpi-label">YTD Primary Sales</div>
+            <div class="kpi-value"><?= fmtINR($primaryYTD) ?></div>
+            <div class="kpi-sub" style="background:<?= achBg($primaryAchPct) ?>; color:<?= achColor($primaryAchPct) ?>;"><?= $primaryAchPct ?>% of Target</div>
+            <div class="progress-bar"><div class="progress-fill" style="width:<?= min(100, $primaryAchPct) ?>%; background:<?= achColor($primaryAchPct) ?>;"></div></div>
+        </div>
+        <div class="kpi-card" style="--accent:#059669;">
+            <div class="kpi-label">YTD Collections</div>
+            <div class="kpi-value" style="color:#059669;"><?= fmtINR($secondaryYTD) ?></div>
+            <div class="kpi-sub" style="background:#ecfdf5; color:#047857;"><?= $collVsPrimary ?? 0 ?>% of Primary</div>
+        </div>
+        <div class="kpi-card" style="--accent:#c9982e;">
+            <div class="kpi-label">YTD Sales Target</div>
+            <div class="kpi-value" style="color:#b45309;"><?= fmtINR($targetYTD) ?></div>
+            <div class="kpi-sub" style="background:#fffbeb; color:#b45309;"><?= $fyLabel ?></div>
+        </div>
+        <div class="kpi-card" style="--accent:<?= $salesGap >= 0 ? '#ef4444' : '#059669' ?>;">
+            <div class="kpi-label"><?= $salesGap >= 0 ? 'Outstanding (YTD)' : 'Net Recovery (YTD)' ?></div>
+            <div class="kpi-value" style="color:<?= $salesGap >= 0 ? '#dc2626' : '#059669' ?>;"><?= fmtINR(abs($salesGap)) ?></div>
+            <div class="kpi-sub" style="background:<?= $salesGap >= 0 ? '#fef2f2' : '#ecfdf5' ?>; color:<?= $salesGap >= 0 ? '#b91c1c' : '#047857' ?>;"><?= $salesGap >= 0 ? 'Billing − Collections' : 'Collections > Billing' ?></div>
         </div>
     </div>
-</div>
+    <?php endif; ?>
 
-<!-- ===================== LIVE PULSE / ALERTS (Admin Only) ===================== -->
-<?php if ($isAdmin): ?>
-<div class="ops-section-title">
-    <span>Live Operational Pulse</span>
-    <span class="badge-sub">Real-time counters (Admin)</span>
-</div>
-<div class="pulse-strip">
-    <a href="billing/orders.php" class="pulse-card">
-        <div class="pulse-icon" style="background:#eff6ff; color:#2563eb;">🛒</div>
-        <div class="pulse-info"><div class="p-num"><?= (int)$wPendingOrders ?></div><div class="p-lbl">Orders in Flow</div></div>
-    </a>
-    <a href="billing/billing.php" class="pulse-card">
-        <div class="pulse-icon" style="background:#fff7ed; color:#ea580c;">🧾</div>
-        <div class="pulse-info"><div class="p-num"><?= (int)$wPendingBilling ?></div><div class="p-lbl">Pending Billing</div></div>
-    </a>
-    <a href="hr/leaveapproval.php" class="pulse-card">
-        <div class="pulse-icon" style="background:#fef3c7; color:#d97706;">🏖️</div>
-        <div class="pulse-info"><div class="p-num"><?= (int)$pendingLeaves ?></div><div class="p-lbl">Leave Pending</div></div>
-    </a>
-    <a href="fieldforce/expenseapproval.php" class="pulse-card">
-        <div class="pulse-icon" style="background:#fce7f3; color:#db2777;">💳</div>
-        <div class="pulse-info"><div class="p-num"><?= (int)$pendingExpenses ?></div><div class="p-lbl">Expense Pending</div></div>
-    </a>
-    <a href="fieldforce/tourplanapproval.php" class="pulse-card">
-        <div class="pulse-icon" style="background:#ede9fe; color:#7c3aed;">📅</div>
-        <div class="pulse-info"><div class="p-num"><?= (int)$pendingTourPlans ?></div><div class="p-lbl">STP Pending</div></div>
-    </a>
-    <a href="hr/attendance.php" class="pulse-card">
-        <div class="pulse-icon" style="background:#fef2f2; color:#dc2626;">⏱️</div>
-        <div class="pulse-info"><div class="p-num"><?= (int)$absentToday ?></div><div class="p-lbl">Absent Today</div></div>
-    </a>
-    <a href="dispatch/dispatch.php" class="pulse-card">
-        <div class="pulse-icon" style="background:#fef2f2; color:#dc2626;">🚚</div>
-        <div class="pulse-info"><div class="p-num"><?= (int)$dispatchPending ?></div><div class="p-lbl">Dispatch Pending</div></div>
-    </a>
-</div>
-<?php endif; ?>
+    <!-- ===================== MY ACTIVITY & PIPELINE (MR & MANAGER) ===================== -->
+    <?php if (!$isAdmin && ($isMR || $isManager)): ?>
+    <div class="ops-section-title">
+        <span>My Activity & Pipeline</span>
+        <span class="badge-sub"><?= $isManager ? 'Team Data Rollup' : 'My Data' ?></span>
+    </div>
+    <div class="status-grid" style="margin-bottom:28px;">
+        <!-- Field Data -->
+        <a href="fieldforce/doctors.php" class="status-pill" style="text-decoration:none;">
+            <div class="s-num" style="color:var(--navy);"><?= number_format($myDoctors) ?></div>
+            <div class="s-lbl">Total Doctors</div>
+        </a>
+        <a href="masters/parties.php" class="status-pill" style="text-decoration:none;">
+            <div class="s-num" style="color:var(--navy);"><?= number_format($partyCount) ?></div>
+            <div class="s-lbl">My Parties</div>
+        </a>
+        
+        <!-- Orders Data -->
+        <a href="billing/orders.php" class="status-pill" style="text-decoration:none;">
+            <div class="s-num" style="color:#2563eb;"><?= number_format($myPlacedOrders) ?></div>
+            <div class="s-lbl">Orders Placed</div>
+        </a>
+        <a href="billing/orders.php" class="status-pill" style="text-decoration:none;">
+            <div class="s-num" style="color:#ea580c;"><?= number_format($myPendingBilling) ?></div>
+            <div class="s-lbl">Pending Billing</div>
+        </a>
+        <a href="billing/orders.php" class="status-pill" style="text-decoration:none;">
+            <div class="s-num" style="color:#dc2626;"><?= number_format($myRejectedOrders) ?></div>
+            <div class="s-lbl">Rejected Orders</div>
+        </a>
 
-<!-- ===================== PRIMARY KPI CARDS (Sales) ===================== -->
-<?php if ($isSales || $isAdmin || $isAccounts): ?>
-<div class="ops-section-title">
-    <span>Sales & Collection KPIs</span>
-    <span class="badge-sub"><?= $fyLabel ?> • Scope: <?= $viewContext ?? 'All Scope' ?></span>
-</div>
-<div class="kpi-grid">
-    <div class="kpi-card" style="--accent:#3b82f6;">
-        <div class="kpi-label">MTD Primary Sales</div>
-        <div class="kpi-value"><?= fmtINR($primaryMTD) ?></div>
-        <?php if ($targetMTD > 0): ?>
-            <div class="kpi-sub" style="background:<?= achBg($mtdAchPct) ?>; color:<?= achColor($mtdAchPct) ?>;"><?= $mtdAchPct ?>% of MTD Target</div>
-            <div class="progress-bar"><div class="progress-fill" style="width:<?= min(100, $mtdAchPct) ?>%; background:<?= achColor($mtdAchPct) ?>;"></div></div>
+        <!-- Dispatch Tracking -->
+        <a href="sales/primary.php" class="status-pill" style="text-decoration:none;">
+            <div class="s-num" style="color:#059669;"><?= number_format($myDispatched) ?></div>
+            <div class="s-lbl">Dispatched</div>
+        </a>
+        <a href="sales/primary.php" class="status-pill" style="text-decoration:none;">
+            <div class="s-num" style="color:#d97706;"><?= number_format($myDispatchPending) ?></div>
+            <div class="s-lbl">Pending Dispatch</div>
+        </a>
+
+        <!-- HR & Expenses -->
+        <a href="hr/leave.php" class="status-pill" style="text-decoration:none;">
+            <div class="s-num" style="color:#7c3aed;"><?= number_format($myLeaveTaken) ?></div>
+            <div class="s-lbl">Leaves (YTD)</div>
+        </a>
+        <a href="hr/leave.php" class="status-pill" style="text-decoration:none;">
+            <div class="s-num" style="color:#475569; font-size:15px; margin-top:5px; margin-bottom:5px;"><?= htmlspecialchars($myLeaveStatus) ?></div>
+            <div class="s-lbl">Recent Leave</div>
+        </a>
+        <a href="fieldforce/expense.php" class="status-pill" style="text-decoration:none;">
+            <div class="s-num" style="color:#db2777; font-size:18px; line-height:22px;"><?= fmtINR($myExpenseYTD) ?></div>
+            <div class="s-lbl">Expenses (YTD)</div>
+        </a>
+    </div>
+    <?php endif; ?>
+
+    <!-- ===================== QUICK ACTIONS (Role & Access Restricted) ===================== -->
+    <div class="quick-actions">
+        <?php if ($isAdmin): ?>
+            <a href="sales/salesdata.php" class="btn-action">⬆ Upload Invoices</a>
+            <a href="accounts/collections.php" class="btn-action" style="color:#059669; border-color:#a7f3d0;">💰 Add Collection</a>
+            <a href="billing/orders.php" class="btn-action">🛒 Place Order</a>
+            <a href="sales/targets.php" class="btn-action" style="color:#d97706; border-color:#fde68a;">🎯 Targets</a>
+            <a href="dispatch/dispatch.php" class="btn-action" style="color:#dc2626; border-color:#fecaca;">🚚 Dispatch Console</a>
+            <a href="reports.php" class="btn-action" style="color:#dc2626; border-color:#fecaca;">📑 All Reports</a>
         <?php else: ?>
-            <div class="kpi-sub" style="background:#eff6ff; color:#1d4ed8;"><?= $monthLabel ?></div>
+            <?php if (canAccess('dailyvisit.php', $allowedPages, false, $useDynamicPerms, true)): ?>
+                <a href="fieldforce/dailyvisit.php" class="btn-action">📝 Manage DCR</a>
+            <?php endif; ?>
+            <?php if (canAccess('doctors.php', $allowedPages, false, $useDynamicPerms, true)): ?>
+                <a href="fieldforce/doctors.php" class="btn-action" style="color:#0e7490; border-color:#a5f3fc;">🩺 Manage Doctors</a>
+            <?php endif; ?>
+            <?php if (canAccess('leave.php', $allowedPages, false, $useDynamicPerms, true)): ?>
+                <a href="hr/leave.php" class="btn-action" style="color:#6d28d9; border-color:#ddd6fe;">🏖️ Apply Leave</a>
+            <?php endif; ?>
+            <?php if (canAccess('stockstatement.php', $allowedPages, false, $useDynamicPerms, true)): ?>
+                <a href="inventory/stockstatement.php" class="btn-action" style="color:#d97706; border-color:#fde68a;">📦 Stock Entry</a>
+            <?php endif; ?>
+            <?php if (canAccess('primary.php', $allowedPages, false, $useDynamicPerms, true)): ?>
+                <a href="sales/primary.php" class="btn-action">📊 View Primary</a>
+            <?php endif; ?>
+            <?php if (canAccess('orders.php', $allowedPages, false, $useDynamicPerms, true)): ?>
+                <a href="billing/orders.php" class="btn-action" style="color:#059669; border-color:#a7f3d0;">🛒 View Orders</a>
+            <?php endif; ?>
         <?php endif; ?>
     </div>
-    <div class="kpi-card" style="--accent:#10b981;">
-        <div class="kpi-label">MTD Collections</div>
-        <div class="kpi-value" style="color:#059669;"><?= fmtINR($secondaryMTD) ?></div>
-        <div class="kpi-sub" style="background:#ecfdf5; color:#047857;">Money in this month</div>
-    </div>
-    <div class="kpi-card" style="--accent:#1e2a78;">
-        <div class="kpi-label">YTD Primary Sales</div>
-        <div class="kpi-value"><?= fmtINR($primaryYTD) ?></div>
-        <div class="kpi-sub" style="background:<?= achBg($primaryAchPct) ?>; color:<?= achColor($primaryAchPct) ?>;"><?= $primaryAchPct ?>% of Target</div>
-        <div class="progress-bar"><div class="progress-fill" style="width:<?= min(100, $primaryAchPct) ?>%; background:<?= achColor($primaryAchPct) ?>;"></div></div>
-    </div>
-    <div class="kpi-card" style="--accent:#059669;">
-        <div class="kpi-label">YTD Collections</div>
-        <div class="kpi-value" style="color:#059669;"><?= fmtINR($secondaryYTD) ?></div>
-        <div class="kpi-sub" style="background:#ecfdf5; color:#047857;"><?= $collVsPrimary ?? 0 ?>% of Primary</div>
-    </div>
-    <div class="kpi-card" style="--accent:#c9982e;">
-        <div class="kpi-label">YTD Sales Target</div>
-        <div class="kpi-value" style="color:#b45309;"><?= fmtINR($targetYTD) ?></div>
-        <div class="kpi-sub" style="background:#fffbeb; color:#b45309;"><?= $fyLabel ?></div>
-    </div>
-    <div class="kpi-card" style="--accent:<?= $salesGap >= 0 ? '#ef4444' : '#059669' ?>;">
-        <div class="kpi-label"><?= $salesGap >= 0 ? 'Outstanding (YTD)' : 'Net Recovery (YTD)' ?></div>
-        <div class="kpi-value" style="color:<?= $salesGap >= 0 ? '#dc2626' : '#059669' ?>;"><?= fmtINR(abs($salesGap)) ?></div>
-        <div class="kpi-sub" style="background:<?= $salesGap >= 0 ? '#fef2f2' : '#ecfdf5' ?>; color:<?= $salesGap >= 0 ? '#b91c1c' : '#047857' ?>;"><?= $salesGap >= 0 ? 'Billing − Collections' : 'Collections > Billing' ?></div>
-    </div>
-</div>
 
-<!-- Secondary metrics -->
-<div class="metric-strip">
+    <!-- ===================== UNIVERSAL NAV HUB (Role & Permission Restricted) ===================== -->
+    <div class="ops-section-title">
+        <span>Command Navigation Hub</span>
+        <span class="badge-sub">Authorized modules</span>
+    </div>
+    <div class="nav-hub">
+        <!-- SALES MODULES -->
+        <?php if (canAccess('primary.php', $allowedPages, $isAdmin, $useDynamicPerms, $isSales)): ?>
+            <a href="sales/primary.php" class="nav-tile sales"><span class="icon">📊</span><span class="lbl">Primary</span><span class="sub"><?= $isAdmin ? 'Sales Report' : 'View Report' ?></span></a>
+        <?php endif; ?>
+        <?php if (canAccess('secondary.php', $allowedPages, $isAdmin, $useDynamicPerms, $isSales)): ?>
+            <a href="sales/secondary.php" class="nav-tile sales"><span class="icon">📈</span><span class="lbl">Secondary</span><span class="sub"><?= $isAdmin ? 'Collections' : 'View Collections' ?></span></a>
+        <?php endif; ?>
+        <?php if (canAccess('collections.php', $allowedPages, $isAdmin, $useDynamicPerms, $isSales)): ?>
+            <a href="accounts/collections.php" class="nav-tile sales"><span class="icon">💰</span><span class="lbl">Collections</span><span class="sub"><?= $isAdmin ? 'Add / View' : 'View Only' ?></span></a>
+        <?php endif; ?>
+        <?php if (canAccess('achievements.php', $allowedPages, $isAdmin, $useDynamicPerms, $isSales)): ?>
+            <a href="sales/achievements.php" class="nav-tile sales"><span class="icon">🏆</span><span class="lbl">Achievements</span><span class="sub">Leaderboard</span></a>
+        <?php endif; ?>
+        <?php if (canAccess('salestrend.php', $allowedPages, $isAdmin, $useDynamicPerms, $isSales)): ?>
+            <a href="sales/salestrend.php" class="nav-tile sales"><span class="icon">📉</span><span class="lbl">Trends</span><span class="sub">Sales Graph</span></a>
+        <?php endif; ?>
+        <?php if (canAccess('orders.php', $allowedPages, $isAdmin, $useDynamicPerms, $isSales)): ?>
+            <a href="billing/orders.php" class="nav-tile sales"><span class="icon">🛒</span><span class="lbl">Orders</span><span class="sub"><?= $isAdmin ? 'Sales Orders' : 'View Pipeline' ?></span></a>
+        <?php endif; ?>
+        
+        <!-- FIELD OPERATIONS -->
+        <?php if (canAccess('doctors.php', $allowedPages, $isAdmin, $useDynamicPerms, $isSales)): ?>
+            <a href="fieldforce/doctors.php" class="nav-tile sales"><span class="icon">🩺</span><span class="lbl">Doctors</span><span class="sub">Manage List</span></a>
+        <?php endif; ?>
+        <?php if (canAccess('tourplan.php', $allowedPages, $isAdmin, $useDynamicPerms, $isSales)): ?>
+            <a href="fieldforce/tourplan.php" class="nav-tile sales"><span class="icon">📅</span><span class="lbl">Tour Plan</span><span class="sub"><?= $isAdmin ? 'STP' : 'View STP' ?></span></a>
+        <?php endif; ?>
+        <?php if (canAccess('dailyvisit.php', $allowedPages, $isAdmin, $useDynamicPerms, $isSales)): ?>
+            <a href="fieldforce/dailyvisit.php" class="nav-tile sales"><span class="icon">📝</span><span class="lbl">DCR</span><span class="sub">Manage Visits</span></a>
+        <?php endif; ?>
+        <?php if (canAccess('secondaryentry.php', $allowedPages, $isAdmin, $useDynamicPerms, $isSales)): ?>
+            <a href="fieldforce/secondaryentry.php" class="nav-tile sales"><span class="icon">🧪</span><span class="lbl">Sec. Entry</span><span class="sub"><?= $isAdmin ? 'Chemist POB' : 'View POB' ?></span></a>
+        <?php endif; ?>
+        <?php if (canAccess('stockstatement.php', $allowedPages, $isAdmin, $useDynamicPerms, $isSales)): ?>
+            <a href="inventory/stockstatement.php" class="nav-tile sales"><span class="icon">📦</span><span class="lbl">Stock</span><span class="sub">Manage Entry</span></a>
+        <?php endif; ?>
+
+        <!-- HR & OPERATIONS -->
+        <?php if (canAccess('leave.php', $allowedPages, $isAdmin, $useDynamicPerms, ($isSales || $isHR))): ?>
+            <a href="hr/leave.php" class="nav-tile hr"><span class="icon">🏖️</span><span class="lbl">Leave</span><span class="sub">Manage App</span></a>
+        <?php endif; ?>
+        <?php if (canAccess('expense.php', $allowedPages, $isAdmin, $useDynamicPerms, ($isSales || $isHR))): ?>
+            <a href="fieldforce/expense.php" class="nav-tile hr"><span class="icon">💳</span><span class="lbl">Expenses</span><span class="sub"><?= $isAdmin ? 'TA / DA' : 'View Claims' ?></span></a>
+        <?php endif; ?>
+        <?php if (canAccess('attendance.php', $allowedPages, $isAdmin, $useDynamicPerms, ($isSales || $isHR))): ?>
+            <a href="hr/attendance.php" class="nav-tile hr"><span class="icon">⏱️</span><span class="lbl">Attendance</span><span class="sub">Daily</span></a>
+        <?php endif; ?>
+
+        <!-- MANAGER & ADMIN ONLY -->
+        <?php if (canAccess('salesdata.php', $allowedPages, $isAdmin, $useDynamicPerms, false)): ?>
+            <a href="sales/salesdata.php" class="nav-tile sales"><span class="icon">⬆</span><span class="lbl">Upload</span><span class="sub">Invoices</span></a>
+        <?php endif; ?>
+        <?php if (canAccess('targets.php', $allowedPages, $isAdmin, $useDynamicPerms, false)): ?>
+            <a href="sales/targets.php" class="nav-tile sales"><span class="icon">🎯</span><span class="lbl">Targets</span><span class="sub">Set / Track</span></a>
+        <?php endif; ?>
+        <?php if (canAccess('billing.php', $allowedPages, $isAdmin, $useDynamicPerms, false)): ?>
+            <a href="billing/billing.php" class="nav-tile sales"><span class="icon">🧾</span><span class="lbl">Billing</span><span class="sub">Pending Bills</span></a>
+        <?php endif; ?>
+        <?php if (canAccess('leaveapproval.php', $allowedPages, $isAdmin, $useDynamicPerms, false)): ?>
+            <a href="hr/leaveapproval.php" class="nav-tile hr"><span class="icon">✅</span><span class="lbl">Leave Appr.</span><span class="sub">Approve</span></a>
+        <?php endif; ?>
+        <?php if (canAccess('expenseapproval.php', $allowedPages, $isAdmin, $useDynamicPerms, false)): ?>
+            <a href="fieldforce/expenseapproval.php" class="nav-tile hr"><span class="icon">📋</span><span class="lbl">Exp. Appr.</span><span class="sub">Settle</span></a>
+        <?php endif; ?>
+        <?php if (canAccess('tourplanapproval.php', $allowedPages, $isAdmin, $useDynamicPerms, false)): ?>
+            <a href="fieldforce/tourplanapproval.php" class="nav-tile hr"><span class="icon">🗓️</span><span class="lbl">STP Appr.</span><span class="sub">Authorize</span></a>
+        <?php endif; ?>
+
+        <!-- DISPATCH & PURCHASE -->
+        <?php if (canAccess('dispatch.php', $allowedPages, $isAdmin, $useDynamicPerms, $isDispatch)): ?>
+            <a href="dispatch/dispatch.php" class="nav-tile dispatch"><span class="icon">🚚</span><span class="lbl">Dispatch</span><span class="sub">Console</span></a>
+        <?php endif; ?>
+        <?php if (canAccess('purchase.php', $allowedPages, $isAdmin, $useDynamicPerms, $isPurchase)): ?>
+            <a href="purchase.php" class="nav-tile purchase"><span class="icon">🛒</span><span class="lbl">Purchase</span><span class="sub">Orders</span></a>
+        <?php endif; ?>
+        <?php if (canAccess('vendors.php', $allowedPages, $isAdmin, $useDynamicPerms, $isPurchase)): ?>
+            <a href="vendors.php" class="nav-tile purchase"><span class="icon">🏭</span><span class="lbl">Vendors</span><span class="sub">Suppliers</span></a>
+        <?php endif; ?>
+
+        <!-- ADMIN MASTER TABS -->
+        <?php if ($isAdmin): ?>
+            <a href="masters/parties.php" class="nav-tile dispatch"><span class="icon">👥</span><span class="lbl">Parties</span><span class="sub">Customers</span></a>
+            <a href="hr/employees.php" class="nav-tile hr"><span class="icon">🧑‍💼</span><span class="lbl">Employees</span><span class="sub">Master</span></a>
+            <a href="reports.php" class="nav-tile reports"><span class="icon">📑</span><span class="lbl">All Reports</span><span class="sub">Export Hub</span></a>
+            <a href="admin/users.php" class="nav-tile admin"><span class="icon">🔐</span><span class="lbl">Users</span><span class="sub">Access</span></a>
+            <a href="admin/settings.php" class="nav-tile admin"><span class="icon">⚙️</span><span class="lbl">Settings</span><span class="sub">Config</span></a>
+        <?php endif; ?>
+    </div>
+
+    <!-- ===================== HR / PEOPLE KPIs (Admin & Manager) ===================== -->
     <?php if ($isAdmin || $isManager): ?>
-        <div class="metric-item"><div class="num"><?= number_format($teamSize) ?></div><div class="lbl"><?= $isAdmin ? 'Total Employees' : 'Team Size' ?></div></div>
-    <?php endif; ?>
-    <div class="metric-item"><div class="num"><?= number_format($partyCount) ?></div><div class="lbl"><?= $isMR ? 'My Parties' : 'Parties in Scope' ?></div></div>
-    <div class="metric-item"><div class="num" style="color:<?= achColor($primaryAchPct) ?>"><?= $primaryAchPct ?>%</div><div class="lbl">Primary Achievement</div></div>
-    <div class="metric-item"><div class="num" style="color:<?= $collectionEff >= 100 ? '#059669' : achColor($collectionEff) ?>"><?= $collectionEff ?>%</div><div class="lbl">Collection Efficiency</div></div>
-    <?php if ($isAdmin && $dispatchPending > 0): ?>
-        <div class="metric-item" style="border-color:#fecaca;"><div class="num" style="color:#dc2626;"><?= number_format($dispatchPending) ?></div><div class="lbl">Pending Dispatch</div></div>
-    <?php endif; ?>
-    <?php if ($isAdmin && $dispatchTotalCases > 0): ?>
-        <div class="metric-item"><div class="num"><?= number_format($dispatchTotalCases) ?></div><div class="lbl">Cases Moved</div></div>
-    <?php endif; ?>
-    <div class="metric-item"><div class="num" style="color:#2563eb;"><?= $mtdAchPct ?>%</div><div class="lbl">MTD Achievement</div></div>
-</div>
-<?php endif; ?>
-
-<!-- ===================== MY ACTIVITY & PIPELINE (MR & MANAGER) ===================== -->
-<?php if (!$isAdmin && ($isMR || $isManager)): ?>
-<div class="ops-section-title">
-    <span>My Activity & Pipeline</span>
-    <span class="badge-sub"><?= $isManager ? 'Team Data Rollup' : 'My Data' ?></span>
-</div>
-<div class="status-grid" style="margin-bottom:20px;">
-    <!-- Field Data -->
-    <a href="fieldforce/doctors.php" class="status-pill" style="background:#f8fafc; border-color:#e2e8f0; text-decoration:none;">
-        <div class="s-num" style="color:var(--navy);"><?= number_format($myDoctors) ?></div>
-        <div class="s-lbl">Total Doctors</div>
-    </a>
-    <a href="masters/parties.php" class="status-pill" style="background:#f8fafc; border-color:#e2e8f0; text-decoration:none;">
-        <div class="s-num" style="color:var(--navy);"><?= number_format($partyCount) ?></div>
-        <div class="s-lbl">My Parties</div>
-    </a>
-    
-    <!-- Orders Data -->
-    <a href="billing/orders.php" class="status-pill" style="background:#eff6ff; border-color:#bfdbfe; text-decoration:none;">
-        <div class="s-num" style="color:#2563eb;"><?= number_format($myPlacedOrders) ?></div>
-        <div class="s-lbl">Orders Placed</div>
-    </a>
-    <a href="billing/orders.php" class="status-pill" style="background:#fff7ed; border-color:#fed7aa; text-decoration:none;">
-        <div class="s-num" style="color:#ea580c;"><?= number_format($myPendingBilling) ?></div>
-        <div class="s-lbl">Pending Billing</div>
-    </a>
-    <a href="billing/orders.php" class="status-pill" style="background:#fef2f2; border-color:#fecaca; text-decoration:none;">
-        <div class="s-num" style="color:#dc2626;"><?= number_format($myRejectedOrders) ?></div>
-        <div class="s-lbl">Rejected Orders</div>
-    </a>
-
-    <!-- Dispatch Tracking -->
-    <a href="sales/primary.php" class="status-pill" style="background:#ecfdf5; border-color:#a7f3d0; text-decoration:none;">
-        <div class="s-num" style="color:#059669;"><?= number_format($myDispatched) ?></div>
-        <div class="s-lbl">Dispatched</div>
-    </a>
-    <a href="sales/primary.php" class="status-pill" style="background:#fef3c7; border-color:#fde68a; text-decoration:none;">
-        <div class="s-num" style="color:#d97706;"><?= number_format($myDispatchPending) ?></div>
-        <div class="s-lbl">Pending Dispatch</div>
-    </a>
-
-    <!-- HR & Expenses -->
-    <a href="hr/leave.php" class="status-pill" style="background:#f5f3ff; border-color:#ddd6fe; text-decoration:none;">
-        <div class="s-num" style="color:#7c3aed;"><?= number_format($myLeaveTaken) ?></div>
-        <div class="s-lbl">Leaves (YTD)</div>
-    </a>
-    <a href="hr/leave.php" class="status-pill" style="background:#f8fafc; border-color:#e2e8f0; text-decoration:none;">
-        <div class="s-num" style="color:#475569; font-size:15px; margin-top:5px; margin-bottom:5px;"><?= htmlspecialchars($myLeaveStatus) ?></div>
-        <div class="s-lbl">Recent Leave</div>
-    </a>
-    <a href="fieldforce/expense.php" class="status-pill" style="background:#fdf2f8; border-color:#fbcfe8; text-decoration:none;">
-        <div class="s-num" style="color:#db2777; font-size:18px; line-height:22px;"><?= fmtINR($myExpenseYTD) ?></div>
-        <div class="s-lbl">Expenses (YTD)</div>
-    </a>
-</div>
-<?php endif; ?>
-
-<!-- ===================== QUICK ACTIONS (Role & Access Restricted) ===================== -->
-<div class="quick-actions">
-    <?php if ($isAdmin): ?>
-        <a href="sales/salesdata.php" class="btn-action">⬆ Upload Invoices</a>
-        <a href="accounts/collections.php" class="btn-action green">💰 Add Collection</a>
-        <a href="billing/orders.php" class="btn-action">🛒 Place Order</a>
-        <a href="sales/targets.php" class="btn-action gold">🎯 Targets</a>
-        <a href="dispatch/dispatch.php" class="btn-action red">🚚 Dispatch Console</a>
-        <a href="reports.php" class="btn-action red">📑 All Reports</a>
-    <?php else: ?>
-        <?php if (canAccess('dailyvisit.php', $allowedPages, false, $useDynamicPerms, true)): ?>
-            <a href="fieldforce/dailyvisit.php" class="btn-action">📝 Manage DCR</a>
-        <?php endif; ?>
-        <?php if (canAccess('doctors.php', $allowedPages, false, $useDynamicPerms, true)): ?>
-            <a href="fieldforce/doctors.php" class="btn-action cyan">🩺 Manage Doctors</a>
-        <?php endif; ?>
-        <?php if (canAccess('leave.php', $allowedPages, false, $useDynamicPerms, true)): ?>
-            <a href="hr/leave.php" class="btn-action violet">🏖️ Apply Leave</a>
-        <?php endif; ?>
-        <?php if (canAccess('stockstatement.php', $allowedPages, false, $useDynamicPerms, true)): ?>
-            <a href="inventory/stockstatement.php" class="btn-action gold">📦 Stock Entry</a>
-        <?php endif; ?>
-        <?php if (canAccess('primary.php', $allowedPages, false, $useDynamicPerms, true)): ?>
-            <a href="sales/primary.php" class="btn-action">📊 View Primary</a>
-        <?php endif; ?>
-        <?php if (canAccess('orders.php', $allowedPages, false, $useDynamicPerms, true)): ?>
-            <a href="billing/orders.php" class="btn-action green">🛒 View Orders</a>
-        <?php endif; ?>
-    <?php endif; ?>
-</div>
-
-<!-- ===================== UNIVERSAL NAV HUB (Role & Permission Restricted) ===================== -->
-<div class="ops-section-title">
-    <span>Command Navigation Hub</span>
-    <span class="badge-sub">Authorized modules</span>
-</div>
-<div class="nav-hub">
-    <!-- SALES MODULES -->
-    <?php if (canAccess('primary.php', $allowedPages, $isAdmin, $useDynamicPerms, $isSales)): ?>
-        <a href="sales/primary.php" class="nav-tile sales"><span class="icon">📊</span><span class="lbl">Primary</span><span class="sub"><?= $isAdmin ? 'Sales Report' : 'View Report' ?></span></a>
-    <?php endif; ?>
-    <?php if (canAccess('secondary.php', $allowedPages, $isAdmin, $useDynamicPerms, $isSales)): ?>
-        <a href="sales/secondary.php" class="nav-tile sales"><span class="icon">📈</span><span class="lbl">Secondary</span><span class="sub"><?= $isAdmin ? 'Collections' : 'View Collections' ?></span></a>
-    <?php endif; ?>
-    <?php if (canAccess('collections.php', $allowedPages, $isAdmin, $useDynamicPerms, $isSales)): ?>
-        <a href="accounts/collections.php" class="nav-tile sales"><span class="icon">💰</span><span class="lbl">Collections</span><span class="sub"><?= $isAdmin ? 'Add / View' : 'View Only' ?></span></a>
-    <?php endif; ?>
-    <?php if (canAccess('achievements.php', $allowedPages, $isAdmin, $useDynamicPerms, $isSales)): ?>
-        <a href="sales/achievements.php" class="nav-tile sales"><span class="icon">🏆</span><span class="lbl">Achievements</span><span class="sub">Leaderboard</span></a>
-    <?php endif; ?>
-    <?php if (canAccess('salestrend.php', $allowedPages, $isAdmin, $useDynamicPerms, $isSales)): ?>
-        <a href="sales/salestrend.php" class="nav-tile sales"><span class="icon">📉</span><span class="lbl">Trends</span><span class="sub">Sales Graph</span></a>
-    <?php endif; ?>
-    <?php if (canAccess('orders.php', $allowedPages, $isAdmin, $useDynamicPerms, $isSales)): ?>
-        <a href="billing/orders.php" class="nav-tile sales"><span class="icon">🛒</span><span class="lbl">Orders</span><span class="sub"><?= $isAdmin ? 'Sales Orders' : 'View Pipeline' ?></span></a>
-    <?php endif; ?>
-    
-    <!-- FIELD OPERATIONS -->
-    <?php if (canAccess('doctors.php', $allowedPages, $isAdmin, $useDynamicPerms, $isSales)): ?>
-        <a href="fieldforce/doctors.php" class="nav-tile sales"><span class="icon">🩺</span><span class="lbl">Doctors</span><span class="sub">Manage List</span></a>
-    <?php endif; ?>
-    <?php if (canAccess('tourplan.php', $allowedPages, $isAdmin, $useDynamicPerms, $isSales)): ?>
-        <a href="fieldforce/tourplan.php" class="nav-tile sales"><span class="icon">📅</span><span class="lbl">Tour Plan</span><span class="sub"><?= $isAdmin ? 'STP' : 'View STP' ?></span></a>
-    <?php endif; ?>
-    <?php if (canAccess('dailyvisit.php', $allowedPages, $isAdmin, $useDynamicPerms, $isSales)): ?>
-        <a href="fieldforce/dailyvisit.php" class="nav-tile sales"><span class="icon">📝</span><span class="lbl">DCR</span><span class="sub">Manage Visits</span></a>
-    <?php endif; ?>
-    <?php if (canAccess('secondaryentry.php', $allowedPages, $isAdmin, $useDynamicPerms, $isSales)): ?>
-        <a href="fieldforce/secondaryentry.php" class="nav-tile sales"><span class="icon">🧪</span><span class="lbl">Sec. Entry</span><span class="sub"><?= $isAdmin ? 'Chemist POB' : 'View POB' ?></span></a>
-    <?php endif; ?>
-    <?php if (canAccess('stockstatement.php', $allowedPages, $isAdmin, $useDynamicPerms, $isSales)): ?>
-        <a href="inventory/stockstatement.php" class="nav-tile sales"><span class="icon">📦</span><span class="lbl">Stock</span><span class="sub">Manage Entry</span></a>
-    <?php endif; ?>
-
-    <!-- HR & OPERATIONS -->
-    <?php if (canAccess('leave.php', $allowedPages, $isAdmin, $useDynamicPerms, ($isSales || $isHR))): ?>
-        <a href="hr/leave.php" class="nav-tile hr"><span class="icon">🏖️</span><span class="lbl">Leave</span><span class="sub">Manage App</span></a>
-    <?php endif; ?>
-    <?php if (canAccess('expense.php', $allowedPages, $isAdmin, $useDynamicPerms, ($isSales || $isHR))): ?>
-        <a href="fieldforce/expense.php" class="nav-tile hr"><span class="icon">💳</span><span class="lbl">Expenses</span><span class="sub"><?= $isAdmin ? 'TA / DA' : 'View Claims' ?></span></a>
-    <?php endif; ?>
-    <?php if (canAccess('attendance.php', $allowedPages, $isAdmin, $useDynamicPerms, ($isSales || $isHR))): ?>
-        <a href="hr/attendance.php" class="nav-tile hr"><span class="icon">⏱️</span><span class="lbl">Attendance</span><span class="sub">Daily</span></a>
-    <?php endif; ?>
-
-    <!-- MANAGER & ADMIN ONLY -->
-    <?php if (canAccess('salesdata.php', $allowedPages, $isAdmin, $useDynamicPerms, false)): ?>
-        <a href="sales/salesdata.php" class="nav-tile sales"><span class="icon">⬆</span><span class="lbl">Upload</span><span class="sub">Invoices</span></a>
-    <?php endif; ?>
-    <?php if (canAccess('targets.php', $allowedPages, $isAdmin, $useDynamicPerms, false)): ?>
-        <a href="sales/targets.php" class="nav-tile sales"><span class="icon">🎯</span><span class="lbl">Targets</span><span class="sub">Set / Track</span></a>
-    <?php endif; ?>
-    <?php if (canAccess('billing.php', $allowedPages, $isAdmin, $useDynamicPerms, false)): ?>
-        <a href="billing/billing.php" class="nav-tile sales"><span class="icon">🧾</span><span class="lbl">Billing</span><span class="sub">Pending Bills</span></a>
-    <?php endif; ?>
-    <?php if (canAccess('leaveapproval.php', $allowedPages, $isAdmin, $useDynamicPerms, false)): ?>
-        <a href="hr/leaveapproval.php" class="nav-tile hr"><span class="icon">✅</span><span class="lbl">Leave Appr.</span><span class="sub">Approve</span></a>
-    <?php endif; ?>
-    <?php if (canAccess('expenseapproval.php', $allowedPages, $isAdmin, $useDynamicPerms, false)): ?>
-        <a href="fieldforce/expenseapproval.php" class="nav-tile hr"><span class="icon">📋</span><span class="lbl">Exp. Appr.</span><span class="sub">Settle</span></a>
-    <?php endif; ?>
-    <?php if (canAccess('tourplanapproval.php', $allowedPages, $isAdmin, $useDynamicPerms, false)): ?>
-        <a href="fieldforce/tourplanapproval.php" class="nav-tile hr"><span class="icon">🗓️</span><span class="lbl">STP Appr.</span><span class="sub">Authorize</span></a>
-    <?php endif; ?>
-
-    <!-- DISPATCH & PURCHASE -->
-    <?php if (canAccess('dispatch.php', $allowedPages, $isAdmin, $useDynamicPerms, $isDispatch)): ?>
-        <a href="dispatch/dispatch.php" class="nav-tile dispatch"><span class="icon">🚚</span><span class="lbl">Dispatch</span><span class="sub">Console</span></a>
-    <?php endif; ?>
-    <?php if (canAccess('purchase.php', $allowedPages, $isAdmin, $useDynamicPerms, $isPurchase)): ?>
-        <a href="purchase.php" class="nav-tile purchase"><span class="icon">🛒</span><span class="lbl">Purchase</span><span class="sub">Orders</span></a>
-    <?php endif; ?>
-    <?php if (canAccess('vendors.php', $allowedPages, $isAdmin, $useDynamicPerms, $isPurchase)): ?>
-        <a href="vendors.php" class="nav-tile purchase"><span class="icon">🏭</span><span class="lbl">Vendors</span><span class="sub">Suppliers</span></a>
-    <?php endif; ?>
-
-    <!-- ADMIN MASTER TABS -->
-    <?php if ($isAdmin): ?>
-        <a href="masters/parties.php" class="nav-tile dispatch"><span class="icon">👥</span><span class="lbl">Parties</span><span class="sub">Customers</span></a>
-        <a href="hr/employees.php" class="nav-tile hr"><span class="icon">🧑‍💼</span><span class="lbl">Employees</span><span class="sub">Master</span></a>
-        <a href="reports.php" class="nav-tile reports"><span class="icon">📑</span><span class="lbl">All Reports</span><span class="sub">Export Hub</span></a>
-        <a href="admin/users.php" class="nav-tile admin"><span class="icon">🔐</span><span class="lbl">Users</span><span class="sub">Access</span></a>
-        <a href="admin/settings.php" class="nav-tile admin"><span class="icon">⚙️</span><span class="lbl">Settings</span><span class="sub">Config</span></a>
-    <?php endif; ?>
-</div>
-
-<!-- ===================== HR / PEOPLE KPIs (Admin & Manager) ===================== -->
-<?php if ($isAdmin || $isManager): ?>
-<div class="ops-section-title" style="color:#6d28d9; border-bottom-color:#ddd6fe;">
-    <span>People & HR Snapshot</span>
-    <span class="badge-sub" style="background:#f5f3ff; color:#6d28d9;">Workforce</span>
-</div>
-<div class="kpi-grid">
-    <div class="kpi-card" style="--accent:#7c3aed;">
-        <div class="kpi-label">Active Employees</div>
-        <div class="kpi-value" style="color:#6d28d9;"><?= number_format($activeEmployees ?: $teamSize) ?></div>
-        <div class="kpi-sub" style="background:#f5f3ff; color:#6d28d9;">On rolls</div>
+    <div class="ops-section-title" style="color:#6d28d9; border-bottom-color:#ddd6fe;">
+        <span>People & HR Snapshot</span>
+        <span class="badge-sub" style="background:#f5f3ff; color:#6d28d9;">Workforce</span>
     </div>
-    <div class="kpi-card" style="--accent:#d97706;">
-        <div class="kpi-label">Pending Leaves</div>
-        <div class="kpi-value" style="color:#d97706;"><?= number_format($pendingLeaves) ?></div>
-        <div class="kpi-sub" style="background:#fffbeb; color:#b45309;">Awaiting approval</div>
-    </div>
-    <div class="kpi-card" style="--accent:#db2777;">
-        <div class="kpi-label">Pending Expenses</div>
-        <div class="kpi-value" style="color:#db2777;"><?= number_format($pendingExpenses) ?></div>
-        <div class="kpi-sub" style="background:#fdf2f8; color:#be185d;">TA/DA claims</div>
-    </div>
-    <div class="kpi-card" style="--accent:#7c3aed;">
-        <div class="kpi-label">STP Pending</div>
-        <div class="kpi-value" style="color:#7c3aed;"><?= number_format($pendingTourPlans) ?></div>
-        <div class="kpi-sub" style="background:#f5f3ff; color:#6d28d9;">Tour plans</div>
-    </div>
-    <?php if ($isAdmin): ?>
-    <div class="kpi-card" style="--accent:#dc2626;">
-        <div class="kpi-label">Absent Today</div>
-        <div class="kpi-value" style="color:#dc2626;"><?= number_format($absentToday) ?></div>
-        <div class="kpi-sub" style="background:#fef2f2; color:#b91c1c;">Attendance</div>
-    </div>
-    <div class="kpi-card" style="--accent:#059669;">
-        <div class="kpi-label">Present Today</div>
-        <div class="kpi-value" style="color:#059669;"><?= number_format($presentToday) ?></div>
-        <div class="kpi-sub" style="background:#ecfdf5; color:#047857;">Marked present</div>
-    </div>
-    <?php endif; ?>
-</div>
-<?php endif; ?>
-
-
-<!-- ===================== CHARTS — COLORFUL (TOP) ===================== -->
-<?php if ($isSales || $isAdmin || $isAccounts): ?>
-<div class="ops-section-title">
-    <span>Performance Analytics</span>
-    <span class="badge-sub"><?= $isAdmin ? 'Global Data' : 'My Analytics' ?></span>
-</div>
-<div class="dash-grid">
-    <div class="panel-card">
-        <div class="panel-title">
-            <div class="title-left">Primary Sales Trend <span class="badge-sub">Last 6 Months</span></div>
+    <div class="kpi-grid">
+        <div class="kpi-card" style="--accent:#7c3aed;">
+            <div class="kpi-label">Active Employees</div>
+            <div class="kpi-value" style="color:#6d28d9;"><?= number_format($activeEmployees ?: $teamSize) ?></div>
+            <div class="kpi-sub" style="background:#f5f3ff; color:#6d28d9;">On rolls</div>
         </div>
-        <div class="chart-wrap"><canvas id="trendChart"></canvas></div>
-    </div>
-    <div class="panel-card">
-        <div class="panel-title">
-            <div class="title-left">Target Achievement <span class="badge-sub"><?= $fyLabel ?></span></div>
+        <div class="kpi-card" style="--accent:#d97706;">
+            <div class="kpi-label">Pending Leaves</div>
+            <div class="kpi-value" style="color:#d97706;"><?= number_format($pendingLeaves) ?></div>
+            <div class="kpi-sub" style="background:#fffbeb; color:#b45309;">Awaiting approval</div>
         </div>
-        <div class="chart-wrap sm"><canvas id="achChart"></canvas></div>
+        <div class="kpi-card" style="--accent:#db2777;">
+            <div class="kpi-label">Pending Expenses</div>
+            <div class="kpi-value" style="color:#db2777;"><?= number_format($pendingExpenses) ?></div>
+            <div class="kpi-sub" style="background:#fdf2f8; color:#be185d;">TA/DA claims</div>
+        </div>
+        <div class="kpi-card" style="--accent:#7c3aed;">
+            <div class="kpi-label">STP Pending</div>
+            <div class="kpi-value" style="color:#7c3aed;"><?= number_format($pendingTourPlans) ?></div>
+            <div class="kpi-sub" style="background:#f5f3ff; color:#6d28d9;">Tour plans</div>
+        </div>
+        <?php if ($isAdmin): ?>
+        <div class="kpi-card" style="--accent:#dc2626;">
+            <div class="kpi-label">Absent Today</div>
+            <div class="kpi-value" style="color:#dc2626;"><?= number_format($absentToday) ?></div>
+            <div class="kpi-sub" style="background:#fef2f2; color:#b91c1c;">Attendance</div>
+        </div>
+        <div class="kpi-card" style="--accent:#059669;">
+            <div class="kpi-label">Present Today</div>
+            <div class="kpi-value" style="color:#059669;"><?= number_format($presentToday) ?></div>
+            <div class="kpi-sub" style="background:#ecfdf5; color:#047857;">Marked present</div>
+        </div>
+        <?php endif; ?>
     </div>
-</div>
+    <?php endif; ?>
 
-<div class="dash-grid">
-    <div class="panel-card">
-        <div class="panel-title">
-            <div class="title-left">Collections Trend <span class="badge-sub">Last 6 Months</span></div>
-        </div>
-        <div class="chart-wrap"><canvas id="collChart"></canvas></div>
+    <!-- ===================== CHARTS — COLORFUL (TOP) ===================== -->
+    <?php if ($isSales || $isAdmin || $isAccounts): ?>
+    <div class="ops-section-title">
+        <span>Performance Analytics</span>
+        <span class="badge-sub"><?= $isAdmin ? 'Global Data' : 'My Analytics' ?></span>
     </div>
-    <div class="panel-card">
-        <div class="panel-title">
-            <div class="title-left">Primary vs Collections <span class="badge-sub">YTD Comparison</span></div>
-        </div>
-        <div class="chart-wrap sm"><canvas id="compareChart"></canvas></div>
-    </div>
-</div>
-<?php endif; ?>
-
-<!-- ===================== TOP LISTS (SIDE-BY-SIDE) ===================== -->
-<?php if ($isSales || $isAdmin): ?>
-<div class="dash-grid">
-    <!-- LEFT: Top Parties (YTD) -> For Current Scope (My/Team/All) -->
-    <div class="panel-card">
-        <div class="panel-title">
-            <div class="title-left">Top Parties (YTD) <span class="badge-sub">By Primary Value</span></div>
-            <div class="panel-actions">
-                <a href="sales/primary.php" class="btn-viewall">View All →</a>
+    <div class="dash-grid">
+        <div class="panel-card">
+            <div class="panel-title">
+                <div class="title-left">Primary Sales Trend <span class="badge-sub">Last 6 Months</span></div>
             </div>
+            <div class="chart-wrap"><canvas id="trendChart"></canvas></div>
         </div>
-        <?php if (empty($topParties)): ?>
-            <div class="empty-state">No party data for this scope.</div>
-        <?php else: ?>
-            <table class="compact-table">
-                <thead><tr><th style="width:28px;">#</th><th>Party</th><th style="text-align:right;">Value</th></tr></thead>
-                <tbody>
-                    <?php foreach ($topParties as $i => $p): ?>
-                    <tr>
-                        <td><span class="rank rank-<?= $i < 3 ? ($i+1) : 'n' ?>"><?= $i+1 ?></span></td>
-                        <td title="<?= htmlspecialchars($p['partyname']) ?>"><?= htmlspecialchars($p['partyname']) ?></td>
-                        <td class="val-cell"><?= fmtINR($p['val']) ?></td>
-                    </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        <?php endif; ?>
+        <div class="panel-card">
+            <div class="panel-title">
+                <div class="title-left">Target Achievement <span class="badge-sub"><?= $fyLabel ?></span></div>
+            </div>
+            <div class="chart-wrap sm"><canvas id="achChart"></canvas></div>
+        </div>
     </div>
 
-    <!-- RIGHT: Company Top Performers -> Global Data (For All Viewers) -->
-    <div class="panel-card">
-        <div class="panel-title">
-            <div class="title-left">Top Performers (Company) <span class="badge-sub">Primary Sales (YTD)</span></div>
-            <div class="panel-actions">
-                <a href="sales/achievements.php" class="btn-viewall">View All →</a>
+    <div class="dash-grid">
+        <div class="panel-card">
+            <div class="panel-title">
+                <div class="title-left">Collections Trend <span class="badge-sub">Last 6 Months</span></div>
             </div>
+            <div class="chart-wrap"><canvas id="collChart"></canvas></div>
         </div>
-        <?php if (empty($globalTopEmployees)): ?>
-            <div class="empty-state">No performance data yet.</div>
-        <?php else: ?>
-            <table class="compact-table">
-                <thead><tr><th style="width:28px;">#</th><th>Employee</th><th style="text-align:right;">Value</th></tr></thead>
-                <tbody>
-                    <?php foreach ($globalTopEmployees as $i => $e): ?>
-                    <tr>
-                        <td><span class="rank rank-<?= $i < 3 ? ($i+1) : 'n' ?>"><?= $i+1 ?></span></td>
-                        <td>
-                            <strong><?= htmlspecialchars($e['empname'] ?? $e['empcode']) ?></strong>
-                            <div style="font-size:9px; color:#94a3b8;"><?= htmlspecialchars($e['empcode'] ?? '') ?></div>
-                        </td>
-                        <td class="val-cell"><?= fmtINR($e['val']) ?></td>
-                    </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        <?php endif; ?>
+        <div class="panel-card">
+            <div class="panel-title">
+                <div class="title-left">Primary vs Collections <span class="badge-sub">YTD Comparison</span></div>
+            </div>
+            <div class="chart-wrap sm"><canvas id="compareChart"></canvas></div>
+        </div>
     </div>
-</div>
-<?php endif; ?>
+    <?php endif; ?>
 
-<!-- ===================== RECENT ACTIVITY ===================== -->
-<?php if ($isSales || $isAdmin || $isAccounts): ?>
-<div class="ops-section-title">
-    <span>Recent Activity Feed</span>
-    <span class="badge-sub">Latest transactions</span>
-</div>
-<div class="dash-grid">
-    <div class="panel-card">
-        <div class="panel-title">
-            <div class="title-left">Recent Primary Invoices <span class="badge-sub">Latest 10</span></div>
-            <div class="panel-actions">
-                <a href="sales/primary.php" class="btn-viewall">View All →</a>
+    <!-- ===================== TOP LISTS (SIDE-BY-SIDE) ===================== -->
+    <?php if ($isSales || $isAdmin): ?>
+    <div class="dash-grid">
+        <!-- LEFT: Top Parties (YTD) -> For Current Scope (My/Team/All) -->
+        <div class="panel-card">
+            <div class="panel-title">
+                <div class="title-left">Top Parties (YTD) <span class="badge-sub">By Primary Value</span></div>
+                <div class="panel-actions">
+                    <a href="sales/primary.php" class="btn-viewall">View All →</a>
+                </div>
             </div>
+            <?php if (empty($topParties)): ?>
+                <div class="empty-state">No party data for this scope.</div>
+            <?php else: ?>
+                <table class="compact-table">
+                    <thead><tr><th style="width:28px;">#</th><th>Party</th><th style="text-align:right;">Value</th></tr></thead>
+                    <tbody>
+                        <?php foreach ($topParties as $i => $p): ?>
+                        <tr>
+                            <td><span class="rank rank-<?= $i < 3 ? ($i+1) : 'n' ?>"><?= $i+1 ?></span></td>
+                            <td title="<?= htmlspecialchars($p['partyname']) ?>"><?= htmlspecialchars($p['partyname']) ?></td>
+                            <td class="val-cell"><?= fmtINR($p['val']) ?></td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            <?php endif; ?>
         </div>
-        <?php if (empty($recentInvoices)): ?>
-            <div class="empty-state">No recent invoices for this scope.</div>
-        <?php else: ?>
-            <table class="compact-table">
-                <thead><tr><th>Date</th><th>Invoice</th><th>Party</th><th style="text-align:right;">Value</th></tr></thead>
-                <tbody>
-                    <?php foreach ($recentInvoices as $inv): ?>
-                    <tr>
-                        <td><?= date('d-M-y', strtotime($inv['invoice_date'])) ?></td>
-                        <td style="color:var(--navy); font-weight:600;"><?= htmlspecialchars($inv['invoice_no']) ?></td>
-                        <td title="<?= htmlspecialchars($inv['partyname']) ?>"><?= htmlspecialchars($inv['partyname']) ?></td>
-                        <td class="val-cell"><?= fmtINR($inv['total_value']) ?></td>
-                    </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        <?php endif; ?>
-    </div>
 
-    <div class="panel-card">
-        <div class="panel-title">
-            <div class="title-left">Recent Collections <span class="badge-sub">Latest 10</span></div>
-            <div class="panel-actions">
-                <a href="accounts/collections.php" class="btn-viewall">View All →</a>
+        <!-- RIGHT: Company Top Performers -> Global Data (For All Viewers) -->
+        <div class="panel-card">
+            <div class="panel-title">
+                <div class="title-left">Top Performers (Company) <span class="badge-sub">Primary Sales (YTD)</span></div>
+                <div class="panel-actions">
+                    <a href="sales/achievements.php" class="btn-viewall">View All →</a>
+                </div>
             </div>
+            <?php if (empty($globalTopEmployees)): ?>
+                <div class="empty-state">No performance data yet.</div>
+            <?php else: ?>
+                <table class="compact-table">
+                    <thead><tr><th style="width:28px;">#</th><th>Employee</th><th style="text-align:right;">Value</th></tr></thead>
+                    <tbody>
+                        <?php foreach ($globalTopEmployees as $i => $e): ?>
+                        <tr>
+                            <td><span class="rank rank-<?= $i < 3 ? ($i+1) : 'n' ?>"><?= $i+1 ?></span></td>
+                            <td>
+                                <strong><?= htmlspecialchars($e['empname'] ?? $e['empcode']) ?></strong>
+                                <div style="font-size:9px; color:#94a3b8;"><?= htmlspecialchars($e['empcode'] ?? '') ?></div>
+                            </td>
+                            <td class="val-cell"><?= fmtINR($e['val']) ?></td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            <?php endif; ?>
         </div>
-        <?php if (empty($recentCollections)): ?>
-            <div class="empty-state">No recent collections for this scope.</div>
-        <?php else: ?>
-            <table class="compact-table">
-                <thead><tr><th>Date</th><th>Party</th><th>Mode</th><th style="text-align:right;">Amount</th></tr></thead>
-                <tbody>
-                    <?php foreach ($recentCollections as $col): ?>
-                    <tr>
-                        <td><?= date('d-M-y', strtotime($col['collection_date'])) ?></td>
-                        <td title="<?= htmlspecialchars($col['partyname']) ?>"><?= htmlspecialchars($col['partyname']) ?></td>
-                        <td style="color:#64748b;"><?= htmlspecialchars($col['payment_mode'] ?: '—') ?></td>
-                        <td class="val-cell" style="color:#1d4ed8;"><?= fmtINR($col['amount']) ?></td>
-                    </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        <?php endif; ?>
     </div>
+    <?php endif; ?>
+
+    <!-- ===================== RECENT ACTIVITY ===================== -->
+    <?php if ($isSales || $isAdmin || $isAccounts): ?>
+    <div class="ops-section-title">
+        <span>Recent Activity Feed</span>
+        <span class="badge-sub">Latest transactions</span>
+    </div>
+    <div class="dash-grid">
+        <div class="panel-card">
+            <div class="panel-title">
+                <div class="title-left">Recent Primary Invoices <span class="badge-sub">Latest 10</span></div>
+                <div class="panel-actions">
+                    <a href="sales/primary.php" class="btn-viewall">View All →</a>
+                </div>
+            </div>
+            <?php if (empty($recentInvoices)): ?>
+                <div class="empty-state">No recent invoices for this scope.</div>
+            <?php else: ?>
+                <table class="compact-table">
+                    <thead><tr><th>Date</th><th>Invoice</th><th>Party</th><th style="text-align:right;">Value</th></tr></thead>
+                    <tbody>
+                        <?php foreach ($recentInvoices as $inv): ?>
+                        <tr>
+                            <td><?= date('d-M-y', strtotime($inv['invoice_date'])) ?></td>
+                            <td style="color:var(--navy); font-weight:600;"><?= htmlspecialchars($inv['invoice_no']) ?></td>
+                            <td title="<?= htmlspecialchars($inv['partyname']) ?>"><?= htmlspecialchars($inv['partyname']) ?></td>
+                            <td class="val-cell"><?= fmtINR($inv['total_value']) ?></td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            <?php endif; ?>
+        </div>
+
+        <div class="panel-card">
+            <div class="panel-title">
+                <div class="title-left">Recent Collections <span class="badge-sub">Latest 10</span></div>
+                <div class="panel-actions">
+                    <a href="accounts/collections.php" class="btn-viewall">View All →</a>
+                </div>
+            </div>
+            <?php if (empty($recentCollections)): ?>
+                <div class="empty-state">No recent collections for this scope.</div>
+            <?php else: ?>
+                <table class="compact-table">
+                    <thead><tr><th>Date</th><th>Party</th><th>Mode</th><th style="text-align:right;">Amount</th></tr></thead>
+                    <tbody>
+                        <?php foreach ($recentCollections as $col): ?>
+                        <tr>
+                            <td><?= date('d-M-y', strtotime($col['collection_date'])) ?></td>
+                            <td title="<?= htmlspecialchars($col['partyname']) ?>"><?= htmlspecialchars($col['partyname']) ?></td>
+                            <td style="color:#64748b;"><?= htmlspecialchars($col['payment_mode'] ?: '—') ?></td>
+                            <td class="val-cell" style="color:#1d4ed8;"><?= fmtINR($col['amount']) ?></td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            <?php endif; ?>
+        </div>
+    </div>
+    <?php endif; ?>
+
 </div>
-<?php endif; ?>
+<!-- WRAPPER END -->
 
 <script>
 // Color palette for charts
 const chartColors = {
-    primary: '#1e2a78', sky: '#00aeea', emerald: '#10b981', amber: '#f59e0b',
+    primary: '#1e293b', sky: '#0ea5e9', emerald: '#10b981', amber: '#f59e0b',
     rose: '#e11d48', violet: '#8b5cf6', cyan: '#06b6d4', orange: '#ea580c'
 };
 
@@ -936,8 +949,8 @@ function fmtMonth(l) {
 if (document.getElementById('trendChart')) {
     const ctx = document.getElementById('trendChart').getContext('2d');
     const grad = ctx.createLinearGradient(0, 0, 0, 240);
-    grad.addColorStop(0, 'rgba(30,42,120,0.35)');
-    grad.addColorStop(1, 'rgba(30,42,120,0.02)');
+    grad.addColorStop(0, 'rgba(30,41,59,0.35)');
+    grad.addColorStop(1, 'rgba(30,41,59,0.02)');
     new Chart(ctx, {
         type: 'line',
         data: {
@@ -950,7 +963,7 @@ if (document.getElementById('trendChart')) {
         },
         options: {
             responsive: true, maintainAspectRatio: false,
-            plugins: { legend: { display: false }, tooltip: { backgroundColor: '#0f1a4d', callbacks: { label: ctx => '₹ ' + ctx.parsed.y.toLocaleString('en-IN') } } },
+            plugins: { legend: { display: false }, tooltip: { backgroundColor: '#0f172a', callbacks: { label: ctx => '₹ ' + ctx.parsed.y.toLocaleString('en-IN') } } },
             scales: { y: { ticks: { callback: v => '₹' + (v >= 100000 ? (v/100000).toFixed(1)+'L' : v.toLocaleString()) }, grid: { color: '#f1f5f9' } }, x: { grid: { display: false } } }
         }
     });
@@ -964,7 +977,7 @@ if (document.getElementById('achChart')) {
         type: 'doughnut',
         data: {
             labels: ['Achieved', 'Remaining'],
-            datasets: [{ data: [Math.min(achPct, 100), remaining], backgroundColor: ['<?= achColor($primaryAchPct) ?>', '#e2e8f0'], borderWidth: 0, cutout: '72%' }]
+            datasets: [{ data: [Math.min(achPct, 100), remaining], backgroundColor: ['<?= achColor($primaryAchPct) ?>', '#f1f5f9'], borderWidth: 0, cutout: '74%' }]
         },
         options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { enabled: false } } },
         plugins: [{
@@ -974,7 +987,7 @@ if (document.getElementById('achChart')) {
                 ctx.save();
                 ctx.font = 'bold 24px Sora, sans-serif'; ctx.fillStyle = '<?= achColor($primaryAchPct) ?>';
                 ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(achPct + '%', width / 2, height / 2 - 8);
-                ctx.font = '11px Inter, sans-serif'; ctx.fillStyle = '#64748b'; ctx.fillText('of Target', width / 2, height / 2 + 14);
+                ctx.font = '11px Inter, sans-serif'; ctx.fillStyle = '#64748b'; ctx.fillText('of Target', width / 2, height / 2 + 16);
                 ctx.restore();
             }
         }]
@@ -1003,11 +1016,13 @@ if (document.getElementById('compareChart')) {
         type: 'bar',
         data: {
             labels: ['Primary Sales', 'Collections', 'Outstanding'],
-            datasets: [{ data: [<?= $primaryYTD ?>, <?= $secondaryYTD ?>, <?= max(0, $salesGap) ?>], backgroundColor: ['rgba(30,42,120,0.85)', 'rgba(16,185,129,0.85)', 'rgba(239,68,68,0.85)'], borderRadius: 8 }]
+            datasets: [{ data: [<?= $primaryYTD ?>, <?= $secondaryYTD ?>, <?= max(0, $salesGap) ?>], backgroundColor: ['rgba(30,41,59,0.85)', 'rgba(16,185,129,0.85)', 'rgba(239,68,68,0.85)'], borderRadius: 6 }]
         },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { backgroundColor: '#0f1a4d', callbacks: { label: ctx => '₹ ' + ctx.parsed.y.toLocaleString('en-IN') } } }, scales: { y: { ticks: { callback: v => '₹' + (v >= 100000 ? (v/100000).toFixed(1)+'L' : v.toLocaleString()) }, grid: { color: '#f1f5f9' } }, x: { grid: { display: false } } } }
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { backgroundColor: '#0f172a', callbacks: { label: ctx => '₹ ' + ctx.parsed.y.toLocaleString('en-IN') } } }, scales: { y: { ticks: { callback: v => '₹' + (v >= 100000 ? (v/100000).toFixed(1)+'L' : v.toLocaleString()) }, grid: { color: '#f1f5f9' } }, x: { grid: { display: false } } } }
     });
 }
 </script>
+
+
 
 <?php include __DIR__ . '/includes/footer.php'; ?>
