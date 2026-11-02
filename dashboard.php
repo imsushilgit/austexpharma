@@ -307,7 +307,7 @@ function fmtINR($n) {
 }
 
 $pageTitle = "Dashboard";
-include 'header.php';
+include 'includes/header.php';
 ?>
 
 <style>
