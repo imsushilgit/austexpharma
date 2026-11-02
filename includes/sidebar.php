@@ -79,15 +79,17 @@ $logoHtmlDisplay = $logoHtml ?? '';
     
     <nav class="sidebar-nav" id="sidebarNav">
         
-        <!-- CORE OPERATIONS -->
-        <div class="nav-group" data-group="Core Operations">
+        <div class="nav-group" data-group="Master Menu">
             <button class="nav-master" type="button">
-                <span>Core Operations</span>
+                <span><i class="fa-solid fa-list-check" style="margin-right: 8px;"></i> Master Menu</span>
                 <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
             </button>
             <div class="nav-submenu">
                 <div class="nav-submenu-inner">
-                    <?php if (showLink('dashboard.php', $isAdmin, $sidebarPerms)): ?> <a href="<?= BASE_URL ?>dashboard/dashboard.php" data-keywords="dashboard home overview kpi" class="<?= $currentPage == 'dashboard.php' ? 'active' : '' ?>">Dashboard</a> <?php endif; ?>
+                    
+                    <!-- CORE OPERATIONS -->
+                    <div class="menu-section-title">Core Operations</div>
+                    <?php if (showLink('dashboard.php', $isAdmin, $sidebarPerms)): ?> <a href="<?= BASE_URL ?>dashboard.php" data-keywords="dashboard home overview kpi" class="<?= $currentPage == 'dashboard.php' ? 'active' : '' ?>">Dashboard</a> <?php endif; ?>
                     <?php if (showLink('dispatch.php', $isAdmin, $sidebarPerms)): ?> <a href="<?= BASE_URL ?>dispatch/dispatch.php" data-keywords="dispatch warehouse invoice delivery transporter" class="<?= $currentPage == 'dispatch.php' ? 'active' : '' ?>">Dispatch</a> <?php endif; ?>
                     <?php if (showLink('orders.php', $isAdmin, $sidebarPerms)): ?> <a href="<?= BASE_URL ?>billing/orders.php" data-keywords="order invoice billing rate calculator approval" class="<?= $currentPage == 'orders.php' ? 'active' : '' ?>">Order Management</a> <?php endif; ?>
                     <?php if (showLink('partyrates.php', $isAdmin, $sidebarPerms)): ?> <a href="<?= BASE_URL ?>billing/partyrates.php" data-keywords="party rate ptr price product billing" class="<?= $currentPage == 'partyrates.php' ? 'active' : '' ?>">Party Rates</a> <?php endif; ?>
@@ -104,19 +106,10 @@ $logoHtmlDisplay = $logoHtml ?? '';
                     <?php if (showLink('achievements.php', $isAdmin, $sidebarPerms)): ?> <a href="<?= BASE_URL ?>sales/achievements.php" data-keywords="achievements performance target actual" class="<?= $currentPage == 'achievements.php' ? 'active' : '' ?>">Achievements</a> <?php endif; ?>
                     <?php if (showLink('targets.php', $isAdmin, $sidebarPerms)): ?> <a href="<?= BASE_URL ?>sales/targets.php" data-keywords="targets monthly goal sales target" class="<?= $currentPage == 'targets.php' ? 'active' : '' ?>">Monthly Targets</a> <?php endif; ?>
                     <?php if (showLink('salestrend.php', $isAdmin, $sidebarPerms)): ?> <a href="<?= BASE_URL ?>sales/salestrend.php" data-keywords="sales trend graph report" class="<?= $currentPage == 'salestrend.php' ? 'active' : '' ?>">Sales Trend</a> <?php endif; ?>
-                </div>
-            </div>
-        </div>
 
-        <?php if ($isAdmin || $isManager || $isMR): ?>
-        <!-- FIELD FORCE -->
-        <div class="nav-group" data-group="Field Force">
-            <button class="nav-master" type="button">
-                <span>Field Force</span>
-                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-            </button>
-            <div class="nav-submenu">
-                <div class="nav-submenu-inner">
+                    <?php if ($isAdmin || $isManager || $isMR): ?>
+                    <!-- FIELD FORCE -->
+                    <div class="menu-section-title">Field Force</div>
                     <?php if (showLink('doctors.php', $isAdmin, $sidebarPerms)): ?> <a href="<?= BASE_URL ?>fieldforce/doctors.php" data-keywords="doctors physician chemist" class="<?= $currentPage == 'doctors.php' ? 'active' : '' ?>">Doctors</a> <?php endif; ?>
                     <?php if (($isAdmin || $isManager) && showLink('doctorrequestapproval.php', $isAdmin, $sidebarPerms)): ?> <a href="<?= BASE_URL ?>fieldforce/doctorrequestapproval.php" data-keywords="doctor approval requests" class="<?= $currentPage == 'doctorrequestapproval.php' ? 'active' : '' ?>">Doctor Approvals</a> <?php endif; ?>
                     <?php if (showLink('chemistrequest.php', $isAdmin, $sidebarPerms)): ?> <a href="<?= BASE_URL ?>fieldforce/chemistrequest.php" data-keywords="chemist request add edit pharmacy" class="<?= $currentPage == 'chemistrequest.php' ? 'active' : '' ?>">Chemist Request</a> <?php endif; ?>
@@ -131,19 +124,10 @@ $logoHtmlDisplay = $logoHtml ?? '';
                     <?php if (showLink('routemap.php', $isAdmin, $sidebarPerms)): ?> <a href="<?= BASE_URL ?>fieldforce/routemap.php" data-keywords="route map gps territory" class="<?= $currentPage == 'routemap.php' ? 'active' : '' ?>">Route Map</a> <?php endif; ?>
                     <?php if (showLink('expense.php', $isAdmin, $sidebarPerms)): ?> <a href="<?= BASE_URL ?>fieldforce/expense.php" data-keywords="expense claims ta da reimbursement" class="<?= $currentPage == 'expense.php' ? 'active' : '' ?>">Expense Claims</a> <?php endif; ?>
                     <?php if (($isAdmin || $isManager) && showLink('expenseapproval.php', $isAdmin, $sidebarPerms)): ?> <a href="<?= BASE_URL ?>fieldforce/expenseapproval.php" data-keywords="expense approval ta da" class="<?= $currentPage == 'expenseapproval.php' ? 'active' : '' ?>">Expense Approvals</a> <?php endif; ?>
-                </div>
-            </div>
-        </div>
-        <?php endif; ?>
+                    <?php endif; ?>
 
-        <!-- HR & PAYROLL -->
-        <div class="nav-group" data-group="HR & Payroll">
-            <button class="nav-master" type="button">
-                <span>HR & Payroll</span>
-                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-            </button>
-            <div class="nav-submenu">
-                <div class="nav-submenu-inner">
+                    <!-- HR & PAYROLL -->
+                    <div class="menu-section-title">HR & Payroll</div>
                     <?php if (showLink('profile.php', $isAdmin, $sidebarPerms)): ?> <a href="<?= BASE_URL ?>hr/profile.php" data-keywords="my profile personal details bank" class="<?= $currentPage == 'profile.php' ? 'active' : '' ?>">My Profile</a> <?php endif; ?>
                     <?php if (showLink('notifications.php', $isAdmin, $sidebarPerms)): ?> <a href="<?= BASE_URL ?>dashboard/notifications.php" data-keywords="notifications inbox alerts" class="<?= $currentPage == 'notifications.php' ? 'active' : '' ?>">Notifications</a> <?php endif; ?>
                     <?php if (showLink('attendance.php', $isAdmin, $sidebarPerms)): ?> <a href="<?= BASE_URL ?>hr/attendance.php" data-keywords="attendance present absent punch in out daily" class="<?= $currentPage == 'attendance.php' ? 'active' : '' ?>">Daily Attendance</a> <?php endif; ?>
@@ -163,19 +147,10 @@ $logoHtmlDisplay = $logoHtml ?? '';
                     <?php if (showLink('training.php', $isAdmin, $sidebarPerms)): ?> <a href="<?= BASE_URL ?>hr/training.php" data-keywords="training induction product skill" class="<?= $currentPage == 'training.php' ? 'active' : '' ?>">Training</a> <?php endif; ?>
                     <?php if (($isAdmin || $isHR) && showLink('resignedemployee.php', $isAdmin, $sidebarPerms)): ?> <a href="<?= BASE_URL ?>hr/resignedemployee.php" data-keywords="resigned employees ex alumni" class="<?= $currentPage == 'resignedemployee.php' ? 'active' : '' ?>">Resigned Employees</a> <?php endif; ?>
                     <?php if (($isAdmin || $isHR) && showLink('tada.php', $isAdmin, $sidebarPerms)): ?> <a href="<?= BASE_URL ?>payroll/tada.php" data-keywords="tada rules travel allowance da" class="<?= $currentPage == 'tada.php' ? 'active' : '' ?>">TA / DA Rules</a> <?php endif; ?>
-                </div>
-            </div>
-        </div>
 
-        <?php if ($isAdmin): ?>
-        <!-- MASTER DATA -->
-        <div class="nav-group" data-group="Master Data">
-            <button class="nav-master" type="button">
-                <span>Master Data</span>
-                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-            </button>
-            <div class="nav-submenu">
-                <div class="nav-submenu-inner">
+                    <?php if ($isAdmin): ?>
+                    <!-- MASTER DATA -->
+                    <div class="menu-section-title">Master Data</div>
                     <?php if (showLink('employees.php', $isAdmin, $sidebarPerms)): ?> <a href="<?= BASE_URL ?>hr/employees.php" data-keywords="employees staff mr asm team" class="<?= $currentPage == 'employees.php' ? 'active' : '' ?>">Employee</a> <?php endif; ?>
                     <?php if (showLink('master.php', $isAdmin, $sidebarPerms)): ?> <a href="<?= BASE_URL ?>masters/master.php" data-keywords="departments roles designations division" class="<?= $currentPage == 'master.php' ? 'active' : '' ?>">Departments & Roles</a> <?php endif; ?>
                     <?php if (showLink('geography.php', $isAdmin, $sidebarPerms)): ?> <a href="<?= BASE_URL ?>masters/geography.php" data-keywords="geography state hq area region" class="<?= $currentPage == 'geography.php' ? 'active' : '' ?>">Geographic</a> <?php endif; ?>
@@ -186,32 +161,14 @@ $logoHtmlDisplay = $logoHtml ?? '';
                     <?php if (showLink('products.php', $isAdmin, $sidebarPerms)): ?> <a href="<?= BASE_URL ?>masters/products.php" data-keywords="products sku medicine catalog" class="<?= $currentPage == 'products.php' ? 'active' : '' ?>">Products</a> <?php endif; ?>
                     <?php if (showLink('brand.php', $isAdmin, $sidebarPerms)): ?> <a href="<?= BASE_URL ?>masters/brand.php" data-keywords="brands master manufacturer" class="<?= $currentPage == 'brand.php' ? 'active' : '' ?>">Brands</a> <?php endif; ?>
                     <?php if (showLink('src.php', $isAdmin, $sidebarPerms)): ?> <a href="<?= BASE_URL ?>masters/src.php" data-keywords="src master data" class="<?= $currentPage == 'src.php' ? 'active' : '' ?>">SRC Master</a> <?php endif; ?>
-                </div>
-            </div>
-        </div>
-
-        <!-- DATA MANAGEMENT -->
-        <div class="nav-group" data-group="Data Management">
-            <button class="nav-master" type="button">
-                <span>Data Management</span>
-                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-            </button>
-            <div class="nav-submenu">
-                <div class="nav-submenu-inner">
+                    
+                    <!-- DATA MANAGEMENT -->
+                    <div class="menu-section-title">Data Management</div>
                     <?php if (showLink('masterupload.php', $isAdmin, $sidebarPerms)): ?> <a href="<?= BASE_URL ?>masters/masterupload.php" data-keywords="bulk upload excel import master data" class="<?= $currentPage == 'masterupload.php' ? 'active' : '' ?>">Bulk Master Upload</a> <?php endif; ?>
                     <?php if (showLink('cop.php', $isAdmin, $sidebarPerms)): ?> <a href="<?= BASE_URL ?>admin/cop.php" data-keywords="cop settings configuration" class="<?= $currentPage == 'cop.php' ? 'active' : '' ?>">COP Settings</a> <?php endif; ?>
-                </div>
-            </div>
-        </div>
 
-        <!-- ADMINISTRATION -->
-        <div class="nav-group" data-group="Administration">
-            <button class="nav-master" type="button" style="color: #fca5a5;">
-                <span>Administration</span>
-                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-            </button>
-            <div class="nav-submenu">
-                <div class="nav-submenu-inner">
+                    <!-- ADMINISTRATION -->
+                    <div class="menu-section-title" style="color: #64748b;">Administration</div>
                     <?php if (showLink('systemlogs.php', $isAdmin, $sidebarPerms)): ?> <a href="<?= BASE_URL ?>admin/systemlogs.php" data-keywords="system logs error audit" class="<?= $currentPage == 'systemlogs.php' ? 'active' : '' ?>">System Logs</a> <?php endif; ?>
                     <?php if (showLink('permissions.php', $isAdmin, $sidebarPerms)): ?> <a href="<?= BASE_URL ?>admin/permissions.php" data-keywords="permissions roles page access matrix" class="<?= $currentPage == 'permissions.php' ? 'active' : '' ?>">Permissions</a> <?php endif; ?>
                     <?php if (showLink('backup.php', $isAdmin, $sidebarPerms)): ?> <a href="<?= BASE_URL ?>admin/backup.php" data-keywords="backup database sql download" class="<?= $currentPage == 'backup.php' ? 'active' : '' ?>">Backup</a> <?php endif; ?>
@@ -219,15 +176,14 @@ $logoHtmlDisplay = $logoHtml ?? '';
                     <?php if (showLink('shift.php', $isAdmin, $sidebarPerms)): ?> <a href="<?= BASE_URL ?>hr/shift.php" data-keywords="shift roster timing night" class="<?= $currentPage == 'shift.php' ? 'active' : '' ?>">Shift Management</a> <?php endif; ?>
                     <?php if (showLink('salarystructure.php', $isAdmin, $sidebarPerms)): ?> <a href="<?= BASE_URL ?>payroll/salarystructure.php" data-keywords="salary structure components basic hra pf" class="<?= $currentPage == 'salarystructure.php' ? 'active' : '' ?>">Salary Structure</a> <?php endif; ?>
                     <?php if (showLink('settings.php', $isAdmin, $sidebarPerms)): ?> <a href="<?= BASE_URL ?>admin/settings.php" data-keywords="settings app configuration preferences" class="<?= $currentPage == 'settings.php' ? 'active' : '' ?>">App Settings</a> <?php endif; ?>
+                    <?php endif; ?>
+
                 </div>
             </div>
         </div>
-        <?php endif; ?>
 
     </nav>
 </aside>
-
-
 
 <script>
 (function() {
