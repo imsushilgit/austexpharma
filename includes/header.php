@@ -87,6 +87,20 @@ try {
     <?= asset_css('style.css') ?>
 
     <style>
+
+        /* 3rd Level Items */
+    .nav-sub-menu {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.15s ease-out; /* 0.3s se 0.15s kar diya gaya hai */
+        background-color: rgba(0, 0, 0, 0.15); 
+    }
+
+    /* Chevron Animation */
+    .nav-sub-master .chevron {
+        width: 14px;
+        transition: transform 0.15s ease; /* 0.3s se 0.15s kar diya gaya hai */
+    }
         /* --- 3-LEVEL NESTED TREE MENU STYLING --- */
         .nav-submenu-inner {
             position: relative;
