@@ -70,11 +70,33 @@ try {
     }
 } catch (Exception $e) {}
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* Ensure Logo Area is White & Visible */
+        .sidebar-brand {
+            background-color: #ffffff !important;
+            padding: 12px 10px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        /* Clean, lightweight typography for nested submenus */
+        .menu-section-title {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #1e3a8a; /* Navy blue palette */
+            padding: 18px 15px 6px 15px;
+            font-weight: 400;
+        }
+        .nav-submenu-inner a {
+            padding-left: 20px !important; /* Indent links slightly under their titles */
+        }
+    </style>
     <title><?= htmlspecialchars($pageTitle ?? 'Dashboard') ?> | <?= htmlspecialchars($companyName) ?></title>
     
     <?php if ($logoType === 'image' && !empty($logoPath)): ?>
@@ -125,11 +147,11 @@ try {
                         ");
                         $userStmt->execute([$_SESSION['user_id']]);
                         if ($row = $userStmt->fetch(PDO::FETCH_ASSOC)) {
-                            $userHq = trim((string)$row['hq']);
-                            if (!empty(trim($row['empname']))) { $userNameDisplay = trim($row['empname']); }
-                            if (!empty(trim($row['empcode']))) { $userEmpCode = trim($row['empcode']); }
-                            if (!empty(trim($row['email']))) { $userEmail = trim($row['email']); }
-                            if (!empty(trim($row['mobile']))) { $userMobile = trim($row['mobile']); }
+                            $userHq = trim((string)($row['hq'] ?? ''));
+                            if (!empty(trim((string)($row['empname'] ?? '')))) { $userNameDisplay = trim($row['empname']); }
+                            if (!empty(trim((string)($row['empcode'] ?? '')))) { $userEmpCode = trim($row['empcode']); }
+                            if (!empty(trim((string)($row['email'] ?? '')))) { $userEmail = trim($row['email']); }
+                            if (!empty(trim((string)($row['mobile'] ?? '')))) { $userMobile = trim($row['mobile']); }
                         }
                     } catch (Exception $e) {}
                 }
