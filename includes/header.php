@@ -29,7 +29,6 @@ try {
         $designation = strtoupper(trim($_SESSION['designation'] ?? ''));
         $isManager = (!$isAdmin && !empty($ctx['is_manager']));
         $myEmpCode = $ctx['empcode'] ?? ($_SESSION['empcode'] ?? '');
-        // ROLE SCOPE: approvers are notified only about their own subordinates (admin: everyone)
         $__subs = $isAdmin ? [] : array_values($ctx['sub_codes'] ?? []);
         $__subIn = empty($__subs) ? '' : implode(',', array_fill(0, count($__subs), '?'));
 
@@ -70,60 +69,71 @@ try {
     }
 } catch (Exception $e) {}
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        /* Transparent Logo Background Fix */
-        .sidebar-brand {
-            background-color: #ffffff !important;
-            padding: 12px 10px;
-            border-bottom: 1px solid #e2e8f0;
-        }
+    <title><?= htmlspecialchars($pageTitle ?? 'Dashboard') ?> | <?= htmlspecialchars($companyName) ?></title>
+    
+    <?php if ($logoType === 'image' && !empty($logoPath)): ?>
+        <link rel="icon" href="/erp/<?= htmlspecialchars($logoPath) ?>" type="image/png">
+    <?php else: ?>
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 38 38'><circle cx='19' cy='19' r='18' fill='%23ffffff' stroke='%231e3a8a' stroke-width='2'/><g transform='translate(19, 19) scale(0.32) translate(-38, -36)'><rect x='20' y='6' width='27' height='58' fill='%231e3a8a'/><rect x='3' y='23' width='17' height='22' fill='%231e3a8a'/><rect x='29' y='6' width='18' height='54' fill='%23ffffff'/><rect x='39' y='6' width='11' height='50' fill='%23ffffff'/><rect x='39' y='23' width='26' height='22' fill='%23ffffff'/></g><rect x='32' y='12' width='8' height='18' fill='%23ffffff'/><rect x='36' y='14' width='4' height='10' fill='%23ffffff'/></svg>" type="image/svg+xml">
+    <?php endif; ?>
 
-        /* 3-Level Menu Styling */
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <?= asset_css('style.css') ?>
+
+    <style>
+        /* --- 3-LEVEL NESTED TREE MENU STYLING --- */
         .nav-submenu-inner {
             position: relative;
-            padding-left: 12px;
-            margin-left: 20px;
+            padding-left: 0;
+            margin-left: 24px;
             border-left: 1px solid rgba(255, 255, 255, 0.2); /* The vertical connecting line */
+            padding-bottom: 5px;
         }
         
-        /* 2nd Level Items (Nodes with circles) */
+        /* 2nd Level Items (Nodes with hollow circles) */
         .nav-submenu-inner > a,
         .nav-submenu-inner > .nav-sub-group > .nav-sub-master {
             position: relative;
-            padding-left: 15px !important;
+            padding-left: 22px !important;
             display: flex;
             align-items: center;
             justify-content: space-between;
             width: 100%;
             background: transparent;
             border: none;
-            color: inherit;
+            color: rgba(255, 255, 255, 0.85);
             text-align: left;
             cursor: pointer;
             font-size: 13px;
-            padding-top: 10px;
-            padding-bottom: 10px;
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-decoration: none;
         }
 
-        /* The Hollow Circle Node */
+        .nav-submenu-inner > a:hover,
+        .nav-submenu-inner > .nav-sub-group > .nav-sub-master:hover {
+            color: #ffffff;
+        }
+
+        /* The Hollow Circle */
         .nav-submenu-inner > a::before,
         .nav-submenu-inner > .nav-sub-group > .nav-sub-master::before {
             content: '';
             position: absolute;
-            left: -16px; /* Positioned exactly over the left border */
+            left: -4px; /* Positions perfectly over the border-left */
             top: 50%;
             transform: translateY(-50%);
             width: 7px;
             height: 7px;
             border-radius: 50%;
             border: 1px solid rgba(255, 255, 255, 0.6);
-            background-color: #0b1930; /* Should match your sidebar background to look hollow */
+            background-color: #0b5394; /* Matches typical blue sidebar backgrounds */
             z-index: 2;
         }
 
@@ -133,20 +143,27 @@ try {
             overflow: hidden;
             transition: max-height 0.3s ease-out;
             background-color: rgba(0, 0, 0, 0.15); /* Darker inset effect */
-            margin-left: -12px; /* Pull back to edge */
         }
         
         .nav-sub-menu a {
             padding-left: 45px !important;
             position: relative;
             font-size: 12.5px;
+            display: block;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .nav-sub-menu a:hover, .nav-sub-menu a.active {
+            color: #ffffff;
         }
         
         .nav-sub-menu a::before {
-            display: none !important; /* Hide circle for 3rd level */
+            display: none !important; /* No hollow circles on 3rd level items */
         }
 
-        /* Sub-master chevron animation */
         .nav-sub-master .chevron {
             width: 14px;
             transition: transform 0.3s ease;
@@ -155,19 +172,6 @@ try {
             transform: rotate(180deg);
         }
     </style>
-    <title><?= htmlspecialchars($pageTitle ?? 'Dashboard') ?> | <?= htmlspecialchars($companyName) ?></title>
-    
-    <?php if ($logoType === 'image' && !empty($logoPath)): ?>
-        <link rel="icon" href="/erp/<?= htmlspecialchars($logoPath) ?>" type="image/png">
-    <?php else: ?>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 38 38'><circle cx='19' cy='19' r='18' fill='%23ffffff' stroke='%231e3a8a' stroke-width='2'/><g transform='translate(19, 19) scale(0.32) translate(-38, -36)'><rect x='20' y='6' width='27' height='58' fill='%231e3a8a'/><rect x='3' y='23' width='17' height='22' fill='%231e3a8a'/><rect x='29' y='6' width='18' height='54' fill='%23ffffff'/><rect x='39' y='6' width='11' height='50' fill='%23ffffff'/><rect x='39' y='23' width='26' height='22' fill='%23ffffff'/></g><rect x='32' y='12' width='8' height='18' fill='%23ffffff'/><rect x='36' y='14' width='4' height='10' fill='%23ffffff'/></svg>" type="image/svg+xml">
-    <?php endif; ?>
-
-    <!-- Using only lighter weights (300, 400) -->
-    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400&family=Inter:wght@300;400&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <?= asset_css('style.css') ?>
 </head>
 <?php $__pgClass = 'pg-' . trim(preg_replace('/[^a-z0-9]+/', '-', strtolower(basename(dirname($_SERVER['SCRIPT_NAME'])) . '-' . basename($_SERVER['SCRIPT_NAME'], '.php'))), '-'); ?>
 <body class="app <?= $__pgClass ?>">
@@ -196,13 +200,7 @@ try {
                 
                 if (isset($_SESSION['user_id'])) {
                     try {
-                        $userStmt = $pdo->prepare("
-                            SELECT e.empcode, e.empname, e.email, e.mobile, e.hq 
-                            FROM users u 
-                            LEFT JOIN employees e ON (u.empcode = e.empcode OR u.username = e.empcode)
-                            WHERE u.id = ? 
-                            LIMIT 1
-                        ");
+                        $userStmt = $pdo->prepare("SELECT e.empcode, e.empname, e.email, e.mobile, e.hq FROM users u LEFT JOIN employees e ON (u.empcode = e.empcode OR u.username = e.empcode) WHERE u.id = ? LIMIT 1");
                         $userStmt->execute([$_SESSION['user_id']]);
                         if ($row = $userStmt->fetch(PDO::FETCH_ASSOC)) {
                             $userHq = trim((string)($row['hq'] ?? ''));
@@ -215,12 +213,8 @@ try {
                 }
                 ?>
 
-                <!-- FULLSCREEN TOGGLE -->
-                <button class="icon-btn" id="fullScreenBtn" title="Toggle Fullscreen">
-                    <i class="fa-solid fa-expand"></i>
-                </button>
+                <button class="icon-btn" id="fullScreenBtn" title="Toggle Fullscreen"><i class="fa-solid fa-expand"></i></button>
 
-                <!-- NOTIFICATION BELL -->
                 <div class="notify-dropdown">
                     <button class="icon-btn" id="notifyBtn" title="Notifications">
                         <i class="fa-regular fa-bell"></i>
@@ -229,9 +223,7 @@ try {
                         <?php endif; ?>
                     </button>
                     <div class="notify-content" id="notifyContent">
-                        <div class="notify-header">
-                            <span>Notifications</span>
-                        </div>
+                        <div class="notify-header"><span>Notifications</span></div>
                         <div class="notify-items">
                             <?php if (empty($notifications)): ?>
                                 <div class="notify-empty">No new notifications.</div>
@@ -248,44 +240,32 @@ try {
                     </div>
                 </div>
                 
-                <!-- PURE WHITE LOCATION BADGE -->
                 <?php if (!empty($userHq)): ?>
-                    <span class="role-badge" style="background:#ffffff; color:navy; border:none; padding:4px 10px;">
-                        <i class="fa-solid fa-location-dot"></i> <?= htmlspecialchars($userHq); ?>
-                    </span>
+                    <span class="role-badge" style="background:#ffffff; color:navy; border:none; padding:4px 10px;"><i class="fa-solid fa-location-dot"></i> <?= htmlspecialchars($userHq); ?></span>
                 <?php endif; ?>
-
                 <span class="role-badge"><?= htmlspecialchars((string)($ctx['designation'] ?? $_SESSION['user_role'] ?? 'Staff')); ?></span>
                 
-                <!-- USER PROFILE NAVY DROPDOWN -->
                 <div class="profile-dropdown">
                     <div class="user-profile-trigger" id="profileDropdownBtn" title="Profile Menu">
-                        <div class="avatar-circle">
-                            <i class="fa-regular fa-user"></i>
-                        </div>
+                        <div class="avatar-circle"><i class="fa-regular fa-user"></i></div>
                     </div>
                     <div class="profile-dropdown-content" id="profileDropdownContent">
-                        <!-- Employee Info Panel -->
                         <div class="profile-header-card">
                             <div class="profile-name"><?= htmlspecialchars($userNameDisplay); ?></div>
                             <div class="profile-code">ID: <?= htmlspecialchars($userEmpCode); ?></div>
                             <div class="profile-contact"><i class="fa-regular fa-envelope"></i> <?= htmlspecialchars($userEmail); ?></div>
                             <div class="profile-contact"><i class="fa-solid fa-phone"></i> <?= htmlspecialchars($userMobile); ?></div>
                         </div>
-                        
-                        <!-- Action Links -->
                         <a href="changepassword.php" class="menu-link"><i class="fa-solid fa-lock"></i> Change Password</a>
                         <a href="<?= BASE_URL ?>auth/logout.php" class="menu-link text-light-danger"><i class="fa-solid fa-arrow-right-from-bracket"></i> Secure Logout</a>
                     </div>
                 </div>
             </div>
         </header>
-
         <main class="workspace">
 
         <script>
             document.addEventListener('DOMContentLoaded', () => {
-                // Sidebar Toggle Logic
                 const toggleBtn = document.getElementById('sidebarToggle');
                 const sidebar = document.querySelector('.sidebar');
                 const overlay = document.getElementById('sidebarOverlay');
@@ -295,29 +275,8 @@ try {
                     else { sidebar.classList.toggle('collapsed'); }
                 });
 
-                overlay.addEventListener('click', () => {
-                    sidebar.classList.remove('mobile-open'); overlay.classList.remove('active');
-                });
+                overlay.addEventListener('click', () => { sidebar.classList.remove('mobile-open'); overlay.classList.remove('active'); });
 
-                // Menu Accordion Logic
-                document.querySelectorAll('.nav-master').forEach(master => {
-                    master.addEventListener('click', () => {
-                        const submenu = master.nextElementSibling;
-                        const isOpen = master.classList.contains('open');
-                        
-                        document.querySelectorAll('.nav-master').forEach(btn => {
-                            btn.classList.remove('open');
-                            if (btn.nextElementSibling) btn.nextElementSibling.style.maxHeight = null;
-                        });
-                        
-                        if (!isOpen && submenu) {
-                            master.classList.add('open');
-                            submenu.style.maxHeight = "2000px"; 
-                        }
-                    });
-                });
-
-                // Profile & Notification Dropdown Logic
                 const profileBtn = document.getElementById('profileDropdownBtn');
                 const profileContent = document.getElementById('profileDropdownContent');
                 const notifyBtn = document.getElementById('notifyBtn');
@@ -346,24 +305,16 @@ try {
                     });
                 }
                 
-                document.addEventListener('click', () => {
-                    closeAllDropdowns();
-                });
+                document.addEventListener('click', () => closeAllDropdowns());
 
-                // Full-Screen Logic
                 const fsBtn = document.getElementById('fullScreenBtn');
                 if (fsBtn) {
                     fsBtn.addEventListener('click', () => {
                         if (!document.fullscreenElement) {
-                            document.documentElement.requestFullscreen().catch(err => {
-                                console.log("Error attempting to enable fullscreen:", err.message);
-                            });
+                            document.documentElement.requestFullscreen().catch(err => console.log(err.message));
                             fsBtn.innerHTML = '<i class="fa-solid fa-compress"></i>';
                         } else {
-                            if (document.exitFullscreen) {
-                                document.exitFullscreen();
-                                fsBtn.innerHTML = '<i class="fa-solid fa-expand"></i>';
-                            }
+                            if (document.exitFullscreen) { document.exitFullscreen(); fsBtn.innerHTML = '<i class="fa-solid fa-expand"></i>'; }
                         }
                     });
                 }
