@@ -71,6 +71,129 @@ try {
 ?>
 <!DOCTYPE html>
 <html lang="en">
+    /* --- 1. SIDEBAR COLLAPSE STYLING --- */
+    .sidebar {
+        transition: width 0.15s ease-out;
+        overflow-x: hidden;
+        white-space: nowrap;
+    }
+    
+    /* COLLAPSED STATE (MINI SIDEBAR) */
+    .sidebar.collapsed {
+        width: 70px !important;
+    }
+
+    /* Hide text, search, and chevrons when collapsed */
+    .sidebar.collapsed .sidebar-search-wrap,
+    .sidebar.collapsed .nav-master .text-label,
+    .sidebar.collapsed .nav-master .chevron,
+    .sidebar.collapsed .nav-submenu,
+    .sidebar.collapsed .brand-text {
+        display: none !important;
+    }
+
+    /* Center the icons when collapsed */
+    .sidebar.collapsed .nav-master {
+        justify-content: center !important;
+        padding: 15px 0 !important;
+    }
+    .sidebar.collapsed .nav-master i {
+        margin-right: 0 !important;
+        font-size: 1.25rem;
+    }
+
+    /* Resize logo to fit mini sidebar */
+    .sidebar.collapsed .sidebar-brand img {
+        max-width: 45px;
+    }
+
+    /* --- 2. 3-LEVEL NESTED TREE MENU STYLING --- */
+    .nav-submenu-inner {
+        position: relative;
+        padding-left: 0;
+        margin-left: 24px;
+        border-left: 1px solid rgba(255, 255, 255, 0.2); /* The vertical connecting line */
+        padding-bottom: 5px;
+    }
+    
+    /* 2nd Level Items (Nodes with hollow circles) */
+    .nav-submenu-inner > a,
+    .nav-submenu-inner > .nav-sub-group > .nav-sub-master {
+        position: relative;
+        padding-left: 22px !important;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        background: transparent;
+        border: none;
+        color: rgba(255, 255, 255, 0.85);
+        text-align: left;
+        cursor: pointer;
+        font-size: 13px;
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-decoration: none;
+    }
+
+    .nav-submenu-inner > a:hover,
+    .nav-submenu-inner > .nav-sub-group > .nav-sub-master:hover {
+        color: #ffffff;
+    }
+
+    /* The Hollow Circle */
+    .nav-submenu-inner > a::before,
+    .nav-submenu-inner > .nav-sub-group > .nav-sub-master::before {
+        content: '';
+        position: absolute;
+        left: -4px; /* Positions perfectly over the border-left */
+        top: 50%;
+        transform: translateY(-50%);
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        background-color: #0b5394; /* Matches typical blue sidebar backgrounds */
+        z-index: 2;
+    }
+
+    /* 3rd Level Items (Indented, darker background, no circle) */
+    .nav-sub-menu {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.15s ease-out; /* Fast 0.15s Transition */
+        background-color: rgba(0, 0, 0, 0.15); /* Darker inset effect */
+    }
+    
+    .nav-sub-menu a {
+        padding-left: 45px !important;
+        position: relative;
+        font-size: 12.5px;
+        display: block;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        text-decoration: none;
+        color: rgba(255, 255, 255, 0.7);
+    }
+
+    .nav-sub-menu a:hover, 
+    .nav-sub-menu a.active {
+        color: #ffffff;
+    }
+    
+    .nav-sub-menu a::before {
+        display: none !important; /* No hollow circles on 3rd level items */
+    }
+
+    /* Chevron Animation */
+    .nav-sub-master .chevron {
+        width: 14px;
+        transition: transform 0.15s ease; /* Fast 0.15s Transition */
+    }
+    
+    .nav-sub-master.open .chevron {
+        transform: rotate(180deg);
+    }
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -86,106 +209,6 @@ try {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <?= asset_css('style.css') ?>
 
-    <style>
-
-        /* 3rd Level Items */
-    .nav-sub-menu {
-        max-height: 0;
-        overflow: hidden;
-        transition: max-height 0.15s ease-out; /* 0.3s se 0.15s kar diya gaya hai */
-        background-color: rgba(0, 0, 0, 0.15); 
-    }
-
-    /* Chevron Animation */
-    .nav-sub-master .chevron {
-        width: 14px;
-        transition: transform 0.15s ease; /* 0.3s se 0.15s kar diya gaya hai */
-    }
-        /* --- 3-LEVEL NESTED TREE MENU STYLING --- */
-        .nav-submenu-inner {
-            position: relative;
-            padding-left: 0;
-            margin-left: 24px;
-            border-left: 1px solid rgba(255, 255, 255, 0.2); /* The vertical connecting line */
-            padding-bottom: 5px;
-        }
-        
-        /* 2nd Level Items (Nodes with hollow circles) */
-        .nav-submenu-inner > a,
-        .nav-submenu-inner > .nav-sub-group > .nav-sub-master {
-            position: relative;
-            padding-left: 22px !important;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            width: 100%;
-            background: transparent;
-            border: none;
-            color: rgba(255, 255, 255, 0.85);
-            text-align: left;
-            cursor: pointer;
-            font-size: 13px;
-            padding-top: 12px;
-            padding-bottom: 12px;
-            text-decoration: none;
-        }
-
-        .nav-submenu-inner > a:hover,
-        .nav-submenu-inner > .nav-sub-group > .nav-sub-master:hover {
-            color: #ffffff;
-        }
-
-        /* The Hollow Circle */
-        .nav-submenu-inner > a::before,
-        .nav-submenu-inner > .nav-sub-group > .nav-sub-master::before {
-            content: '';
-            position: absolute;
-            left: -4px; /* Positions perfectly over the border-left */
-            top: 50%;
-            transform: translateY(-50%);
-            width: 7px;
-            height: 7px;
-            border-radius: 50%;
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            background-color: #0b5394; /* Matches typical blue sidebar backgrounds */
-            z-index: 2;
-        }
-
-        /* 3rd Level Items (Indented, darker background, no circle) */
-        .nav-sub-menu {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease-out;
-            background-color: rgba(0, 0, 0, 0.15); /* Darker inset effect */
-        }
-        
-        .nav-sub-menu a {
-            padding-left: 45px !important;
-            position: relative;
-            font-size: 12.5px;
-            display: block;
-            padding-top: 10px;
-            padding-bottom: 10px;
-            text-decoration: none;
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        .nav-sub-menu a:hover, .nav-sub-menu a.active {
-            color: #ffffff;
-        }
-        
-        .nav-sub-menu a::before {
-            display: none !important; /* No hollow circles on 3rd level items */
-        }
-
-        .nav-sub-master .chevron {
-            width: 14px;
-            transition: transform 0.3s ease;
-        }
-        .nav-sub-master.open .chevron {
-            transform: rotate(180deg);
-        }
-    </style>
 </head>
 <?php $__pgClass = 'pg-' . trim(preg_replace('/[^a-z0-9]+/', '-', strtolower(basename(dirname($_SERVER['SCRIPT_NAME'])) . '-' . basename($_SERVER['SCRIPT_NAME'], '.php'))), '-'); ?>
 <body class="app <?= $__pgClass ?>">
