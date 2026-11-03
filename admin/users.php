@@ -116,7 +116,7 @@ function getCombinedUsersData($pdo) {
         FROM employees 
         WHERE (hq IS NOT NULL AND hq != '') 
           AND (reporting_manager IS NOT NULL AND reporting_manager != '') 
-          AND (resignation_date IS NULL OR resignation_date = '0000-00-00' OR resignation_date = '')
+          AND (resignation_date IS NULL OR resignation_date = '0000-00-00')
         ORDER BY empname ASC
     ")->fetchAll(PDO::FETCH_ASSOC);
 
@@ -367,7 +367,6 @@ include __DIR__ . '/../includes/header.php';
         document.getElementById('displayName').innerText = empname;
         document.getElementById('displayCode').innerText = "System Code: " + empcode;
         
-        // Uses the DB fetched maxAttempts, or falls back to 5 ONLY if empty/null for new users in form UI
         document.getElementById('maxAttempts').value = maxAttempts || 5; 
         
         const firstName = empname.split(' ')[0];
